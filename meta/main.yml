@@ -1,0 +1,58 @@
+galaxy_info:
+  role_name: "mydumper_rclone_myloader"
+  author: "Emerson Rocha <rocha(at)ieee.org>"
+  description: |
+    Full Ad Hoc backup/recovery for MariaDB/MySQL with performance
+    optimized mydumper/myloader for export/import full database servers
+    and rclone for remote storage
+  company: Etica.AI
+  license: Unlicense
+  min_ansible_version: 2.9
+
+  platforms:
+    # TODO: revide these platforms and maybe remove some if did not pass
+    #       all the tests (fititnt, 2020-02-12 03:40 BRT)
+    - name: Alpine
+      versions:
+        - any
+    - name: ArchLinux
+      versions:
+        - any
+    - name: Debian
+      versions:
+        - buster
+    - name: EL
+      versions:
+        - 7
+        - 8
+    - name: Fedora
+      versions:
+        - 31
+    - name: FreeBSD
+      versions:
+        - 12.0
+
+    # TODO: Ansible Galaxy may not have OpenSUSE leap version added. We shoul
+    #       look how to improve this (fititnt, 2019-12-02 00:25 BRT)
+    #       See https://github.com/fititnt/ap-application-load-balancer/issues/49#issuecomment-570110368
+    - name: opensuse
+      versions:
+        - leap
+    - name: Ubuntu
+      versions:
+        - bionic
+
+  galaxy_tags:
+    - galeracluster
+    - mariadb
+    - mysql
+    - mydumper
+    - myloader
+    - rclone
+    - backup
+    - disasterrecovery
+
+dependencies: []
+  # List your role dependencies here, one per line. Be sure to remove the '[]' above,
+  # if you add dependencies to this list.
+  
