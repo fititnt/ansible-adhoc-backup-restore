@@ -1,3 +1,14 @@
 ---
 # vars file for ansible-mydumper-rclone-myloader
 mrm_version: "v0.3.0"
+
+# my_host_all-databases_datetime
+mrm_name_default: "{{ inventory_hostname_short 
+  + ((mrm_database is defined and mrm_database|lenght > 0) | ternary('_' + mrm_database + '_', '_all-databases_'))
+  + '__' + ansible_date_time.iso8601_basic_short }}"
+
+# To allow be reused by other tools, we will use standard names
+# @see https://www.tecmint.com/linux-password-protect-files-with-encryption/
+mrm_active_directory: ""
+mrm_active_file: ""
+mrm_active_isencrypted: false

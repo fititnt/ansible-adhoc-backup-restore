@@ -8,3 +8,4 @@
     msg: "Work in progress"
 
 # SEE https://forum.rclone.org/t/rclone-as-destination-for-borgbackup/12717
+# SEE https://ruderich.org/simon/notes/append-only-backups-with-restic-and-rclone

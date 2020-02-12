@@ -1,5 +1,38 @@
 ---
-# defaults file for ansible-mydumper-rclone-myloader
+
+# FILE:            {{ role_path }}/defaults/main.yml
+# LICENSE:         Public Domain
+
+# Data to export/import
+mrm_name: "{{ mrm_name_default }}"
+mrm_database: null         # -B, --database: Database to dump (defalts to ALL databases, including system databases!)
+mrm_tables_list: ""        # --tables-list: Comma delimited table list to dump (does not exclude regex option)
+mrm_regex: ""              # -x, --regex: Regular expression for 'db.table' matching
+mrm_no_schemas: null       # -m, --no-schemas: Do not dump table schemas with the data
+mrm_no_data: null          # -d, --no-data: Do not dump table data
+
+# Server to export/import
+mrm_mariadb_user: root     # -u, --user: Username with privileges to run the dump
+mrm_mariadb_password: null # -p, --password: User password
+mrm_mariadb_host: null     # --host: The host to connect to
+mrm_mariadb_port: null     # -P, --port: TCP/IP port to connect to
+mrm_mariadb_socket: null   # -S, --socket: UNIX domain socket file to use for connection
+
+# For features not implemented, please use the following parameters
+mrm_mydumper_append: null  # String to append to mydumper shell command
+mrm_myloader_append: null  # String to append to myloader shell command
+
+# Less common options
+# @see https://dba.stackexchange.com/questions/99007/how-does-mydumpers-use-savepoints-option-reduce-metadata-locking
+
+# Paranoid Mode ________________________________________________________________
+# If enabled: 
+#    - run full-temp-backup-before-recovery
+#    - It will take additional time (it will backup all databases on target reserver)
+#    - It may fill your disks (if your database is big and the target directory is on small disk)
+mrm_paranoid: false
+
+## Other variables _____________________________________________________________
 
 mrm_setup_mydump_myloader: yes
 mrm_setup_rclone: no

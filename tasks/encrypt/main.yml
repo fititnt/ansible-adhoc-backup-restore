@@ -1,0 +1,8 @@
+---
+
+# FILE:            {{ role_path }}/tasks/encrypt/main.yml
+# LICENSE:         Public Domain
+
+- name: "MRM | encrypt | TODO message"
+  debug:
+    msg: "Work in progress"

@@ -6,3 +6,69 @@
 - name: "MRM | backup | TODO message"
   debug:
     msg: "Work in progress"
+- name: "debug"
+  debug:
+    msg:
+      target_host: "{{ target_host }}"
+      remote_user: "{{ remote_user | default('undefined') }}"
+      ansible_user_id: "{{ ansible_user_id }}"
+      temp: "{{ temp }}"
+      this_mydumper_datetime: "{{ this_mydumper_datetime }}"
+
+- name: "~/.my.cnf stat"
+  stat:
+    path: "~/.my.cnf"
+  register: dot_my_cnf
+
+- name: "~/.my.cnf assert"
+  assert:
+    that:
+      - dot_my_cnf.stat.exists
+    success_msg: "~/.my.cnf exists. mydumper will use this file"
+    fail_msg: |
+      Please create a file /home/{{ ansible_user_id }}/~/.my.cnf with:
+
+      [client]
+      user="root"
+      password="YourPasswordHere"
+
+# - name: "mydumper_raw build"
+#   set_fact:
+#     mydumper_command: "mydumper --outputdir {{ this_mydumper_outputdir }}"
+#     # this_dumpinfo: "{{ inventory_hostname_short }}"
+#     # this_mydumper_outputdir_base: "{{ mydumper_outputdir_base | default('/home/' + ansible_user_id + '/') }}"
+#     # this_mydumper_outputdir: "{{ mydumper_outputdir | default(this_mydumper_outputdir_base + inventory_hostname_short + '-' + this_datetime) }}"
+#     # mydumper_raw: "test"
+#   when:
+#     - (mydumper_command is undefined) and (mydumper_command|length < 1)
+
+
+- name: "Custom mydumper_command?"
+  shell: "{{ mydumper_command }}"
+  when:
+    - (mydumper_command is defined)
+
+- name: "Run prepared mydumper_command"
+  shell: >
+    mydumper
+    --outputdir='{{ this_mydumper_outputdir }}'
+    {{ mydumper_command_append | default('') }}
+#   command:
+#     argv:
+#       - "mydumper"
+#       - "--outputdir='{{ this_mydumper_outputdir }}'"
+#       # - ""
+  when:
+    - (mydumper_command is undefined)
+  register: command_result
+
+- name: "mydumper_raw"
+  debug:
+    msg:
+      # this_datetime: "{{ this_datetime }}"
+      # this_dumpinfo: "{{ inventory_hostname_short }}"
+      # this_mydumper_outputdir_base: "{{ this_mydumper_outputdir_base }}"
+      # this_mydumper_outputdir: "{{ this_mydumper_outputdir }}"
+      # mydumper_datetime: "{{ mydumper_datetime }}"
+      # basedir: "{{ basedir }}"
+      mydumper_command: "{{ mydumper_command | default('undefined')}}"

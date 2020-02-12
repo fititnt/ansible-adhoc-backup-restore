@@ -82,6 +82,15 @@ tags:
     - (mrm_mode is sameas "recovery")
     - (mrm_valt_receive_disabled is sameas false)
 
+- name: "full-temp-backup-before-recovery/main.yml"
+  include: full-temp-backup-before-recovery/main.yml
+  tags:
+    - full-temp-backup-before-recovery
+  when:
+    - (mrm_mode is sameas "recovery")
+    - (mrm_paranoid is sameas true)
+    - (mrm_valt_recovery_disabled is sameas false)
+
 - name: "recovery/main.yml"
   include: recovery/main.yml
   tags:
