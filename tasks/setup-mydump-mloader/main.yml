@@ -1,0 +1,8 @@
+---
+
+# FILE:            {{ role_path }}/tasks/setup-mydump-mloader/main.yml
+# LICENSE:         Public Domain
+
+- name: "MRM | setup-mydump-mloader | TODO message"
+  debug:
+    msg: "Work in progress"

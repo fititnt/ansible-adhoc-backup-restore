@@ -1,0 +1,7 @@
+---
+# FILE:            {{ role_path }}/vars/os-family/debian.yml
+# LICENSE:         Public Domain
+#
+# DESCRIPTION:     This file is loaded by default for at least these OSs:
+#                  'Debian': ['Debian', 'Ubuntu', 'Raspbian', 'Neon', 'KDE neon',
+#                            'Linux Mint', 'SteamOS', 'Devuan', 'Kali', 'Cumulus Linux'],

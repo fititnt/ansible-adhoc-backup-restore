@@ -1,2 +1,10 @@
 ---
 # defaults file for ansible-mydumper-rclone-myloader
+
+mrm_setup_mydump_myloader: yes
+mrm_setup_rclone: no
+mrm_backup_disabled: no
+mrm_recovery_disabled: no
+mrm_valt_send_disabled: no
+mrm_valt_receive_disabled: no
+mrm_mode: "undefined-mode-select-backup-or-recovery"

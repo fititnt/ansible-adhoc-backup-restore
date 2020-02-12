@@ -1,7 +1,11 @@
-# ansible-mydumper-rclone-myloader
-Full Ad Hoc backup/recovery for MariaDB/MySQL with performance
-optimized mydumper/myloader for export/import full database servers
-and rclone for remote storage
+# Ansible MyDumper -> RClone -> MyLoader
+**Ansible Role to performn Ad Hoc backup/recovery for MariaDB/MySQL/Galera Cluster.
+Uses [mydumper/myloader](https://github.com/maxbube/mydumper) for performance
+otimized export/import of COMPLETE server and optimal send/receive using
+[rclone](https://rclone.org/).**
+
+Note: this role is otimized for Ad Hoc (e.g. executed with human intervention)
+instead of automated cron backups.
 
 Requirements
 ------------

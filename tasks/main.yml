@@ -1,2 +1,91 @@
 ---
-# tasks file for ansible-mydumper-rclone-myloader
+
+# FILE:            {{ role_path }}/tasks/main.yml
+# LICENSE:         Public Domain
+
+- name: "MRM | Welcome message"
+debug:
+  msg:
+    mrm_version: "{{ alb_version }}"
+    node:
+      os: "{{ ansible_os_family | default('undefined') | lower }}"
+      dist: "{{ ansible_distribution | default('undefined') | lower }}"
+      dist_release: "{{ ansible_distribution_release | default('undefined') | lower }}"
+      dist_major_ver: "{{ ansible_distribution_major_version | default('undefined') | lower }}"
+      ansible_lsb: "{{ ansible_lsb | default('undefined') }}"
+      # If behind NAT, this may not represent real public IPv4.
+      # Alternative: https://docs.ansible.com/ansible/latest/modules/ipify_facts_module.html
+      ansible_default_ipv4: "{{ ansible_default_ipv4.address | default('undefined') }}"
+    run_related:
+      alb_run_only_app_uid: "{{ alb_run_only_app_uid | default('undefined') }}"
+      alb_forceredeploy: "{{ alb_forceredeploy | default('undefined') }}"
+      ansible_run_tags: "{{ ansible_run_tags | default('undefined') }}"
+      ansible_skip_tags: "{{ ansible_skip_tags | default('undefined') }}"
+tags:
+  - mrm
+  - always
+
+## Variable loading based on node Operational System ___________________________
+- name: "MRM | OS Family variables (Override with mrm_vars_osfamily)"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ (mrm_vars_osfamily is defined) | ternary(mrm_vars_osfamily, 'name-of-a-file-that-does-not-exist.yml') }}"
+    - "os-family/{{ ansible_os_family | default('undefined') | lower }}.yml"
+    - "os-family/{{ (ansible_os_family is defined) | ternary('untested','unknown') }}.yml"
+  tags:
+    - always
+
+## Run each MRM subcomponent ___________________________________________________
+
+- name: "setup-mydump-mloader/main.yml"
+  include: setup-mydump-mloader/main.yml
+  tags:
+    - setup-mydump-mloader
+  when:
+    - mrm_setup_mydump_myloader is sameas true
+
+- name: "setup-rclone/main.yml"
+  include: setup-rclone/main.yml
+  tags:
+    - setup-rclone
+  when:
+    - mrm_setup_rclone is sameas true
+
+- name: "setup-rclone/main.yml"
+  include: setup-rclone/main.yml
+  tags:
+    - setup-rclone
+  when:
+    - mrm_setup_rclone is sameas true
+
+- name: "backup/main.yml"
+  include: backup/main.yml
+  tags:
+    - backup
+  when:
+    - (mrm_mode is sameas "backup")
+    - (mrm_backup_disabled is sameas false)
+
+- name: "valt-send/main.yml"
+  include: valt-send/main.yml
+  tags:
+    - valt-send
+  when:
+    - (mrm_mode is sameas "backup")
+    - (mrm_valt_send_disabled is sameas false)
+
+- name: "valt-receive/main.yml"
+  include: valt-receive/main.yml
+  tags:
+    - valt-receive
+  when:
+    - (mrm_mode is sameas "recovery")
+    - (mrm_valt_receive_disabled is sameas false)
+
+- name: "recovery/main.yml"
+  include: recovery/main.yml
+  tags:
+    - recovery
+  when:
+    - (mrm_mode is sameas "recovery")
+    - (mrm_valt_recovery_disabled is sameas false)

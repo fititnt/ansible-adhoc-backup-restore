@@ -1,0 +1,10 @@
+---
+
+# FILE:            {{ role_path }}/tasks/setup-rclone/main.yml
+# LICENSE:         Public Domain
+
+- name: "MRM | setup-rclone | TODO message"
+  debug:
+    msg: "Work in progress"
+
+# SEE https://forum.rclone.org/t/rclone-as-destination-for-borgbackup/12717

@@ -1,0 +1,8 @@
+---
+
+# FILE:            {{ role_path }}/tasks/valt-receive/main.yml
+# LICENSE:         Public Domain
+
+- name: "MRM | valt-receive | TODO message"
+  debug:
+    msg: "Work in progress"
