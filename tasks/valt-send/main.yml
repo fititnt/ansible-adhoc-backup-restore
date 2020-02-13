@@ -5,12 +5,9 @@
 # SEE:             https://forum.rclone.org/t/can-rclone-be-run-solely-with-command-line-options-no-config-no-env-vars/6314/2
 # SEE:             https://github.com/rclone/rclone/issues/2449 (Title: Allow creation of backends from command line parameters)
 
-- name: "MRM | valt-send | TODO message"
-  debug:
-    msg: "Work in progress"
-
 - name: "MRM | valt-send | debug (requires -v, -vv, -vvv, or -vvvv)"
   debug:
     msg:
       mrm_rclone_enviroment: "{{ mrm_rclone_enviroment | default('undefined') }}"
+      mrm_backup_rclone_command: "{{ mrm_backup_rclone_command | default('undefined') }}"
     verbosity: 1

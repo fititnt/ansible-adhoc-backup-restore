@@ -7,7 +7,7 @@
 # Check mrm_database var if you dont want FULL backup or FULL server recovery
 mrm_mode: "undefined-mode-select-backup-or-recovery" # Options: backup or recovery
 mrm_name: "{{ mrm_default_summary }}" # Example: myhostname__all-databases__20200213T052730
-mrm_bucket: "mrm-local-bucket" # See also mrm_bucket_backup/mrm_bucket_recovery
+mrm_rclone_bucket: ":local:/var/local/mrm/mrm-local-bucket/" # See also mrm_rclone_bucket_backup/mrm_rclone_bucket_recovery
 mrm_pathprefix: "" # See also mrm_pathprefix_local/mrm_pathprefix_remote
 # mrm_paranoid: yes # if you are running in production and is ok to do full-temp-backup-before-recovery
 
@@ -44,12 +44,18 @@ mrm_myloader_append: null  # String to append to myloader shell command
 
 # RCLONE _______________________________________________________________________
 
+mrm_rclone_bucket_type: "local"
+mrm_rclone_enviroment: []
+# mrm_rclone_args: {
+#   ""
+# }
+
 # Since is possible to have valt backends with different access keys to backup
 # (e.g. the backup for security reason ONLY ALLOW WRITE, but not reads) and
 # to recovery (e.g. a key that, via human intervention, may allow list remote
 # options) the user can customize both
-mrm_bucket_backup: "{{ mrm_rclone_bucket }}"
-mrm_bucket_recovery: "{{ mrm_rclone_bucket }}"
+mrm_rclone_bucket_backup: "{{ mrm_rclone_bucket }}"
+mrm_rclone_bucket_recovery: "{{ mrm_rclone_bucket }}"
 
 mrm_rclone_valt_send_method: "move" # Move files from source to dest https://rclone.org/commands/rclone_move/
 # mrm_rclone_valt_send_method: "copy" # Copy files from source to dest, skipping already copied https://rclone.org/commands/rclone_move/

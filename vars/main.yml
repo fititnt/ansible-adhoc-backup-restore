@@ -12,6 +12,18 @@ mrm_default_summary: "{{ inventory_hostname_short + '__' + (mrm_database | defau
 mrm_backup_name: "{{ mrm_name }}{{ ((mrm_backup_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
 mrm_recovery_name: "{{ mrm_name }}{{ ((mrm_recovery_timestamp|bool) | ternary('__' + mrm_recovery_timestamp, '', '')) }}"
 
+# mrm_internal_islocalbucket: "{{ mrm_rclone_bucket == 'mrm-local-bucket' }}"
+
+mrm_backup_rclone_source: "{{ mrm_dir_mydumpermyloader.path }}"
+# mrm_backup_rclone_destiny: "{{ (mrm_internal_islocalbucket!bool) | ternary(mrm_dir_mrmlocalbucket.path + mrm_pathprefix_remote + mrm_backup_name, '' }}"
+mrm_backup_rclone_destiny: "{{ mrm_rclone_bucket_backup + mrm_pathprefix_remote + mrm_backup_name }}"
+mrm_backup_rclone_command: "rclone {{ mrm_rclone_valt_send_method }} {{ mrm_backup_rclone_source }} {{ mrm_backup_rclone_destiny }}"
+
+# mrm_recovery_rclone_source: "{{ mrm_dir_mrmlocalbucket.path }}{{ mrm_pathprefix_remote }}{{ mrm_backup_name }}"
+mrm_recovery_rclone_source: "{{ mrm_rclone_bucket_backup + mrm_pathprefix_remote + mrm_backup_name }}"
+mrm_recovery_rclone_destiny: "{{ mrm_dir_mydumpermyloader.path }}"
+mrm_recovery_rclone_command: "rclone {{ mrm_rclone_valt_send_method }} {{ mrm_backup_source }} {{ mrm_backup_destiny }}"
+
 mrm_mydumper_outputdir: "{{ mrm_dir_mydumpermyloader.path }}"
 mrm_myloader_diretory: "{{ mrm_dir_mydumpermyloader.path }}"
 
