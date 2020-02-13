@@ -6,6 +6,9 @@
 #                  'Debian': ['Debian', 'Ubuntu', 'Raspbian', 'Neon', 'KDE neon',
 #                            'Linux Mint', 'SteamOS', 'Devuan', 'Kali', 'Cumulus Linux'],
 
+# mrm_internal_root_user: 'root'
+# mrm_internal_root_group: 'root'
+
 # mrm_packages_mydumpermyloader:
 #   - mydumper
 

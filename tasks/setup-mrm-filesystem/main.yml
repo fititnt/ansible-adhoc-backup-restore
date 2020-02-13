@@ -1,0 +1,34 @@
+---
+
+# FILE:            {{ role_path }}/tasks/setup-mrm-filesystem/main.yml
+# LICENSE:         Public Domain
+# SEE:             https://askubuntu.com/questions/575679/what-is-the-default-location-for-backup-files-of-another-server/754155#754155
+
+- name: "MRM | setup-mrm-filesystem | TODO message"
+  debug:
+    msg: "Work in progress"
+
+- name: "MRM | setup-mrm-filesystem | manange MRM base directories"
+  file:
+    path: "{{ item.path }}"
+    state: "{{ item.state | default('directory') }}"
+
+    # Other parameters, by alphabetical order
+    access_time: "{{ item.access_time | default(omit) }}"
+    access_time_format: "{{ item.access_time_format | default(omit) }}"
+    attributes: "{{ item.attributes | default(omit) }}"
+    attr: "{{ item.attr | default(omit) }}" # alias for attributes
+    follow: "{{ item.follow | default(omit) }}"
+    force: "{{ item.force | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    mode: "{{ item.mode | default(omit) }}"
+    modification_time: "{{ item.modification_time | default(omit) }}"
+    modification_time_format: "{{ item.modification_time_format | default(omit) }}"
+    owner: "{{ item.owner | default(omit) }}"
+    recurse: "{{ item.recurse | default(omit) }}"
+    selevel: "{{ item.selevel | default(omit) }}"
+    serole: "{{ item.serole | default(omit) }}"
+    setype: "{{ item.setype | default(omit) }}"
+    seuser: "{{ item.seuser | default(omit) }}"
+    unsafe_writes: "{{ item.unsafe_writes | default(omit) }}"
+  with_items: "{{ mrm_fs_dirs }}"

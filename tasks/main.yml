@@ -3,10 +3,10 @@
 # FILE:            {{ role_path }}/tasks/main.yml
 # LICENSE:         Public Domain
 
-- name: "MRM | Welcome message"
+- name: "MRM | MVM {{ mrm_version }} Welcome message"
   debug:
     msg:
-      mrm_version: "{{ mrm_version }}"
+      mrm_fs_dirs: "{{ mrm_fs_dirs }}"
       node:
         os: "{{ ansible_os_family | default('undefined') | lower }}"
         dist: "{{ ansible_distribution | default('undefined') | lower }}"
@@ -33,7 +33,7 @@
   tags:
     - always
 
-## Sanity Check>: mydumper/myloader must have way to contact the DB server _____
+## Sanity Check: mydumper/myloader must have way to contact the DB server ______
 
 - name: "~/.my.cnf stat"
   stat:
@@ -57,6 +57,13 @@
         password="YourPasswordHere"
 
 ## Run each MRM subcomponent ___________________________________________________
+
+- name: "setup-mrm-filesystem/main.yml"
+  include: setup-mrm-filesystem/main.yml
+  tags:
+    - setup-mrm-filesystem
+  when:
+    - mrm_setup_mrm_filesystem is sameas true
 
 - name: "setup-mydumper-mloader/main.yml"
   include: setup-mydumper-mloader/main.yml

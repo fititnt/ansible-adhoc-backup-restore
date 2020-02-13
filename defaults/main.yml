@@ -35,9 +35,59 @@ mrm_paranoid: false
 ## Other variables _____________________________________________________________
 
 mrm_setup_mydumper_myloader: yes
-mrm_setup_rclone: no
+mrm_setup_rclone: yes
+mrm_setup_mrm_filesystem: yes
 mrm_backup_disabled: no
 mrm_recovery_disabled: no
 mrm_valt_send_disabled: no
 mrm_valt_receive_disabled: no
 mrm_mode: "undefined-mode-select-backup-or-recovery"
+
+## Filesystem __________________________________________________________________
+
+# With 'mrm_setup_mrm_filesystem: yes', mrm_dirs is used to prepare local
+# filesystem. You can append other directories here
+mrm_fs_dirs:
+  - "{{ mrm_dir_base }}"
+  - "{{ mrm_dir_backup }}"
+  - "{{ mrm_dir_mydumperdaemon }}"
+  - "{{ mrm_dir_paranoidmode }}"
+
+# You do not plan to run always as root? Customize this
+mrm_fs_owner: "{{ mrm_internal_root_user }}" # root
+mrm_fs_group: "{{ mrm_internal_root_group }}" # root/wheel
+mrm_fs_mode: "0700"
+
+# The default base dir respect Filesystem Hierarchy Standard 3.0
+mrm_dir_base: 
+  path: "/var/local/mrm/"
+  owner: "{{ mrm_fs_owner }}"
+  group: "{{ mrm_internal_root_group }}"
+  mode: "{{ mrm_fs_mode }}"
+  state: directory
+  # recurse: yes
+  # serole: ...
+  # setype: ...
+  # Check {{ role_path }}/tasks/setup-mrm-filesystem/main.yml for all options!
+
+mrm_dir_backup:
+  path: "{{ mrm_dir_base.path }}backups/"
+  owner: "{{ mrm_fs_owner }}"
+  group: "{{ mrm_internal_root_group }}"
+  mode: "{{ mrm_fs_mode }}"
+  state: directory
+
+# Not implemented, but the folder at least exist if you want to implement
+mrm_dir_mydumperdaemon:
+  path: "{{ mrm_dir_base.path }}mydumper-daemon"
+  owner: "{{ mrm_fs_owner }}"
+  group: "{{ mrm_internal_root_group }}"
+  mode: "{{ mrm_fs_mode }}"
+  state: directory
+
+mrm_dir_paranoidmode:
+  path: "{{ mrm_dir_base.path }}full-temp-backup-before-recovery/"
+  owner: "{{ mrm_fs_owner }}"
+  group: "{{ mrm_internal_root_group }}"
+  mode: "{{ mrm_fs_mode }}"
+  state: directory

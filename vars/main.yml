@@ -13,6 +13,9 @@ mrm_active_directory: ""
 mrm_active_file: ""
 mrm_active_isencrypted: false
 
+mrm_internal_root_user: 'root'
+mrm_internal_root_group: 'root'
+
 mrm_packages_mydumpermyloader:
   - mydumper
 
