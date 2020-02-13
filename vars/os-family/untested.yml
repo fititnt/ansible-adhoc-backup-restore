@@ -34,3 +34,9 @@
 # ```
 # Note, actually  more systems are detected than these ones (the
 # distribution.py mention OpenBSD for example)
+
+# mrm_packages_mydumpermyloader:
+#   - mydumper
+
+# mrm_packages_rclone:
+#   - rclone

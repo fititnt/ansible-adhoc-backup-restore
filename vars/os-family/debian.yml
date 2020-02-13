@@ -5,3 +5,9 @@
 # DESCRIPTION:     This file is loaded by default for at least these OSs:
 #                  'Debian': ['Debian', 'Ubuntu', 'Raspbian', 'Neon', 'KDE neon',
 #                            'Linux Mint', 'SteamOS', 'Devuan', 'Kali', 'Cumulus Linux'],
+
+# mrm_packages_mydumpermyloader:
+#   - mydumper
+
+# mrm_packages_rclone:
+#   - rclone

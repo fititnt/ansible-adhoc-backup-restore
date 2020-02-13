@@ -4,26 +4,24 @@
 # LICENSE:         Public Domain
 
 - name: "MRM | Welcome message"
-debug:
-  msg:
-    mrm_version: "{{ alb_version }}"
-    node:
-      os: "{{ ansible_os_family | default('undefined') | lower }}"
-      dist: "{{ ansible_distribution | default('undefined') | lower }}"
-      dist_release: "{{ ansible_distribution_release | default('undefined') | lower }}"
-      dist_major_ver: "{{ ansible_distribution_major_version | default('undefined') | lower }}"
-      ansible_lsb: "{{ ansible_lsb | default('undefined') }}"
-      # If behind NAT, this may not represent real public IPv4.
-      # Alternative: https://docs.ansible.com/ansible/latest/modules/ipify_facts_module.html
-      ansible_default_ipv4: "{{ ansible_default_ipv4.address | default('undefined') }}"
-    run_related:
-      alb_run_only_app_uid: "{{ alb_run_only_app_uid | default('undefined') }}"
-      alb_forceredeploy: "{{ alb_forceredeploy | default('undefined') }}"
-      ansible_run_tags: "{{ ansible_run_tags | default('undefined') }}"
-      ansible_skip_tags: "{{ ansible_skip_tags | default('undefined') }}"
-tags:
-  - mrm
-  - always
+  debug:
+    msg:
+      mrm_version: "{{ mrm_version }}"
+      node:
+        os: "{{ ansible_os_family | default('undefined') | lower }}"
+        dist: "{{ ansible_distribution | default('undefined') | lower }}"
+        dist_release: "{{ ansible_distribution_release | default('undefined') | lower }}"
+        dist_major_ver: "{{ ansible_distribution_major_version | default('undefined') | lower }}"
+        ansible_lsb: "{{ ansible_lsb | default('undefined') }}"
+        # If behind NAT, this may not represent real public IPv4.
+        # Alternative: https://docs.ansible.com/ansible/latest/modules/ipify_facts_module.html
+        ansible_default_ipv4: "{{ ansible_default_ipv4.address | default('undefined') }}"
+      run_related:
+        ansible_run_tags: "{{ ansible_run_tags | default('undefined') }}"
+        ansible_skip_tags: "{{ ansible_skip_tags | default('undefined') }}"
+  tags:
+    - mrm
+    - always
 
 ## Variable loading based on node Operational System ___________________________
 - name: "MRM | OS Family variables (Override with mrm_vars_osfamily)"
@@ -35,14 +33,37 @@ tags:
   tags:
     - always
 
+## Sanity Check>: mydumper/myloader must have way to contact the DB server _____
+
+- name: "~/.my.cnf stat"
+  stat:
+    path: "~/.my.cnf"
+  when:
+    - "(mrm_dbserver_password is not sameas null)"
+  register: dot_my_cnf
+
+- name: "~/.my.cnf assert"
+  assert:
+    that:
+        - "(dot_my_cnf.stat.exists) or (mrm_dbserver_password is none)"
+    success_msg: "~/.my.cnf exists. mydumper will use this file"
+    fail_msg: |
+        Please do at least one of these strategies:
+        1. (quick) Set: mrm_dbserver_password value
+        2. (recommended) create file on ~/.my.cnf where with:
+
+        [client]
+        user="{{ ansible_user_id }}"
+        password="YourPasswordHere"
+
 ## Run each MRM subcomponent ___________________________________________________
 
-- name: "setup-mydump-mloader/main.yml"
-  include: setup-mydump-mloader/main.yml
+- name: "setup-mydumper-mloader/main.yml"
+  include: setup-mydumper-mloader/main.yml
   tags:
-    - setup-mydump-mloader
+    - setup-mydumper-mloader
   when:
-    - mrm_setup_mydump_myloader is sameas true
+    - mrm_setup_mydumper_myloader is sameas true
 
 - name: "setup-rclone/main.yml"
   include: setup-rclone/main.yml

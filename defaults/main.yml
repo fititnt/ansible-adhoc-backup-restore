@@ -12,11 +12,11 @@ mrm_no_schemas: null       # -m, --no-schemas: Do not dump table schemas with th
 mrm_no_data: null          # -d, --no-data: Do not dump table data
 
 # Server to export/import
-mrm_mariadb_user: root     # -u, --user: Username with privileges to run the dump
-mrm_mariadb_password: null # -p, --password: User password
-mrm_mariadb_host: null     # --host: The host to connect to
-mrm_mariadb_port: null     # -P, --port: TCP/IP port to connect to
-mrm_mariadb_socket: null   # -S, --socket: UNIX domain socket file to use for connection
+mrm_dbserver_user: root     # -u, --user: Username with privileges to run the dump
+mrm_dbserver_password: null # -p, --password: User password
+mrm_dbserver_host: null     # --host: The host to connect to
+mrm_dbserver_port: null     # -P, --port: TCP/IP port to connect to
+mrm_dbserver_socket: null   # -S, --socket: UNIX domain socket file to use for connection
 
 # For features not implemented, please use the following parameters
 mrm_mydumper_append: null  # String to append to mydumper shell command
@@ -34,7 +34,7 @@ mrm_paranoid: false
 
 ## Other variables _____________________________________________________________
 
-mrm_setup_mydump_myloader: yes
+mrm_setup_mydumper_myloader: yes
 mrm_setup_rclone: no
 mrm_backup_disabled: no
 mrm_recovery_disabled: no

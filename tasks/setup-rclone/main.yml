@@ -7,5 +7,23 @@
   debug:
     msg: "Work in progress"
 
+- name: "MRM | setup-rclone"
+  block:
+    - name: "MRM | setup-rclone | install {{ mrm_packages_rclone }}"
+      package:
+        name: "{{ mrm_packages_rclone }}"
+        state: present
+  rescue:
+    - name: "MRM | setup-rclone | user message"
+      fail:
+        msg: >
+          Default packages for rclone not found.
+
+          For imediate suggestion, you can disable this setup step with
+          'mrm_setup_rclone: no' and then install manually.
+
+          Please consider open an issue / open a pull request to the maintainer
+          repository.
+
 # SEE https://forum.rclone.org/t/rclone-as-destination-for-borgbackup/12717
 # SEE https://ruderich.org/simon/notes/append-only-backups-with-restic-and-rclone

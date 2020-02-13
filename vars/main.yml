@@ -12,3 +12,9 @@ mrm_name_default: "{{ inventory_hostname_short
 mrm_active_directory: ""
 mrm_active_file: ""
 mrm_active_isencrypted: false
+
+mrm_packages_mydumpermyloader:
+  - mydumper
+
+mrm_packages_rclone:
+  - rclone
