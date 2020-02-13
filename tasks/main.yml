@@ -3,10 +3,16 @@
 # FILE:            {{ role_path }}/tasks/main.yml
 # LICENSE:         Public Domain
 
-- name: "MRM | MVM {{ mrm_version }} Welcome message"
+- name: "MRM | MVM {{ mrm_version }} Welcome message | Mode: {{ mrm_mode }}"
   debug:
     msg:
-      mrm_fs_dirs: "{{ mrm_fs_dirs }}"
+      # aaaa: "{{ (mrm_database is defined and mrm_database|bool) | type_debug }}"
+      # bbbb: "{{ (mrm_database is defined and mrm_database|bool) | ternary('_aa', '__bb', '__ccc') }}"
+      # aaaa: "{{ ((mrm_database is defined and mrm_database|bool) | ternary('__' + mrm_database, '__all-databases', '__all-databases')) }}"
+      mrm:
+        mrm_fs_dirs: "{{ mrm_fs_dirs }}"
+        mrm_backup_disabled: "{{ mrm_backup_disabled }}"
+        mrm_recovery_disabled: "{{ mrm_recovery_disabled }}"
       node:
         os: "{{ ansible_os_family | default('undefined') | lower }}"
         dist: "{{ ansible_distribution | default('undefined') | lower }}"
@@ -79,50 +85,43 @@
   when:
     - mrm_setup_rclone is sameas true
 
-- name: "setup-rclone/main.yml"
-  include: setup-rclone/main.yml
-  tags:
-    - setup-rclone
-  when:
-    - mrm_setup_rclone is sameas true
-
 - name: "backup/main.yml"
   include: backup/main.yml
   tags:
     - backup
   when:
-    - (mrm_mode is sameas "backup")
-    - (mrm_backup_disabled is sameas false)
+    - (mrm_mode == "backup")
+    - (mrm_backup_disabled|bool is sameas false)
 
 - name: "valt-send/main.yml"
   include: valt-send/main.yml
   tags:
     - valt-send
   when:
-    - (mrm_mode is sameas "backup")
-    - (mrm_valt_send_disabled is sameas false)
+    - (mrm_mode == "backup")
+    - (mrm_valt_send_disabled|bool is sameas false)
 
 - name: "valt-receive/main.yml"
   include: valt-receive/main.yml
   tags:
     - valt-receive
   when:
-    - (mrm_mode is sameas "recovery")
-    - (mrm_valt_receive_disabled is sameas false)
+    - (mrm_mode == "recovery")
+    - (mrm_valt_receive_disabled|bool is sameas false)
 
 - name: "full-temp-backup-before-recovery/main.yml"
   include: full-temp-backup-before-recovery/main.yml
   tags:
     - full-temp-backup-before-recovery
   when:
-    - (mrm_mode is sameas "recovery")
-    - (mrm_paranoid is sameas true)
-    - (mrm_valt_recovery_disabled is sameas false)
+    - (mrm_mode == "recovery")
+    - (mrm_paranoid == true)
+    - (mrm_valt_recovery_disabled|bool is sameas false)
 
 - name: "recovery/main.yml"
   include: recovery/main.yml
   tags:
     - recovery
   when:
-    - (mrm_mode is sameas "recovery")
+    - (mrm_mode == "recovery")
     - (mrm_valt_recovery_disabled is sameas false)

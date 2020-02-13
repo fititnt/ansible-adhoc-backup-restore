@@ -6,9 +6,11 @@
 mrm_version: "v0.4.0"
 
 # my_host_all-databases_datetime
-mrm_name_default: "{{ inventory_hostname_short 
-  + ((mrm_database is defined and mrm_database|lenght > 0) | ternary('_' + mrm_database + '_', '_all-databases_'))
-  + '__' + ansible_date_time.iso8601_basic_short }}"
+mrm_default_summary: "{{ inventory_hostname_short + '__' + (mrm_database | default('all-databases', true)) }}"
+
+# myhostname__all-databases__20200213T052730
+mrm_backup_name: "{{ mrm_name }}{{ ((mrm_backup_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
+mrm_recovery_name: "{{ mrm_name }}{{ ((mrm_recovery_timestamp|bool) | ternary('__' + mrm_recovery_timestamp, '', '')) }}"
 
 mrm_mydumper_outputdir: "{{ mrm_dir_mydumpermyloader.path }}"
 mrm_myloader_diretory: "{{ mrm_dir_mydumpermyloader.path }}"

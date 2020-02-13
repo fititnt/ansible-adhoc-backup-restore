@@ -4,7 +4,6 @@
 # LICENSE:         Public Domain
 # SEE:             https://askubuntu.com/questions/575679/what-is-the-default-location-for-backup-files-of-another-server/754155#754155
 
-
 - name: "MRM | setup-mrm-filesystem | Manange MRM base directories"
   file:
     path: "{{ item.path }}"
@@ -30,8 +29,7 @@
     unsafe_writes: "{{ item.unsafe_writes | default(omit) }}"
   with_items: "{{ mrm_fs_dirs }}"
 
-- name: "MRM | setup-mrm-filesystem | Manange MRM directory for this specific backup/recovery
-    (if mrm_pathprefix_local was customized)"
+- name: "MRM | setup-mrm-filesystem | Manange MRM directory for this specific backup/recovery"
   file:
     path: "{{ item.path }}"
     state: "{{ item.state | default('directory') }}"
@@ -58,4 +56,4 @@
     - "{{ mrm_dir_mydumpermyloader }}"
   when:
     - "(mrm_mode is sameas 'backup') or (mrm_mode is sameas 'recovery')"
-    - "(mrm_pathprefix_local is not defined) or (mrm_pathprefix_local|lenght > 0)"
+    # - "(mrm_pathprefix_local is not defined) or (mrm_pathprefix_local|lenght > 0)"
