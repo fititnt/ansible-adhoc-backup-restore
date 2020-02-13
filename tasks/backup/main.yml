@@ -3,20 +3,19 @@
 # FILE:            {{ role_path }}/tasks/backup/main.yml
 # LICENSE:         Public Domain
 
-- name: "MRM | backup | TODO message"
+# - name: "MRM | backup | TODO message"
+#   debug:
+#     msg: "Work in progress"
+
+- name: "MRM | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
   debug:
-    msg: "Work in progress"
+    msg:
+      mrm_mydumper_outputdir: "{{ mrm_mydumper_outputdir | default('undefined') }}"
+    verbosity: 1
 
 - name: "Run prepared mydumper_command"
   shell: >
     mydumper
-    --outputdir='{{ this_mydumper_outputdir }}'
-    {{ mydumper_command_append | default('') }}
-#   command:
-#     argv:
-#       - "mydumper"
-#       - "--outputdir='{{ this_mydumper_outputdir }}'"
-#       # - ""
-  when:
-    - (mydumper_command is undefined)
+    --outputdir='{{ mrm_mydumper_outputdir }}'
+    {{ mrm_mydumper_append | default('') }}
   register: command_result

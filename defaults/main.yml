@@ -3,8 +3,15 @@
 # FILE:            {{ role_path }}/defaults/main.yml
 # LICENSE:         Public Domain
 
-# Data to export/import
-mrm_name: "{{ mrm_name_default }}"
+# Most common variables to change ______________________________________________
+mrm_mode: "undefined-mode-select-backup-or-recovery" # Options: backup or recovery
+mrm_name: "{{ mrm_name_default }}"  # (TODO: add example of name here)
+mrm_bucket: "mrm-local-test" # See also mrm_bucket_backup/mrm_bucket_recovery
+mrm_pathprefix: "" # See also mrm_pathprefix_local/mrm_pathprefix_remote
+# mrm_paranoid: yes # if you are running in production and is ok to do full-temp-backup-before-recovery
+
+# MariaDB/MySQL/Galera Cluster _________________________________________________
+
 mrm_database: null         # -B, --database: Database to dump (defalts to ALL databases, including system databases!)
 mrm_tables_list: ""        # --tables-list: Comma delimited table list to dump (does not exclude regex option)
 mrm_regex: ""              # -x, --regex: Regular expression for 'db.table' matching
@@ -21,6 +28,26 @@ mrm_dbserver_socket: null   # -S, --socket: UNIX domain socket file to use for c
 # For features not implemented, please use the following parameters
 mrm_mydumper_append: null  # String to append to mydumper shell command
 mrm_myloader_append: null  # String to append to myloader shell command
+
+# RCLONE _______________________________________________________________________
+
+# Since is possible to have valt backends with different access keys to backup
+# (e.g. the backup for security reason ONLY ALLOW WRITE, but not reads) and
+# to recovery (e.g. a key that, via human intervention, may allow list remote
+# options) the user can customize both
+mrm_bucket_backup: "{{ mrm_rclone_bucket }}"
+mrm_bucket_recovery: "{{ mrm_rclone_bucket }}"
+
+mrm_rclone_valt_send_method: "move" # Move files from source to dest https://rclone.org/commands/rclone_move/
+# mrm_rclone_valt_send_method: "copy" # Copy files from source to dest, skipping already copied https://rclone.org/commands/rclone_move/
+# mrm_rclone_valt_send_method: "sync" # Make source and dest identical, modifying destination only https://rclone.org/commands/rclone_sync/
+
+mrm_rclone_valt_receive_method: "copy"
+
+# @see https://rclone.org/docs/#environment-variables
+mrm_rclone_enviroment:
+  RCLONE_YOUR_CUSTOM_VAR: "here."
+  RCLONE_ANOTHER_VAR: "here"
 
 # Less common options
 # @see https://dba.stackexchange.com/questions/99007/how-does-mydumpers-use-savepoints-option-reduce-metadata-locking
@@ -41,9 +68,29 @@ mrm_backup_disabled: no
 mrm_recovery_disabled: no
 mrm_valt_send_disabled: no
 mrm_valt_receive_disabled: no
-mrm_mode: "undefined-mode-select-backup-or-recovery"
+# mrm_mode: "undefined-mode-select-backup-or-recovery"
 
 ## Filesystem __________________________________________________________________
+
+### Backup/recovery step .......................................................
+# If you dont want to store all backups on same base folder, you can customize
+# here
+mrm_pathprefix_local: "{{ mrm_pathprefix }}"
+mrm_pathprefix_remote: "{{ mrm_pathprefix }}"
+
+# The default base dir respect Filesystem Hierarchy Standard 3.0
+mrm_dir_mydumpermyloader: 
+  path: "{{ mrm_dir_backup.path }}{{ mrm_pathprefix_local }}" # Default: /var/local/mrm/backups/{{ mrm_pathprefix }}
+  owner: "{{ mrm_fs_owner }}" # Default: root
+  group: "{{ mrm_internal_root_group }}" # Default: root/wheel
+  mode: "{{ mrm_fs_mode }}" # Default: "0700"
+  state: directory
+  recurse: yes
+  # serole: ...
+  # setype: ...
+  # Check {{ role_path }}/tasks/setup-mrm-filesystem/main.yml for all options!
+
+### Setup step .................................................................
 
 # With 'mrm_setup_mrm_filesystem: yes', mrm_dirs is used to prepare local
 # filesystem. You can append other directories here
