@@ -11,3 +11,14 @@
       mrm_rclone_enviroment: "{{ mrm_rclone_enviroment | default('undefined') }}"
       mrm_backup_rclone_command: "{{ mrm_backup_rclone_command | default('undefined') }}"
     verbosity: 1
+
+- name: "MRM | valt-send | rclone command"
+  shell: "{{ mrm_backup_rclone_command }}"
+  environment: "{{ mrm_rclone_enviroment }}"
+  register: command_result
+
+- name: "MRM | valt-send | debug (requires -v, -vv, -vvv, or -vvvv)"
+  debug:
+    msg:
+      command_result: "{{ command_result | default('undefined') }}"
+    verbosity: 1

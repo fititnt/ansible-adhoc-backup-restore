@@ -45,10 +45,18 @@ mrm_myloader_append: null  # String to append to myloader shell command
 # RCLONE _______________________________________________________________________
 
 mrm_rclone_bucket_type: "local"
-mrm_rclone_enviroment: []
+
+mrm_rclone_enviroment: {}
+# mrm_rclone_enviroment:
+#   RCLONE_B2_ACCOUNT: "000b3e7..."
+#   RCLONE_B2_KEY: "K000pyk..."
+
+mrm_rclone_args: {}
 # mrm_rclone_args: {
-#   ""
+#   '--b2-account': "000b3e7...",
+#   '--b2-key': "K000pyk..."
 # }
+
 
 # Since is possible to have valt backends with different access keys to backup
 # (e.g. the backup for security reason ONLY ALLOW WRITE, but not reads) and
@@ -56,6 +64,11 @@ mrm_rclone_enviroment: []
 # options) the user can customize both
 mrm_rclone_bucket_backup: "{{ mrm_rclone_bucket }}"
 mrm_rclone_bucket_recovery: "{{ mrm_rclone_bucket }}"
+mrm_rclone_enviroment_backup: "{{ mrm_rclone_enviroment }}"
+mrm_rclone_enviroment_recovery: "{{ mrm_rclone_enviroment }}"
+mrm_rclone_args_backup: "{{ mrm_rclone_args }}"
+mrm_rclone_args_recovery: "{{ mrm_rclone_args }}"
+
 
 mrm_rclone_valt_send_method: "move" # Move files from source to dest https://rclone.org/commands/rclone_move/
 # mrm_rclone_valt_send_method: "copy" # Copy files from source to dest, skipping already copied https://rclone.org/commands/rclone_move/
@@ -64,9 +77,9 @@ mrm_rclone_valt_send_method: "move" # Move files from source to dest https://rcl
 mrm_rclone_valt_receive_method: "copy"
 
 # @see https://rclone.org/docs/#environment-variables
-mrm_rclone_enviroment:
-  RCLONE_YOUR_CUSTOM_VAR: "here."
-  RCLONE_ANOTHER_VAR: "here"
+# mrm_rclone_enviroment:
+#   RCLONE_YOUR_CUSTOM_VAR: "here."
+#   RCLONE_ANOTHER_VAR: "here"
 
 # Less common options
 # @see https://dba.stackexchange.com/questions/99007/how-does-mydumpers-use-savepoints-option-reduce-metadata-locking
