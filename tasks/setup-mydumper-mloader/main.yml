@@ -4,20 +4,20 @@
 # LICENSE:         Public Domain
 # SEE:             https://docs.ansible.com/ansible/latest/modules/package_module.html
 
-- name: "MRM | setup-mydumper-mloader"
+- name: "b2r | setup-mydumper-mloader"
   block:
-    - name: "MRM | setup-mydumper-mloader | install {{ mrm_packages_mydumpermyloader }}"
+    - name: "b2r | setup-mydumper-mloader | install {{ b2r_packages_mydumpermyloader }}"
       package:
-        name: "{{ mrm_packages_mydumpermyloader }}"
+        name: "{{ b2r_packages_mydumpermyloader }}"
         state: present
   rescue:
-    - name: "MRM | setup-mydumper-mloader | user message"
+    - name: "b2r | setup-mydumper-mloader | user message"
       fail:
         msg: >
           Default packages for mydumper/myloader not found.
 
           For imediate suggestion, you can disable this setup step with
-          'mrm_setup_mydumper_myloader: no' and then install manually.
+          'b2r_setup_mydumper_myloader: no' and then install manually.
 
           Please consider open an issue / open a pull request to the maintainer
           repository.

@@ -1,10 +1,10 @@
 ---
 
-# FILE:            {{ role_path }}/tasks/setup-mrm-filesystem/main.yml
+# FILE:            {{ role_path }}/tasks/setup-b2r-filesystem/main.yml
 # LICENSE:         Public Domain
 # SEE:             https://askubuntu.com/questions/575679/what-is-the-default-location-for-backup-files-of-another-server/754155#754155
 
-- name: "MRM | setup-mrm-filesystem | Manange MRM base directories"
+- name: "b2r | setup-b2r-filesystem | Manange b2r base directories"
   file:
     path: "{{ item.path }}"
     state: "{{ item.state | default('directory') }}"
@@ -27,9 +27,9 @@
     setype: "{{ item.setype | default(omit) }}"
     seuser: "{{ item.seuser | default(omit) }}"
     unsafe_writes: "{{ item.unsafe_writes | default(omit) }}"
-  with_items: "{{ mrm_fs_dirs }}"
+  with_items: "{{ b2r_fs_dirs }}"
 
-- name: "MRM | setup-mrm-filesystem | Manange MRM directory for this specific backup/recovery"
+- name: "b2r | setup-b2r-filesystem | Manange b2r directory for this specific backup/recovery"
   file:
     path: "{{ item.path }}"
     state: "{{ item.state | default('directory') }}"
@@ -53,7 +53,7 @@
     seuser: "{{ item.seuser | default(omit) }}"
     unsafe_writes: "{{ item.unsafe_writes | default(omit) }}"
   with_items:
-    - "{{ mrm_dir_mydumpermyloader }}"
+    - "{{ b2r_dir_mydumpermyloader }}"
   when:
-    - "(mrm_mode is sameas 'backup') or (mrm_mode is sameas 'recovery')"
-    # - "(mrm_pathprefix_local is not defined) or (mrm_pathprefix_local|lenght > 0)"
+    - "(b2r_mode is sameas 'backup') or (b2r_mode is sameas 'recovery')"
+    # - "(b2r_pathprefix_local is not defined) or (b2r_pathprefix_local|lenght > 0)"

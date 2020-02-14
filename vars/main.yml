@@ -3,44 +3,53 @@
 # FILE:            {{ role_path }}/vars/main.yml
 # LICENSE:         Public Domain
 
-mrm_version: "v0.4.0"
+b2r_version: "v0.5.0"
+
+b2r_now:
+  path: null
+  type: file
+  encrypted: false
+
 
 # my_host_all-databases_datetime
-mrm_default_summary: "{{ inventory_hostname_short + '__' + (mrm_database | default('all-databases', true)) }}"
+b2r_default_summary: "{{ inventory_hostname_short + '__' + (b2r_database | default('all-databases', true)) }}"
 
 # myhostname__all-databases__20200213T052730
-mrm_backup_name: "{{ mrm_name }}{{ ((mrm_backup_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
-mrm_recovery_name: "{{ mrm_name }}{{ ((mrm_recovery_timestamp|bool) | ternary('__' + mrm_recovery_timestamp, '', '')) }}"
+b2r_backup_name: "{{ b2r_name }}{{ ((b2r_backup_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
+b2r_recovery_name: "{{ b2r_name }}{{ ((b2r_recovery_timestamp|bool) | ternary('__' + b2r_recovery_timestamp, '', '')) }}"
 
-mrm_rclone_args_backup_string: "{{ mrm_rclone_args_backup | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
-mrm_rclone_args_recovery_string: "{{ mrm_rclone_args_recovery | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
+b2r_rclone_args_backup_string: "{{ b2r_rclone_args_backup | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
+b2r_rclone_args_recovery_string: "{{ b2r_rclone_args_recovery | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
 
-# mrm_internal_islocalbucket: "{{ mrm_rclone_bucket == 'mrm-local-bucket' }}"
+# b2r_internal_islocalbucket: "{{ b2r_rclone_bucket == 'b2r-local-bucket' }}"
 
-mrm_backup_rclone_source: "{{ mrm_dir_mydumpermyloader.path }}"
-# mrm_backup_rclone_destiny: "{{ (mrm_internal_islocalbucket!bool) | ternary(mrm_dir_mrmlocalbucket.path + mrm_pathprefix_remote + mrm_backup_name, '' }}"
-mrm_backup_rclone_destiny: "{{ mrm_rclone_bucket_backup + mrm_pathprefix_remote + mrm_backup_name }}"
-mrm_backup_rclone_command: "rclone {{ mrm_rclone_valt_send_method }} {{ mrm_rclone_args_backup_string }} {{ mrm_backup_rclone_source }} {{ mrm_backup_rclone_destiny }}"
+### b2r_backup_rclone_source: "{{ b2r_dir_mydumpermyloader.path }}"
+b2r_backup_rclone_source: "{{ b2r_now.path }}"
+# b2r_backup_rclone_destiny: "{{ (b2r_internal_islocalbucket!bool) | ternary(b2r_dir_b2rlocalbucket.path + b2r_pathprefix_remote + b2r_backup_name, '' }}"
+b2r_backup_rclone_destiny: "{{ b2r_rclone_bucket_backup + b2r_pathprefix_remote + b2r_backup_name }}"
+b2r_backup_rclone_command: "rclone {{ b2r_rclone_valt_send_method }} {{ b2r_rclone_args_backup_string }} {{ b2r_backup_rclone_source }} {{ b2r_backup_rclone_destiny }}"
 
-# mrm_recovery_rclone_source: "{{ mrm_dir_mrmlocalbucket.path }}{{ mrm_pathprefix_remote }}{{ mrm_backup_name }}"
-mrm_recovery_rclone_source: "{{ mrm_rclone_bucket_backup + mrm_pathprefix_remote + mrm_backup_name }}"
-mrm_recovery_rclone_destiny: "{{ mrm_dir_mydumpermyloader.path }}"
-mrm_recovery_rclone_command: "rclone {{ mrm_rclone_valt_receive_method }} {{ mrm_rclone_args_recovery_string }} {{ mrm_backup_source }} {{ mrm_backup_destiny }}"
+# b2r_recovery_rclone_source: "{{ b2r_dir_b2rlocalbucket.path }}{{ b2r_pathprefix_remote }}{{ b2r_backup_name }}"
+b2r_recovery_rclone_source: "{{ b2r_rclone_bucket_backup + b2r_pathprefix_remote + b2r_backup_name }}"
+b2r_recovery_rclone_destiny: "{{ b2r_dir_mydumpermyloader.path }}"
+b2r_recovery_rclone_command: "rclone {{ b2r_rclone_valt_receive_method }} {{ b2r_rclone_args_recovery_string }} {{ b2r_backup_source }} {{ b2r_backup_destiny }}"
 
-mrm_mydumper_outputdir: "{{ mrm_dir_mydumpermyloader.path }}"
-mrm_myloader_diretory: "{{ mrm_dir_mydumpermyloader.path }}"
+## b2r_mydumper_outputdir: "{{ b2r_dir_mydumpermyloader.path }}"
+## b2r_myloader_diretory: "{{ b2r_dir_mydumpermyloader.path }}"
+# b2r_mydumper_outputdir: "{{ b2r_now.path }}"
+# b2r_myloader_diretory: "{{ b2r_now.path }}"
 
 # To allow be reused by other tools, we will use standard names
 # @see https://www.tecmint.com/linux-password-protect-files-with-encryption/
-mrm_active_directory: ""
-mrm_active_file: ""
-mrm_active_isencrypted: false
+b2r_active_directory: ""
+b2r_active_file: ""
+b2r_active_isencrypted: false
 
-mrm_internal_root_user: 'root'
-mrm_internal_root_group: 'root'
+b2r_internal_root_user: 'root'
+b2r_internal_root_group: 'root'
 
-mrm_packages_mydumpermyloader:
+b2r_packages_mydumpermyloader:
   - mydumper
 
-mrm_packages_rclone:
+b2r_packages_rclone:
   - rclone

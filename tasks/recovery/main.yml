@@ -3,6 +3,6 @@
 # FILE:            {{ role_path }}/tasks/recovery/main.yml
 # LICENSE:         Public Domain
 
-- name: "MRM | recovery | TODO message"
+- name: "b2r | recovery | TODO message"
   debug:
     msg: "Work in progress"

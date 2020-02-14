@@ -1,5 +1,5 @@
 galaxy_info:
-  role_name: "mydumper_rclone_myloader"
+  role_name: "adhoc_backup_rclone_restore"
   author: "Emerson Rocha <rocha(at)ieee.org>"
   description: |
     Full Ad Hoc backup/recovery for MariaDB/MySQL with performance

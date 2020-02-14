@@ -3,16 +3,16 @@
 # FILE:            {{ role_path }}/tasks/main.yml
 # LICENSE:         Public Domain
 
-- name: "MRM | MVM {{ mrm_version }} Welcome message | Mode: {{ mrm_mode }}"
+- name: "b2r | MVM {{ b2r_version }} Welcome message | Mode: {{ b2r_mode }}"
   debug:
     msg:
-      # aaaa: "{{ (mrm_database is defined and mrm_database|bool) | type_debug }}"
-      # bbbb: "{{ (mrm_database is defined and mrm_database|bool) | ternary('_aa', '__bb', '__ccc') }}"
-      # aaaa: "{{ ((mrm_database is defined and mrm_database|bool) | ternary('__' + mrm_database, '__all-databases', '__all-databases')) }}"
-      mrm:
-        mrm_fs_dirs: "{{ mrm_fs_dirs }}"
-        mrm_backup_disabled: "{{ mrm_backup_disabled }}"
-        mrm_recovery_disabled: "{{ mrm_recovery_disabled }}"
+      # aaaa: "{{ (b2r_database is defined and b2r_database|bool) | type_debug }}"
+      # bbbb: "{{ (b2r_database is defined and b2r_database|bool) | ternary('_aa', '__bb', '__ccc') }}"
+      # aaaa: "{{ ((b2r_database is defined and b2r_database|bool) | ternary('__' + b2r_database, '__all-databases', '__all-databases')) }}"
+      b2r:
+        b2r_fs_dirs: "{{ b2r_fs_dirs }}"
+        b2r_backup_disabled: "{{ b2r_backup_disabled }}"
+        b2r_recovery_disabled: "{{ b2r_recovery_disabled }}"
       node:
         os: "{{ ansible_os_family | default('undefined') | lower }}"
         dist: "{{ ansible_distribution | default('undefined') | lower }}"
@@ -26,14 +26,14 @@
         ansible_run_tags: "{{ ansible_run_tags | default('undefined') }}"
         ansible_skip_tags: "{{ ansible_skip_tags | default('undefined') }}"
   tags:
-    - mrm
+    - b2r
     - always
 
 ## Variable loading based on node Operational System ___________________________
-- name: "MRM | OS Family variables (Override with mrm_vars_osfamily)"
+- name: "b2r | OS Family variables (Override with b2r_vars_osfamily)"
   include_vars: "{{ item }}"
   with_first_found:
-    - "{{ (mrm_vars_osfamily is defined) | ternary(mrm_vars_osfamily, 'name-of-a-file-that-does-not-exist.yml') }}"
+    - "{{ (b2r_vars_osfamily is defined) | ternary(b2r_vars_osfamily, 'name-of-a-file-that-does-not-exist.yml') }}"
     - "os-family/{{ ansible_os_family | default('undefined') | lower }}.yml"
     - "os-family/{{ (ansible_os_family is defined) | ternary('untested','unknown') }}.yml"
   tags:
@@ -45,83 +45,83 @@
   stat:
     path: "~/.my.cnf"
   when:
-    - "(mrm_dbserver_password is not sameas null)"
+    - "(b2r_dbserver_password is not sameas null)"
   register: dot_my_cnf
 
 - name: "~/.my.cnf assert"
   assert:
     that:
-        - "(dot_my_cnf.stat.exists) or (mrm_dbserver_password is none)"
+        - "(dot_my_cnf.stat.exists) or (b2r_dbserver_password is none)"
     success_msg: "~/.my.cnf exists. mydumper will use this file"
     fail_msg: |
         Please do at least one of these strategies:
-        1. (quick) Set: mrm_dbserver_password value
+        1. (quick) Set: b2r_dbserver_password value
         2. (recommended) create file on ~/.my.cnf where with:
 
         [client]
         user="{{ ansible_user_id }}"
         password="YourPasswordHere"
 
-## Run each MRM subcomponent ___________________________________________________
+## Run each b2r subcomponent ___________________________________________________
 
-- name: "setup-mrm-filesystem/main.yml"
-  include: setup-mrm-filesystem/main.yml
+- name: "setup-b2r-filesystem/main.yml"
+  include: setup-b2r-filesystem/main.yml
   tags:
-    - setup-mrm-filesystem
+    - setup-b2r-filesystem
   when:
-    - mrm_setup_mrm_filesystem is sameas true
+    - b2r_setup_b2r_filesystem is sameas true
 
 - name: "setup-mydumper-mloader/main.yml"
   include: setup-mydumper-mloader/main.yml
   tags:
     - setup-mydumper-mloader
   when:
-    - mrm_setup_mydumper_myloader is sameas true
+    - b2r_setup_mydumper_myloader is sameas true
 
 - name: "setup-rclone/main.yml"
   include: setup-rclone/main.yml
   tags:
     - setup-rclone
   when:
-    - mrm_setup_rclone is sameas true
+    - b2r_setup_rclone is sameas true
 
 - name: "backup/main.yml"
   include: backup/main.yml
   tags:
     - backup
   when:
-    - (mrm_mode == "backup")
-    - (mrm_backup_disabled|bool is sameas false)
+    - (b2r_mode == "backup")
+    - (b2r_backup_disabled|bool is sameas false)
 
 - name: "valt-send/main.yml"
   include: valt-send/main.yml
   tags:
     - valt-send
   when:
-    - (mrm_mode == "backup")
-    - (mrm_valt_send_disabled|bool is sameas false)
+    - (b2r_mode == "backup")
+    - (b2r_valt_send_disabled|bool is sameas false)
 
 - name: "valt-receive/main.yml"
   include: valt-receive/main.yml
   tags:
     - valt-receive
   when:
-    - (mrm_mode == "recovery")
-    - (mrm_valt_receive_disabled|bool is sameas false)
+    - (b2r_mode == "recovery")
+    - (b2r_valt_receive_disabled|bool is sameas false)
 
 - name: "full-temp-backup-before-recovery/main.yml"
   include: full-temp-backup-before-recovery/main.yml
   tags:
     - full-temp-backup-before-recovery
   when:
-    - (mrm_mode == "recovery")
-    - (mrm_paranoid == true)
-    - (mrm_valt_recovery_disabled|bool is sameas false)
+    - (b2r_mode == "recovery")
+    - (b2r_paranoid == true)
+    - (b2r_valt_recovery_disabled|bool is sameas false)
 
 - name: "recovery/main.yml"
   include: recovery/main.yml
   tags:
     - recovery
   when:
-    - (mrm_mode == "recovery")
-    - (mrm_valt_recovery_disabled is sameas false)
+    - (b2r_mode == "recovery")
+    - (b2r_valt_recovery_disabled is sameas false)

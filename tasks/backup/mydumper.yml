@@ -3,27 +3,27 @@
 # FILE:            {{ role_path }}/tasks/backup/mydumper.yml
 # LICENSE:         Public Domain
 
-- name: "MRM | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
+- name: "b2r | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
   debug:
     msg:
-      mrm_mydumper_outputdir: "{{ mrm_mydumper_outputdir | default('undefined') }}"
-      # result: "{{ (mrm_database is defined and mrm_database and mrm_database|length > 0) }}"
-      # result2: "{{ (mrm_database is defined and mrm_database and mrm_database|length > 0) | ternary('_aaaaa_', '_bbbb_', '_isnull_')}}"
-      # result: "{{ ((mrm_database is defined and mrm_database and mrm_database|length > 0) | ternary('_' + mrm_database + '_', '_all-databases_')) }}"
+      b2r_mydumper_outputdir: "{{ b2r_mydumper_outputdir | default('undefined') }}"
+      # result: "{{ (b2r_database is defined and b2r_database and b2r_database|length > 0) }}"
+      # result2: "{{ (b2r_database is defined and b2r_database and b2r_database|length > 0) | ternary('_aaaaa_', '_bbbb_', '_isnull_')}}"
+      # result: "{{ ((b2r_database is defined and b2r_database and b2r_database|length > 0) | ternary('_' + b2r_database + '_', '_all-databases_')) }}"
     verbosity: 1
 
 - name: "Run prepared mydumper_command"
   shell: >
     mydumper
-    --outputdir='{{ mrm_mydumper_outputdir }}'
-    {{ mrm_mydumper_append | default('') }}
+    --outputdir='{{ b2r_mydumper_outputdir }}'
+    {{ b2r_mydumper_append | default('') }}
   register: mydumper_command_result
 
-- name: "Compress {{ mrm_mydumper_outputdir }} into /var/local/mrm/temp/output.xz"
+- name: "Compress {{ b2r_mydumper_outputdir }} into /var/local/b2r/temp/output.xz"
   archive:
-    path: "{{ mrm_mydumper_outputdir }}"
-    #dest: "{{ mrm_mydumper_outputdir }}.xz"
-    dest: "/var/local/mrm/temp/output.xz"
+    path: "{{ b2r_mydumper_outputdir }}"
+    #dest: "{{ b2r_mydumper_outputdir }}.xz"
+    dest: "/var/local/b2r/temp/output.xz"
     format: "xz"
     force_archive: yes
     remove: yes
@@ -31,10 +31,10 @@
 
 - name: "Inform new path of file (before was a folder)"
   set_fact:
-    # mrm_backup_rclone_source: "{{ mrm_mydumper_outputdir }}.xz"
-    mrm_backup_rclone_source: "/var/local/mrm/temp/output.xz"
+    # b2r_backup_rclone_source: "{{ b2r_mydumper_outputdir }}.xz"
+    b2r_backup_rclone_source: "/var/local/b2r/temp/output.xz"
 
-- name: "MRM | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
+- name: "b2r | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
   debug:
     msg:
       mydumper_command_result: "{{ mydumper_command_result | default('undefined') }}"

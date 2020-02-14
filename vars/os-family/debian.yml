@@ -6,11 +6,11 @@
 #                  'Debian': ['Debian', 'Ubuntu', 'Raspbian', 'Neon', 'KDE neon',
 #                            'Linux Mint', 'SteamOS', 'Devuan', 'Kali', 'Cumulus Linux'],
 
-# mrm_internal_root_user: 'root'
-# mrm_internal_root_group: 'root'
+# b2r_internal_root_user: 'root'
+# b2r_internal_root_group: 'root'
 
-# mrm_packages_mydumpermyloader:
+# b2r_packages_mydumpermyloader:
 #   - mydumper
 
-# mrm_packages_rclone:
+# b2r_packages_rclone:
 #   - rclone

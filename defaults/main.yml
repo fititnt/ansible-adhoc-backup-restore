@@ -4,55 +4,55 @@
 # LICENSE:         Public Domain
 
 ### Most common variables to change, start _____________________________________
-# Check mrm_database var if you dont want FULL backup or FULL server recovery
-mrm_mode: "undefined-mode-select-backup-or-recovery" # Options: backup or recovery
-mrm_name: "{{ mrm_default_summary }}" # Example: myhostname__all-databases__20200213T052730
-mrm_rclone_bucket: ":local:/var/local/mrm/mrm-local-bucket/" # See also mrm_rclone_bucket_backup/mrm_rclone_bucket_recovery
-mrm_pathprefix: "" # See also mrm_pathprefix_local/mrm_pathprefix_remote
-# mrm_paranoid: yes # if you are running in production and is ok to do full-temp-backup-before-recovery
+# Check b2r_database var if you dont want FULL backup or FULL server recovery
+b2r_mode: "undefined-mode-select-backup-or-recovery" # Options: backup or recovery
+b2r_name: "{{ b2r_default_summary }}" # Example: myhostname__all-databases__20200213T052730
+b2r_rclone_bucket: ":local:/var/local/b2r/b2r-local-bucket/" # See also b2r_rclone_bucket_backup/b2r_rclone_bucket_recovery
+b2r_pathprefix: "" # See also b2r_pathprefix_local/b2r_pathprefix_remote
+# b2r_paranoid: yes # if you are running in production and is ok to do full-temp-backup-before-recovery
 
-## Exclusive to: mrm_mode: backup ..............................................
-mrm_backup_timestamped: yes # Example 'no': myhostname__all-databases
-mrm_backup_compress: false
+## Exclusive to: b2r_mode: backup ..............................................
+b2r_backup_timestamped: yes # Example 'no': myhostname__all-databases
+b2r_backup_compress: false
 
-## Exclusive to: mrm_mode: recovery ............................................
-mrm_recovery_timestamp: "" # Example: 20200213T052730, ignore when 'mrm_backup_timestamped: no'
-mrm_recovery_database: ""  # If you export all databases, but want import just one, use it
-mrm_recovery_tables: []    # If want just specific databases
-# mrm_recovery_customrclone: ""
+## Exclusive to: b2r_mode: recovery ............................................
+b2r_recovery_timestamp: "" # Example: 20200213T052730, ignore when 'b2r_backup_timestamped: no'
+b2r_recovery_database: ""  # If you export all databases, but want import just one, use it
+b2r_recovery_tables: []    # If want just specific databases
+# b2r_recovery_customrclone: ""
 
 ### Most common variables to change, end _______________________________________
 
 # MariaDB/MySQL/Galera Cluster _________________________________________________
 
-mrm_database: null         # -B, --database: Database to dump (defalts to ALL databases, including system databases!)
-mrm_tables_list: ""        # --tables-list: Comma delimited table list to dump (does not exclude regex option)
-mrm_regex: ""              # -x, --regex: Regular expression for 'db.table' matching
-mrm_no_schemas: null       # -m, --no-schemas: Do not dump table schemas with the data
-mrm_no_data: null          # -d, --no-data: Do not dump table data
+b2r_database: null         # -B, --database: Database to dump (defalts to ALL databases, including system databases!)
+b2r_tables_list: ""        # --tables-list: Comma delimited table list to dump (does not exclude regex option)
+b2r_regex: ""              # -x, --regex: Regular expression for 'db.table' matching
+b2r_no_schemas: null       # -m, --no-schemas: Do not dump table schemas with the data
+b2r_no_data: null          # -d, --no-data: Do not dump table data
 
 # Server to export/import
-mrm_dbserver_user: root     # -u, --user: Username with privileges to run the dump
-mrm_dbserver_password: null # -p, --password: User password
-mrm_dbserver_host: null     # --host: The host to connect to
-mrm_dbserver_port: null     # -P, --port: TCP/IP port to connect to
-mrm_dbserver_socket: null   # -S, --socket: UNIX domain socket file to use for connection
+b2r_dbserver_user: root     # -u, --user: Username with privileges to run the dump
+b2r_dbserver_password: null # -p, --password: User password
+b2r_dbserver_host: null     # --host: The host to connect to
+b2r_dbserver_port: null     # -P, --port: TCP/IP port to connect to
+b2r_dbserver_socket: null   # -S, --socket: UNIX domain socket file to use for connection
 
 # For features not implemented, please use the following parameters
-mrm_mydumper_append: null  # String to append to mydumper shell command
-mrm_myloader_append: null  # String to append to myloader shell command
+b2r_mydumper_append: null  # String to append to mydumper shell command
+b2r_myloader_append: null  # String to append to myloader shell command
 
 # RCLONE _______________________________________________________________________
 
-mrm_rclone_bucket_type: "local"
+b2r_rclone_bucket_type: "local"
 
-mrm_rclone_enviroment: {}
-# mrm_rclone_enviroment:
+b2r_rclone_enviroment: {}
+# b2r_rclone_enviroment:
 #   RCLONE_B2_ACCOUNT: "000b3e7..."
 #   RCLONE_B2_KEY: "K000pyk..."
 
-mrm_rclone_args: {}
-# mrm_rclone_args: {
+b2r_rclone_args: {}
+# b2r_rclone_args: {
 #   '--b2-account': "000b3e7...",
 #   '--b2-key': "K000pyk..."
 # }
@@ -62,22 +62,22 @@ mrm_rclone_args: {}
 # (e.g. the backup for security reason ONLY ALLOW WRITE, but not reads) and
 # to recovery (e.g. a key that, via human intervention, may allow list remote
 # options) the user can customize both
-mrm_rclone_bucket_backup: "{{ mrm_rclone_bucket }}"
-mrm_rclone_bucket_recovery: "{{ mrm_rclone_bucket }}"
-mrm_rclone_enviroment_backup: "{{ mrm_rclone_enviroment }}"
-mrm_rclone_enviroment_recovery: "{{ mrm_rclone_enviroment }}"
-mrm_rclone_args_backup: "{{ mrm_rclone_args }}"
-mrm_rclone_args_recovery: "{{ mrm_rclone_args }}"
+b2r_rclone_bucket_backup: "{{ b2r_rclone_bucket }}"
+b2r_rclone_bucket_recovery: "{{ b2r_rclone_bucket }}"
+b2r_rclone_enviroment_backup: "{{ b2r_rclone_enviroment }}"
+b2r_rclone_enviroment_recovery: "{{ b2r_rclone_enviroment }}"
+b2r_rclone_args_backup: "{{ b2r_rclone_args }}"
+b2r_rclone_args_recovery: "{{ b2r_rclone_args }}"
 
 
-mrm_rclone_valt_send_method: "move" # Move files from source to dest https://rclone.org/commands/rclone_move/
-# mrm_rclone_valt_send_method: "copy" # Copy files from source to dest, skipping already copied https://rclone.org/commands/rclone_move/
-# mrm_rclone_valt_send_method: "sync" # Make source and dest identical, modifying destination only https://rclone.org/commands/rclone_sync/
+b2r_rclone_valt_send_method: "move" # Move files from source to dest https://rclone.org/commands/rclone_move/
+# b2r_rclone_valt_send_method: "copy" # Copy files from source to dest, skipping already copied https://rclone.org/commands/rclone_move/
+# b2r_rclone_valt_send_method: "sync" # Make source and dest identical, modifying destination only https://rclone.org/commands/rclone_sync/
 
-mrm_rclone_valt_receive_method: "copy"
+b2r_rclone_valt_receive_method: "copy"
 
 # @see https://rclone.org/docs/#environment-variables
-# mrm_rclone_enviroment:
+# b2r_rclone_enviroment:
 #   RCLONE_YOUR_CUSTOM_VAR: "here."
 #   RCLONE_ANOTHER_VAR: "here"
 
@@ -89,109 +89,109 @@ mrm_rclone_valt_receive_method: "copy"
 #    - run full-temp-backup-before-recovery
 #    - It will take additional time (it will backup all databases on target reserver)
 #    - It may fill your disks (if your database is big and the target directory is on small disk)
-mrm_paranoid: false
+b2r_paranoid: false
 
 ## Other variables _____________________________________________________________
 
-mrm_setup_mydumper_myloader: yes
-mrm_setup_rclone: yes
-mrm_setup_mrm_filesystem: yes
-mrm_backup_disabled: no # Force disable backup, even if mrm_mode: backup
-mrm_recovery_disabled: no  # Force disable backup, even if mrm_mode: recovery
-mrm_valt_send_disabled: no
-mrm_valt_receive_disabled: no
-# mrm_mode: "undefined-mode-select-backup-or-recovery"
+b2r_setup_mydumper_myloader: yes
+b2r_setup_rclone: yes
+b2r_setup_b2r_filesystem: yes
+b2r_backup_disabled: no # Force disable backup, even if b2r_mode: backup
+b2r_recovery_disabled: no  # Force disable backup, even if b2r_mode: recovery
+b2r_valt_send_disabled: no
+b2r_valt_receive_disabled: no
+# b2r_mode: "undefined-mode-select-backup-or-recovery"
 
 ## Filesystem __________________________________________________________________
 
 ### Backup/recovery step .......................................................
 # If you dont want to store all backups on same base folder, you can customize
 # here
-mrm_pathprefix_local: "{{ mrm_pathprefix }}"
-mrm_pathprefix_remote: "{{ mrm_pathprefix }}"
-# mrm_backupdir: "{{ mrm_name }}{{ (mrm_summary_append_timestamp|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '')) }}"
+b2r_pathprefix_local: "{{ b2r_pathprefix }}"
+b2r_pathprefix_remote: "{{ b2r_pathprefix }}"
+# b2r_backupdir: "{{ b2r_name }}{{ (b2r_summary_append_timestamp|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '')) }}"
 
 # The default base dir respect Filesystem Hierarchy Standard 3.0
-mrm_dir_mydumpermyloader:
-  # Default path: /var/local/mrm/backups/{{ mrm_pathprefix }}{{ mrm_name }}/
-  path: "{{ mrm_dir_backup.path }}{{ mrm_pathprefix_local }}{{ mrm_backup_name }}/"
-  owner: "{{ mrm_fs_owner }}" # Default: root
-  group: "{{ mrm_internal_root_group }}" # Default: root/wheel
-  mode: "{{ mrm_fs_mode }}" # Default: "0700"
+b2r_dir_mydumpermyloader:
+  # Default path: /var/local/b2r/backups/{{ b2r_pathprefix }}{{ b2r_name }}/
+  path: "{{ b2r_dir_backup.path }}{{ b2r_pathprefix_local }}{{ b2r_backup_name }}/"
+  owner: "{{ b2r_fs_owner }}" # Default: root
+  group: "{{ b2r_internal_root_group }}" # Default: root/wheel
+  mode: "{{ b2r_fs_mode }}" # Default: "0700"
   state: directory
   recurse: yes
   # serole: ...
   # setype: ...
-  # Check {{ role_path }}/tasks/setup-mrm-filesystem/main.yml for all options!
+  # Check {{ role_path }}/tasks/setup-b2r-filesystem/main.yml for all options!
 
 ### Setup step .................................................................
 
-# With 'mrm_setup_mrm_filesystem: yes', mrm_dirs is used to prepare local
+# With 'b2r_setup_b2r_filesystem: yes', b2r_dirs is used to prepare local
 # filesystem. You can append other directories here
-mrm_fs_dirs:
-  - "{{ mrm_dir_base }}"
-  - "{{ mrm_dir_recoverytempfolder }}"
-  - "{{ mrm_dir_backup }}"
-  - "{{ mrm_dir_mydumperdaemon }}"
-  - "{{ mrm_dir_paranoidmode }}"
-  - "{{ mrm_dir_mrmlocalbucket }}"
+b2r_fs_dirs:
+  - "{{ b2r_dir_base }}"
+  - "{{ b2r_dir_recoverytempfolder }}"
+  - "{{ b2r_dir_backup }}"
+  - "{{ b2r_dir_mydumperdaemon }}"
+  - "{{ b2r_dir_paranoidmode }}"
+  - "{{ b2r_dir_b2rlocalbucket }}"
 
 # You do not plan to run always as root? Customize this
-mrm_fs_owner: "{{ mrm_internal_root_user }}" # root
-mrm_fs_group: "{{ mrm_internal_root_group }}" # root/wheel
-mrm_fs_mode: "0700"
+b2r_fs_owner: "{{ b2r_internal_root_user }}" # root
+b2r_fs_group: "{{ b2r_internal_root_group }}" # root/wheel
+b2r_fs_mode: "0700"
 
 # The default base dir respect Filesystem Hierarchy Standard 3.0
-mrm_dir_base: 
-  path: "/var/local/mrm/"
-  owner: "{{ mrm_fs_owner }}"
-  group: "{{ mrm_internal_root_group }}"
-  mode: "{{ mrm_fs_mode }}"
+b2r_dir_base: 
+  path: "/var/local/b2r/"
+  owner: "{{ b2r_fs_owner }}"
+  group: "{{ b2r_internal_root_group }}"
+  mode: "{{ b2r_fs_mode }}"
   state: directory
   # recurse: yes
   # serole: ...
   # setype: ...
-  # Check {{ role_path }}/tasks/setup-mrm-filesystem/main.yml for all options!
+  # Check {{ role_path }}/tasks/setup-b2r-filesystem/main.yml for all options!
 
-mrm_dir_recoverytempfolder:
-  path: "{{ mrm_dir_base.path }}temp/"
-  owner: "{{ mrm_fs_owner }}"
-  group: "{{ mrm_internal_root_group }}"
-  mode: "{{ mrm_fs_mode }}"
+b2r_dir_recoverytempfolder:
+  path: "{{ b2r_dir_base.path }}temp/"
+  owner: "{{ b2r_fs_owner }}"
+  group: "{{ b2r_internal_root_group }}"
+  mode: "{{ b2r_fs_mode }}"
   state: directory
 
-mrm_dir_backup:
-  path: "{{ mrm_dir_base.path }}backups/"
-  owner: "{{ mrm_fs_owner }}"
-  group: "{{ mrm_internal_root_group }}"
-  mode: "{{ mrm_fs_mode }}"
+b2r_dir_backup:
+  path: "{{ b2r_dir_base.path }}backups/"
+  owner: "{{ b2r_fs_owner }}"
+  group: "{{ b2r_internal_root_group }}"
+  mode: "{{ b2r_fs_mode }}"
   state: directory
 
 # Not implemented, but the folder at least exist if you want to implement
-mrm_dir_mydumperdaemon:
-  path: "{{ mrm_dir_base.path }}mydumper-daemon"
-  owner: "{{ mrm_fs_owner }}"
-  group: "{{ mrm_internal_root_group }}"
-  mode: "{{ mrm_fs_mode }}"
+b2r_dir_mydumperdaemon:
+  path: "{{ b2r_dir_base.path }}mydumper-daemon"
+  owner: "{{ b2r_fs_owner }}"
+  group: "{{ b2r_internal_root_group }}"
+  mode: "{{ b2r_fs_mode }}"
   state: directory
 
-mrm_dir_paranoidmode:
-  path: "{{ mrm_dir_base.path }}full-temp-backup-before-recovery/"
-  owner: "{{ mrm_fs_owner }}"
-  group: "{{ mrm_internal_root_group }}"
-  mode: "{{ mrm_fs_mode }}"
+b2r_dir_paranoidmode:
+  path: "{{ b2r_dir_base.path }}full-temp-backup-before-recovery/"
+  owner: "{{ b2r_fs_owner }}"
+  group: "{{ b2r_internal_root_group }}"
+  mode: "{{ b2r_fs_mode }}"
   state: directory
 
-mrm_dir_mrmlocalbucket:
-  path: "{{ mrm_dir_base.path }}mrm-local-bucket/"
-  owner: "{{ mrm_fs_owner }}"
-  group: "{{ mrm_internal_root_group }}"
-  mode: "{{ mrm_fs_mode }}"
+b2r_dir_b2rlocalbucket:
+  path: "{{ b2r_dir_base.path }}b2r-local-bucket/"
+  owner: "{{ b2r_fs_owner }}"
+  group: "{{ b2r_internal_root_group }}"
+  mode: "{{ b2r_fs_mode }}"
   state: directory
 
 ## ADVANCED: backup/restore other databases ____________________________________
 
-# If you want to reuse MRM for mongodump (MongDB), pg_dump (PostgreSQL),
+# If you want to reuse b2r for mongodump (MongDB), pg_dump (PostgreSQL),
 # redis-cli bgsave (Redis), create your custom task file and edit this:
-mrm_backup_taskfile: "{{ role_path }}/tasks/backup/mydumper.yml"
-mrm_recovery_taskfile: "{{ role_path }}/tasks/recovery/myloader.yml"
+b2r_backup_taskfile: "{{ role_path }}/tasks/backup/mydumper.yml"
+b2r_recovery_taskfile: "{{ role_path }}/tasks/recovery/myloader.yml"

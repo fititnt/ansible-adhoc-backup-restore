@@ -3,6 +3,6 @@
 # FILE:            {{ role_path }}/tasks/decrypt/main.yml
 # LICENSE:         Public Domain
 
-- name: "MRM | decrypt | TODO message"
+- name: "b2r | decrypt | TODO message"
   debug:
     msg: "Work in progress"
