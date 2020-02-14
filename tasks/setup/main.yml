@@ -1,0 +1,57 @@
+---
+
+# FILE:            {{ role_path }}/tasks/setup/main.yml
+# LICENSE:         Public Domain
+
+# - name: "b2r:{{ b2r_mode }} | setup | TODO message"
+#   debug:
+#     msg: "Work in progress"
+
+- name: "b2r:{{ b2r_mode }} | setup | b2r filesystem"
+  include: "{{ item }}"
+  with_first_found:
+    - "{{ role_path }}/tasks/setup/b2r/{{ b2r_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/b2r/main.yml"
+    - "{{ role_path }}/tasks/setup/none.yml"
+  vars:
+    setup_none_message: "No setup required for b2r itself"
+
+- name: "b2r:{{ b2r_mode }} | setup | mode {{ b2r_driver }}"
+  include: "{{ item }}"
+  with_first_found:
+    - "{{ role_path }}/tasks/setup/{{ b2r_driver_rclone }}/{{ b2r_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/{{ b2r_driver_rclone }}/main.yml"
+    - "{{ role_path }}/tasks/setup/none.yml"
+  vars:
+    setup_none_message: "No special setup configured for rclone strategy {{ b2r_driver_rclone }}"
+
+- name: "b2r:{{ b2r_mode }} | setup | driver {{ b2r_driver }}"
+  include: "{{ item }}"
+  with_first_found:
+    - "{{ role_path }}/tasks/setup/{{ b2r_driver }}/{{ b2r_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/{{ b2r_driver }}/main.yml"
+    - "{{ role_path }}/tasks/setup/none.yml"
+  vars:
+    setup_none_message: "No special setup configured for driver {{ b2r_driver }}"
+
+- name: "b2r:{{ b2r_mode }} | setup | compression strategy {{ b2r_driver_compression }}"
+  include: "{{ item }}"
+  with_first_found:
+    - "{{ role_path }}/tasks/setup/{{ b2r_driver_compression }}/{{ b2r_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/{{ b2r_driver_compression }}/main.yml"
+    - "{{ role_path }}/tasks/setup/none.yml"
+  when:
+    - "(b2r_driver_compression is defined) and (b2r_driver_compression) and (b2r_driver_compression|length > 0)"
+  vars:
+    setup_none_message: "No special setup configured for compression strategy {{ b2r_driver_compression }}"
+
+- name: "b2r:{{ b2r_mode }} | setup | encryption strategy {{ b2r_driver_encryption }}"
+  include: "{{ item }}"
+  with_first_found:
+    - "{{ role_path }}/tasks/setup/{{ b2r_driver_encryption }}/{{ b2r_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/{{ b2r_driver_encryption }}/main.yml"
+    - "{{ role_path }}/tasks/setup/none.yml"
+  when:
+    - "(b2r_driver_encryption is defined) and (b2r_driver_encryption) and (b2r_driver_encryption|length > 0)"
+  vars:
+    setup_none_message: "No special setup configured for encryption strategy {{ b2r_driver_encryption }}"

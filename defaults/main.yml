@@ -8,11 +8,12 @@
 b2r_uid: "{{ inventory_hostname_short }}"
 b2r_timestamped: true
 
-b2r_mode: "setup"              # Options: 'setup', 'backup', 'restore', 'restore-options'
+b2r_mode: "restore-options"    # Options: 'backup', 'restore', 'restore-options'
+b2r_skip_setup: false
 b2r_driver: "mariadb-mydumper" # Options: "mariadb-mydumper"
 b2r_driver_compression: "ansible-archive" # Options: "mariadb-mydumper"
-b2r_driver_encryption: null # Options: 
-# b2r_driver_send_receive: "rclone" # Options: "mariadb-mydumper"
+b2r_driver_encryption: null # Options: none
+b2r_driver_rclone: "rclone" # We actually dont plan to release non-rclone, but you can use to customize
 b2r_paranoid: true
 
 b2r_bucket: ":local:/var/local/b2r/b2r-local-bucket/" # See also b2r_rclone_bucket_backup/b2r_rclone_bucket_restore
@@ -30,6 +31,16 @@ b2r_rclone_args: {}
 
 b2r_name_separator: "__"
 b2r_timestamp: "{{ ansible_date_time.iso8601_basic_short }}"
+
+b2r_task_main_backup: "{{ role_path }}/tasks/backup/{{ b2r_driver }}.yml"
+b2r_task_main_restore: "{{ role_path }}/tasks/restore/{{ b2r_driver }}.yml"
+b2r_task_main_restore_options: "{{ role_path }}/tasks/restore-options/main.yml"
+b2r_task_compression_backup: "{{ role_path }}/tasks/compress/{{ b2r_driver_compression | default('none', true) }}.yml"
+b2r_task_compression_restore: "{{ role_path }}/tasks/decompress/{{ b2r_driver_compression | default('none', true) }}.yml"
+b2r_task_encryption_backup: "{{ role_path }}/tasks/compress/{{ b2r_driver_encryption | default('none', true) }}.yml"
+b2r_task_encryption_restore: "{{ role_path }}/tasks/decompress/{{ b2r_driver_encryption | default('none', true) }}.yml"
+b2r_task_rclone_backup: "{{ role_path }}/tasks/compress/{{ b2r_driver_rclone }}.yml"
+b2r_task_rclone_restore: "{{ role_path }}/tasks/decompress/{{ b2r_driver_rclone }}.yml"
 
 ### DRAFT of v0.5.0 new standard, END __________________________________________
 

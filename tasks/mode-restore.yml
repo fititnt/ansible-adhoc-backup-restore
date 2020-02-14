@@ -1,0 +1,13 @@
+---
+
+# FILE:            {{ role_path }}/tasks/mode-restore.yml
+# LICENSE:         Public Domain
+
+- name: "b2r:{{ b2r_mode }} | mode-restore | TODO message"
+  debug:
+    msg: "Work in progress"
+
+- name: "b2r:{{ b2r_mode }} | mode-restore-options | setup/main.yml"
+  include: "setup/main.yml"
+  when:
+    - "(b2r_skip_setup|bool is sameas false)"

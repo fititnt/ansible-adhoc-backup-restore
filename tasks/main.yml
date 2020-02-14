@@ -3,7 +3,7 @@
 # FILE:            {{ role_path }}/tasks/main.yml
 # LICENSE:         Public Domain
 
-- name: "b2r | MVM {{ b2r_version }} Welcome message | Mode: {{ b2r_mode }}"
+- name: "b2r | B2R {{ b2r_version }} Welcome message | Mode: {{ b2r_mode }}"
   debug:
     msg:
       # aaaa: "{{ (b2r_database is defined and b2r_database|bool) | type_debug }}"
@@ -62,28 +62,33 @@
         user="{{ ansible_user_id }}"
         password="YourPasswordHere"
 
+### DRAFT of v0.5.0 new standard, START ________________________________________
+- name: "{{ b2r_mode }}.yml"
+  include: "mode-{{ b2r_mode }}.yml"
+
+### DRAFT of v0.5.0 new standard, END __________________________________________
 ## Run each b2r subcomponent ___________________________________________________
 
-- name: "setup-b2r-filesystem/main.yml"
-  include: setup-b2r-filesystem/main.yml
-  tags:
-    - setup-b2r-filesystem
-  when:
-    - b2r_setup_b2r_filesystem is sameas true
+# - name: "setup-b2r-filesystem/main.yml"
+#   include: setup-b2r-filesystem/main.yml
+#   tags:
+#     - setup-b2r-filesystem
+#   when:
+#     - b2r_setup_b2r_filesystem is sameas true
 
-- name: "setup-mydumper-mloader/main.yml"
-  include: setup-mydumper-mloader/main.yml
-  tags:
-    - setup-mydumper-mloader
-  when:
-    - b2r_setup_mydumper_myloader is sameas true
+# - name: "setup-mydumper-mloader/main.yml"
+#   include: setup-mydumper-mloader/main.yml
+#   tags:
+#     - setup-mydumper-mloader
+#   when:
+#     - b2r_setup_mydumper_myloader is sameas true
 
-- name: "setup-rclone/main.yml"
-  include: setup-rclone/main.yml
-  tags:
-    - setup-rclone
-  when:
-    - b2r_setup_rclone is sameas true
+# - name: "setup-rclone/main.yml"
+#   include: setup-rclone/main.yml
+#   tags:
+#     - setup-rclone
+#   when:
+#     - b2r_setup_rclone is sameas true
 
 - name: "backup/main.yml"
   include: backup/main.yml
