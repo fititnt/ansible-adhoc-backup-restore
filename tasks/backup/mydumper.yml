@@ -3,10 +3,6 @@
 # FILE:            {{ role_path }}/tasks/backup/mydumper.yml
 # LICENSE:         Public Domain
 
-# - name: "MRM | backup | TODO message"
-#   debug:
-#     msg: "Work in progress"
-
 - name: "MRM | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
   debug:
     msg:
@@ -21,4 +17,26 @@
     mydumper
     --outputdir='{{ mrm_mydumper_outputdir }}'
     {{ mrm_mydumper_append | default('') }}
-  register: command_result
+  register: mydumper_command_result
+
+- name: "Compress {{ mrm_mydumper_outputdir }} into /var/local/mrm/temp/output.xz"
+  archive:
+    path: "{{ mrm_mydumper_outputdir }}"
+    #dest: "{{ mrm_mydumper_outputdir }}.xz"
+    dest: "/var/local/mrm/temp/output.xz"
+    format: "xz"
+    force_archive: yes
+    remove: yes
+  register: archive_command_result
+
+- name: "Inform new path of file (before was a folder)"
+  set_fact:
+    # mrm_backup_rclone_source: "{{ mrm_mydumper_outputdir }}.xz"
+    mrm_backup_rclone_source: "/var/local/mrm/temp/output.xz"
+
+- name: "MRM | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
+  debug:
+    msg:
+      mydumper_command_result: "{{ mydumper_command_result | default('undefined') }}"
+      archive_command_result: "{{ archive_command_result | default('undefined') }}"
+    # verbosity: 1
