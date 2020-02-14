@@ -1,0 +1,8 @@
+---
+
+# FILE:            {{ role_path }}/tasks/download/main.yml
+# LICENSE:         Public Domain
+
+- name: "b2r | download | TODO message"
+  debug:
+    msg: "Work in progress"

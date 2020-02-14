@@ -12,6 +12,30 @@
       # result: "{{ ((b2r_database is defined and b2r_database and b2r_database|length > 0) | ternary('_' + b2r_database + '_', '_all-databases_')) }}"
     verbosity: 1
 
+## Sanity Check: mydumper/myloader must have way to contact the DB server ______
+
+# TODO: maybe move this to a rescue bloc if mydumper command fails? (fititnt, 2020-02-14 09:13 BRT)
+- name: "~/.my.cnf stat"
+  stat:
+    path: "~/.my.cnf"
+  when:
+    - "(b2r_dbserver_password is not sameas null)"
+  register: dot_my_cnf
+
+- name: "~/.my.cnf assert"
+  assert:
+    that:
+        - "(dot_my_cnf.stat.exists) or (b2r_dbserver_password is none)"
+    success_msg: "~/.my.cnf exists. mydumper will use this file"
+    fail_msg: |
+        Please do at least one of these strategies:
+        1. (quick) Set: b2r_dbserver_password value
+        2. (recommended) create file on ~/.my.cnf where with:
+
+        [client]
+        user="{{ ansible_user_id }}"
+        password="YourPasswordHere"
+
 - name: "Run prepared mydumper_command"
   shell: >
     mydumper
@@ -19,6 +43,7 @@
     {{ b2r_mydumper_append | default('') }}
   register: mydumper_command_result
 
+# TODO: move to compress (fititnt, 2020-02014 09:14 BRT)
 - name: "Compress {{ b2r_mydumper_outputdir }} into /var/local/b2r/temp/output.xz"
   archive:
     path: "{{ b2r_mydumper_outputdir }}"

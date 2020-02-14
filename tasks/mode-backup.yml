@@ -3,11 +3,31 @@
 # FILE:            {{ role_path }}/tasks/mode-backup.yml
 # LICENSE:         Public Domain
 
-- name: "b2r:{{ b2r_mode }} | mode-backup | TODO message"
-  debug:
-    msg: "Work in progress"
+# - name: "b2r:{{ b2r_mode }} | mode-backup | TODO message"
+#   debug:
+#     msg: "Work in progress"
 
 - name: "b2r:{{ b2r_mode }} | mode-backup | setup/main.yml"
   include: "setup/main.yml"
   when:
     - "(b2r_skip_setup|bool is sameas false)"
+
+- name: "b2r:{{ b2r_mode }} | mode-backup | backup/main.yml"
+  include: backup/main.yml
+
+- name: "b2r:{{ b2r_mode }} | mode-backup | compress/main.yml"
+  include: compress/main.yml
+
+- name: "b2r:{{ b2r_mode }} | mode-backup | encrypt/main.yml"
+  include: encrypt/main.yml
+
+- name: "b2r:{{ b2r_mode }} | mode-backup | upload/main.yml"
+  include: upload/main.yml
+
+# - name: "b2r:{{ b2r_mode }} | mode-backup | valt-send/main.yml"
+#   include: valt-send/main.yml
+#   tags:
+#     - valt-send
+#   when:
+#     - (b2r_mode == "backup")
+#     - (b2r_valt_send_disabled|bool is sameas false)

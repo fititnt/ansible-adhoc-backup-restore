@@ -1,24 +1,17 @@
 ---
 
-# FILE:            {{ role_path }}/tasks/setup-rclone/main.yml
+# FILE:            {{ role_path }}/tasks/setup/rclone/main.yml
 # LICENSE:         Public Domain
 
-# - name: "b2r | setup-rclone | TODO message"
-#   debug:
-#     msg: "Work in progress"
-
-# TODO: Ubuntu packages are too older, implement this command:
-#           curl https://rclone.org/install.sh | sudo bash
-#       Or decomendo user to install from another ansible role
-
-- name: "b2r | setup-rclone | install"
+- name: "b2r:{{ b2r_mode }} | setup | mariadb-mydumper"
+# - name: "b2r:{{ b2r_mode }} | setup | rclone"
   block:
-    - name: "b2r | setup-rclone | install {{ b2r_packages_rclone }}"
+    - name: "b2r:{{ b2r_mode }} | setup | rclone | install {{ b2r_packages_rclone }}"
       package:
         name: "{{ b2r_packages_rclone }}"
         state: present
   rescue:
-    - name: "b2r | setup-rclone | user message"
+    - name: "b2r:{{ b2r_mode }} | setup | rclone | user message"
       fail:
         msg: >
           Default packages for rclone not found.

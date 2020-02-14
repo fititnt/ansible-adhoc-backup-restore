@@ -1,17 +1,18 @@
 ---
 
-# FILE:            {{ role_path }}/tasks/setup-mydumper-mloader/main.yml
+# FILE:            {{ role_path }}/tasks/setup/mariadb-mydumper/main.yml
 # LICENSE:         Public Domain
 # SEE:             https://docs.ansible.com/ansible/latest/modules/package_module.html
 
-- name: "b2r | setup-mydumper-mloader"
+- name: "b2r:{{ b2r_mode }} | setup | mariadb-mydumper"
+# - name: "b2r | setup-mydumper-mloader"
   block:
-    - name: "b2r | setup-mydumper-mloader | install {{ b2r_packages_mydumpermyloader }}"
+    - name: "b2r:{{ b2r_mode }} | setup | mariadb-mydumper | install {{ b2r_packages_mydumpermyloader }}"
       package:
         name: "{{ b2r_packages_mydumpermyloader }}"
         state: present
   rescue:
-    - name: "b2r | setup-mydumper-mloader | user message"
+    - name: "b2r:{{ b2r_mode }} | setup | mariadb-mydumper | user message"
       fail:
         msg: >
           Default packages for mydumper/myloader not found.

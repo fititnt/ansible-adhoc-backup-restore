@@ -11,8 +11,8 @@
       # aaaa: "{{ ((b2r_database is defined and b2r_database|bool) | ternary('__' + b2r_database, '__all-databases', '__all-databases')) }}"
       b2r:
         b2r_fs_dirs: "{{ b2r_fs_dirs }}"
-        b2r_backup_disabled: "{{ b2r_backup_disabled }}"
-        b2r_restore_disabled: "{{ b2r_restore_disabled }}"
+        # b2r_backup_disabled: "{{ b2r_backup_disabled }}"
+        # b2r_restore_disabled: "{{ b2r_restore_disabled }}"
       node:
         os: "{{ ansible_os_family | default('undefined') | lower }}"
         dist: "{{ ansible_distribution | default('undefined') | lower }}"
@@ -38,29 +38,6 @@
     - "os-family/{{ (ansible_os_family is defined) | ternary('untested','unknown') }}.yml"
   tags:
     - always
-
-## Sanity Check: mydumper/myloader must have way to contact the DB server ______
-
-- name: "~/.my.cnf stat"
-  stat:
-    path: "~/.my.cnf"
-  when:
-    - "(b2r_dbserver_password is not sameas null)"
-  register: dot_my_cnf
-
-- name: "~/.my.cnf assert"
-  assert:
-    that:
-        - "(dot_my_cnf.stat.exists) or (b2r_dbserver_password is none)"
-    success_msg: "~/.my.cnf exists. mydumper will use this file"
-    fail_msg: |
-        Please do at least one of these strategies:
-        1. (quick) Set: b2r_dbserver_password value
-        2. (recommended) create file on ~/.my.cnf where with:
-
-        [client]
-        user="{{ ansible_user_id }}"
-        password="YourPasswordHere"
 
 ### DRAFT of v0.5.0 new standard, START ________________________________________
 - name: "{{ b2r_mode }}.yml"
@@ -90,43 +67,43 @@
 #   when:
 #     - b2r_setup_rclone is sameas true
 
-- name: "backup/main.yml"
-  include: backup/main.yml
-  tags:
-    - backup
-  when:
-    - (b2r_mode == "backup")
-    - (b2r_backup_disabled|bool is sameas false)
+# - name: "backup/main.yml"
+#   include: backup/main.yml
+#   tags:
+#     - backup
+#   when:
+#     - (b2r_mode == "backup")
+#     - (b2r_backup_disabled|bool is sameas false)
 
-- name: "valt-send/main.yml"
-  include: valt-send/main.yml
-  tags:
-    - valt-send
-  when:
-    - (b2r_mode == "backup")
-    - (b2r_valt_send_disabled|bool is sameas false)
+# - name: "valt-send/main.yml"
+#   include: valt-send/main.yml
+#   tags:
+#     - valt-send
+#   when:
+#     - (b2r_mode == "backup")
+#     - (b2r_valt_send_disabled|bool is sameas false)
 
-- name: "valt-receive/main.yml"
-  include: valt-receive/main.yml
-  tags:
-    - valt-receive
-  when:
-    - (b2r_mode == "restore")
-    - (b2r_valt_receive_disabled|bool is sameas false)
+# - name: "valt-receive/main.yml"
+#   include: valt-receive/main.yml
+#   tags:
+#     - valt-receive
+#   when:
+#     - (b2r_mode == "restore")
+#     - (b2r_valt_receive_disabled|bool is sameas false)
 
-- name: "full-temp-backup-before-restore/main.yml"
-  include: full-temp-backup-before-restore/main.yml
-  tags:
-    - full-temp-backup-before-restore
-  when:
-    - (b2r_mode == "restore")
-    - (b2r_paranoid == true)
-    - (b2r_valt_restore_disabled|bool is sameas false)
+# - name: "full-temp-backup-before-restore/main.yml"
+#   include: full-temp-backup-before-restore/main.yml
+#   tags:
+#     - full-temp-backup-before-restore
+#   when:
+#     - (b2r_mode == "restore")
+#     - (b2r_paranoid == true)
+#     - (b2r_valt_restore_disabled|bool is sameas false)
 
-- name: "restore/main.yml"
-  include: restore/main.yml
-  tags:
-    - restore
-  when:
-    - (b2r_mode == "restore")
-    - (b2r_valt_restore_disabled is sameas false)
+# - name: "restore/main.yml"
+#   include: restore/main.yml
+#   tags:
+#     - restore
+#   when:
+#     - (b2r_mode == "restore")
+#     - (b2r_valt_restore_disabled is sameas false)

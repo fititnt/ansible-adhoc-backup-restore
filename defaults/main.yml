@@ -136,11 +136,11 @@ b2r_rclone_valt_receive_method: "copy"
 
 b2r_setup_mydumper_myloader: yes
 b2r_setup_rclone: yes
-b2r_setup_b2r_filesystem: yes
-b2r_backup_disabled: no # Force disable backup, even if b2r_mode: backup
-b2r_restore_disabled: no  # Force disable backup, even if b2r_mode: restore
-b2r_valt_send_disabled: no
-b2r_valt_receive_disabled: no
+# b2r_setup_b2r_filesystem: yes
+# b2r_backup_disabled: no # Force disable backup, even if b2r_mode: backup
+# b2r_restore_disabled: no  # Force disable backup, even if b2r_mode: restore
+# b2r_valt_send_disabled: no
+# b2r_valt_receive_disabled: no
 # b2r_mode: "undefined-mode-select-backup-or-restore"
 
 ## Filesystem __________________________________________________________________

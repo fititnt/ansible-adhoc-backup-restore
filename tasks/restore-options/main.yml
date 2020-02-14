@@ -1,0 +1,8 @@
+---
+
+# FILE:            {{ role_path }}/tasks/restore-options/main.yml
+# LICENSE:         Public Domain
+
+- name: "b2r | restore-options | TODO message"
+  debug:
+    msg: "TODO: we should at least list concents of the remote folder where the backup was uploaded"

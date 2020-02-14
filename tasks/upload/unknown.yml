@@ -1,0 +1,8 @@
+---
+
+# FILE:            {{ role_path }}/tasks/upload/unknown.yml
+# LICENSE:         Public Domain
+
+- name: "b2r:{{ b2r_mode }} | upload | unknown"
+  fail:
+    msg: "{{ upload_unknown_message }}"

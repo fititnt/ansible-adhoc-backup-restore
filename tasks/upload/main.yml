@@ -1,0 +1,18 @@
+---
+
+# FILE:            {{ role_path }}/tasks/setup/main.yml
+# LICENSE:         Public Domain
+
+# - name: "b2r:{{ b2r_mode }} | setup | TODO message"
+#   debug:
+#     msg: "Work in progress"
+
+- name: "b2r:{{ b2r_mode }} | upload"
+  include: "{{ rclone_item }}"
+  with_first_found:
+    - "{{ role_path }}/tasks/upload/{{ b2r_driver_rclone | default('dont-exist') }}/main.yml"
+    - "{{ role_path }}/tasks/upload/unknown.yml"
+  loop_control:
+    loop_var: "rclone_item"
+  vars:
+    upload_unknown_message: "Critical error! Driver for upload not found!"

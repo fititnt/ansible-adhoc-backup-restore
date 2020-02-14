@@ -11,3 +11,28 @@
   include: "setup/main.yml"
   when:
     - "(b2r_skip_setup|bool is sameas false)"
+
+- name: "valt-receive/main.yml"
+  include: valt-receive/main.yml
+#   tags:
+#     - valt-receive
+#   when:
+#     - (b2r_mode == "restore")
+#     - (b2r_valt_receive_disabled|bool is sameas false)
+
+- name: "full-temp-backup-before-restore/main.yml"
+  include: full-temp-backup-before-restore/main.yml
+#   tags:
+#     - full-temp-backup-before-restore
+  when:
+    - (b2r_paranoid == true)
+#     - (b2r_mode == "restore")
+#     - (b2r_valt_restore_disabled|bool is sameas false)
+
+- name: "restore/main.yml"
+  include: restore/main.yml
+#   tags:
+#     - restore
+#   when:
+#     - (b2r_mode == "restore")
+#     - (b2r_valt_restore_disabled is sameas false)
