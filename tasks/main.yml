@@ -12,7 +12,7 @@
       b2r:
         b2r_fs_dirs: "{{ b2r_fs_dirs }}"
         b2r_backup_disabled: "{{ b2r_backup_disabled }}"
-        b2r_recovery_disabled: "{{ b2r_recovery_disabled }}"
+        b2r_restore_disabled: "{{ b2r_restore_disabled }}"
       node:
         os: "{{ ansible_os_family | default('undefined') | lower }}"
         dist: "{{ ansible_distribution | default('undefined') | lower }}"
@@ -106,22 +106,22 @@
   tags:
     - valt-receive
   when:
-    - (b2r_mode == "recovery")
+    - (b2r_mode == "restore")
     - (b2r_valt_receive_disabled|bool is sameas false)
 
-- name: "full-temp-backup-before-recovery/main.yml"
-  include: full-temp-backup-before-recovery/main.yml
+- name: "full-temp-backup-before-restore/main.yml"
+  include: full-temp-backup-before-restore/main.yml
   tags:
-    - full-temp-backup-before-recovery
+    - full-temp-backup-before-restore
   when:
-    - (b2r_mode == "recovery")
+    - (b2r_mode == "restore")
     - (b2r_paranoid == true)
-    - (b2r_valt_recovery_disabled|bool is sameas false)
+    - (b2r_valt_restore_disabled|bool is sameas false)
 
-- name: "recovery/main.yml"
-  include: recovery/main.yml
+- name: "restore/main.yml"
+  include: restore/main.yml
   tags:
-    - recovery
+    - restore
   when:
-    - (b2r_mode == "recovery")
-    - (b2r_valt_recovery_disabled is sameas false)
+    - (b2r_mode == "restore")
+    - (b2r_valt_restore_disabled is sameas false)

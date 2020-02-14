@@ -1,8 +1,0 @@
----
-
-# FILE:            {{ role_path }}/tasks/full-temp-backup-before-recovery/main.yml
-# LICENSE:         Public Domain
-
-- name: "b2r | full-temp-backup-before-recovery | TODO message"
-  debug:
-    msg: "Work in progress"

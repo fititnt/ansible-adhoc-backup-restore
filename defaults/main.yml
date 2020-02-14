@@ -3,23 +3,53 @@
 # FILE:            {{ role_path }}/defaults/main.yml
 # LICENSE:         Public Domain
 
+### DRAFT of v0.5.0 new standard, START ________________________________________
+# Affect name of the backups
+b2r_uid: "{{ inventory_hostname_short }}"
+b2r_timestamped: true
+
+b2r_mode: "setup"              # Options: 'setup', 'backup', 'restore', 'restore-options'
+b2r_driver: "mariadb-mydumper" # Options: "mariadb-mydumper"
+b2r_driver_compression: "ansible-archive" # Options: "mariadb-mydumper"
+b2r_driver_encryption: null # Options: 
+# b2r_driver_send_receive: "rclone" # Options: "mariadb-mydumper"
+b2r_paranoid: true
+
+b2r_bucket: ":local:/var/local/b2r/b2r-local-bucket/" # See also b2r_rclone_bucket_backup/b2r_rclone_bucket_restore
+b2r_prefix: "" # See also b2r_pathprefix_local/b2r_pathprefix_remote
+b2r_rclone_enviroment: {}
+# b2r_rclone_enviroment:
+#   RCLONE_B2_ACCOUNT: "000b3e7..."
+#   RCLONE_B2_KEY: "K000pyk..."
+
+b2r_rclone_args: {}
+# b2r_rclone_args: {
+#   '--b2-account': "000b3e7...",
+#   '--b2-key': "K000pyk..."
+# }
+
+b2r_name_separator: "__"
+b2r_timestamp: "{{ ansible_date_time.iso8601_basic_short }}"
+
+### DRAFT of v0.5.0 new standard, END __________________________________________
+
 ### Most common variables to change, start _____________________________________
-# Check b2r_database var if you dont want FULL backup or FULL server recovery
-b2r_mode: "undefined-mode-select-backup-or-recovery" # Options: backup or recovery
+# Check b2r_database var if you dont want FULL backup or FULL server restore
+# b2r_mode: "undefined-mode-select-backup-or-restore" # Options: backup or restore
 b2r_name: "{{ b2r_default_summary }}" # Example: myhostname__all-databases__20200213T052730
-b2r_rclone_bucket: ":local:/var/local/b2r/b2r-local-bucket/" # See also b2r_rclone_bucket_backup/b2r_rclone_bucket_recovery
+# b2r_rclone_bucket: ":local:/var/local/b2r/b2r-local-bucket/" # See also b2r_rclone_bucket_backup/b2r_rclone_bucket_restore
 b2r_pathprefix: "" # See also b2r_pathprefix_local/b2r_pathprefix_remote
-# b2r_paranoid: yes # if you are running in production and is ok to do full-temp-backup-before-recovery
+# b2r_paranoid: yes # if you are running in production and is ok to do full-temp-backup-before-restore
 
 ## Exclusive to: b2r_mode: backup ..............................................
 b2r_backup_timestamped: yes # Example 'no': myhostname__all-databases
 b2r_backup_compress: false
 
-## Exclusive to: b2r_mode: recovery ............................................
-b2r_recovery_timestamp: "" # Example: 20200213T052730, ignore when 'b2r_backup_timestamped: no'
-b2r_recovery_database: ""  # If you export all databases, but want import just one, use it
-b2r_recovery_tables: []    # If want just specific databases
-# b2r_recovery_customrclone: ""
+## Exclusive to: b2r_mode: restore ............................................
+b2r_restore_timestamp: "" # Example: 20200213T052730, ignore when 'b2r_backup_timestamped: no'
+b2r_restore_database: ""  # If you export all databases, but want import just one, use it
+b2r_restore_tables: []    # If want just specific databases
+# b2r_restore_customrclone: ""
 
 ### Most common variables to change, end _______________________________________
 
@@ -46,28 +76,28 @@ b2r_myloader_append: null  # String to append to myloader shell command
 
 b2r_rclone_bucket_type: "local"
 
-b2r_rclone_enviroment: {}
-# b2r_rclone_enviroment:
-#   RCLONE_B2_ACCOUNT: "000b3e7..."
-#   RCLONE_B2_KEY: "K000pyk..."
+# b2r_rclone_enviroment: {}
+# # b2r_rclone_enviroment:
+# #   RCLONE_B2_ACCOUNT: "000b3e7..."
+# #   RCLONE_B2_KEY: "K000pyk..."
 
-b2r_rclone_args: {}
-# b2r_rclone_args: {
-#   '--b2-account': "000b3e7...",
-#   '--b2-key': "K000pyk..."
-# }
+# b2r_rclone_args: {}
+# # b2r_rclone_args: {
+# #   '--b2-account': "000b3e7...",
+# #   '--b2-key': "K000pyk..."
+# # }
 
 
 # Since is possible to have valt backends with different access keys to backup
 # (e.g. the backup for security reason ONLY ALLOW WRITE, but not reads) and
-# to recovery (e.g. a key that, via human intervention, may allow list remote
+# to restore (e.g. a key that, via human intervention, may allow list remote
 # options) the user can customize both
 b2r_rclone_bucket_backup: "{{ b2r_rclone_bucket }}"
-b2r_rclone_bucket_recovery: "{{ b2r_rclone_bucket }}"
+b2r_rclone_bucket_restore: "{{ b2r_rclone_bucket }}"
 b2r_rclone_enviroment_backup: "{{ b2r_rclone_enviroment }}"
-b2r_rclone_enviroment_recovery: "{{ b2r_rclone_enviroment }}"
+b2r_rclone_enviroment_restore: "{{ b2r_rclone_enviroment }}"
 b2r_rclone_args_backup: "{{ b2r_rclone_args }}"
-b2r_rclone_args_recovery: "{{ b2r_rclone_args }}"
+b2r_rclone_args_restore: "{{ b2r_rclone_args }}"
 
 
 b2r_rclone_valt_send_method: "move" # Move files from source to dest https://rclone.org/commands/rclone_move/
@@ -86,10 +116,10 @@ b2r_rclone_valt_receive_method: "copy"
 
 # Paranoid Mode ________________________________________________________________
 # If enabled: 
-#    - run full-temp-backup-before-recovery
+#    - run full-temp-backup-before-restore
 #    - It will take additional time (it will backup all databases on target reserver)
 #    - It may fill your disks (if your database is big and the target directory is on small disk)
-b2r_paranoid: false
+# b2r_paranoid: false
 
 ## Other variables _____________________________________________________________
 
@@ -97,14 +127,14 @@ b2r_setup_mydumper_myloader: yes
 b2r_setup_rclone: yes
 b2r_setup_b2r_filesystem: yes
 b2r_backup_disabled: no # Force disable backup, even if b2r_mode: backup
-b2r_recovery_disabled: no  # Force disable backup, even if b2r_mode: recovery
+b2r_restore_disabled: no  # Force disable backup, even if b2r_mode: restore
 b2r_valt_send_disabled: no
 b2r_valt_receive_disabled: no
-# b2r_mode: "undefined-mode-select-backup-or-recovery"
+# b2r_mode: "undefined-mode-select-backup-or-restore"
 
 ## Filesystem __________________________________________________________________
 
-### Backup/recovery step .......................................................
+### Backup/restore step .......................................................
 # If you dont want to store all backups on same base folder, you can customize
 # here
 b2r_pathprefix_local: "{{ b2r_pathprefix }}"
@@ -130,7 +160,7 @@ b2r_dir_mydumpermyloader:
 # filesystem. You can append other directories here
 b2r_fs_dirs:
   - "{{ b2r_dir_base }}"
-  - "{{ b2r_dir_recoverytempfolder }}"
+  - "{{ b2r_dir_restoretempfolder }}"
   - "{{ b2r_dir_backup }}"
   - "{{ b2r_dir_mydumperdaemon }}"
   - "{{ b2r_dir_paranoidmode }}"
@@ -153,7 +183,7 @@ b2r_dir_base:
   # setype: ...
   # Check {{ role_path }}/tasks/setup-b2r-filesystem/main.yml for all options!
 
-b2r_dir_recoverytempfolder:
+b2r_dir_restoretempfolder:
   path: "{{ b2r_dir_base.path }}temp/"
   owner: "{{ b2r_fs_owner }}"
   group: "{{ b2r_internal_root_group }}"
@@ -176,7 +206,7 @@ b2r_dir_mydumperdaemon:
   state: directory
 
 b2r_dir_paranoidmode:
-  path: "{{ b2r_dir_base.path }}full-temp-backup-before-recovery/"
+  path: "{{ b2r_dir_base.path }}full-temp-backup-before-restore/"
   owner: "{{ b2r_fs_owner }}"
   group: "{{ b2r_internal_root_group }}"
   mode: "{{ b2r_fs_mode }}"
@@ -194,4 +224,4 @@ b2r_dir_b2rlocalbucket:
 # If you want to reuse b2r for mongodump (MongDB), pg_dump (PostgreSQL),
 # redis-cli bgsave (Redis), create your custom task file and edit this:
 b2r_backup_taskfile: "{{ role_path }}/tasks/backup/mydumper.yml"
-b2r_recovery_taskfile: "{{ role_path }}/tasks/recovery/myloader.yml"
+b2r_restore_taskfile: "{{ role_path }}/tasks/restore/myloader.yml"

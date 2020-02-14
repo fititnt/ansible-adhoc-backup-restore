@@ -29,7 +29,7 @@
     unsafe_writes: "{{ item.unsafe_writes | default(omit) }}"
   with_items: "{{ b2r_fs_dirs }}"
 
-- name: "b2r | setup-b2r-filesystem | Manange b2r directory for this specific backup/recovery"
+- name: "b2r | setup-b2r-filesystem | Manange b2r directory for this specific backup/restore"
   file:
     path: "{{ item.path }}"
     state: "{{ item.state | default('directory') }}"
@@ -55,5 +55,5 @@
   with_items:
     - "{{ b2r_dir_mydumpermyloader }}"
   when:
-    - "(b2r_mode is sameas 'backup') or (b2r_mode is sameas 'recovery')"
+    - "(b2r_mode is sameas 'backup') or (b2r_mode is sameas 'restore')"
     # - "(b2r_pathprefix_local is not defined) or (b2r_pathprefix_local|lenght > 0)"

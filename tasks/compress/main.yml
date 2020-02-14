@@ -1,0 +1,7 @@
+---
+
+# FILE:            {{ role_path }}/tasks/backup/main.yml
+# LICENSE:         Public Domain
+
+- name: "backup/main.yml"
+  include: "{{ b2r_backup_taskfile }}"

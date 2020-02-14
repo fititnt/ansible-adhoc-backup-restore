@@ -2,7 +2,7 @@ galaxy_info:
   role_name: "adhoc_backup_rclone_restore"
   author: "Emerson Rocha <rocha(at)ieee.org>"
   description: |
-    Full Ad Hoc backup/recovery for MariaDB/MySQL with performance
+    Full Ad Hoc backup/restore for MariaDB/MySQL with performance
     optimized mydumper/myloader for export/import full database servers
     and rclone for remote storage
   company: Etica.AI
@@ -50,7 +50,7 @@ galaxy_info:
     - myloader
     - rclone
     - backup
-    - disasterrecovery
+    - disasterrestore
 
 dependencies: []
   # List your role dependencies here, one per line. Be sure to remove the '[]' above,

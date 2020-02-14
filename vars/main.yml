@@ -16,10 +16,10 @@ b2r_default_summary: "{{ inventory_hostname_short + '__' + (b2r_database | defau
 
 # myhostname__all-databases__20200213T052730
 b2r_backup_name: "{{ b2r_name }}{{ ((b2r_backup_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
-b2r_recovery_name: "{{ b2r_name }}{{ ((b2r_recovery_timestamp|bool) | ternary('__' + b2r_recovery_timestamp, '', '')) }}"
+b2r_restore_name: "{{ b2r_name }}{{ ((b2r_restore_timestamp|bool) | ternary('__' + b2r_restore_timestamp, '', '')) }}"
 
 b2r_rclone_args_backup_string: "{{ b2r_rclone_args_backup | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
-b2r_rclone_args_recovery_string: "{{ b2r_rclone_args_recovery | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
+b2r_rclone_args_restore_string: "{{ b2r_rclone_args_restore | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
 
 # b2r_internal_islocalbucket: "{{ b2r_rclone_bucket == 'b2r-local-bucket' }}"
 
@@ -29,13 +29,13 @@ b2r_backup_rclone_source: "{{ b2r_now.path }}"
 b2r_backup_rclone_destiny: "{{ b2r_rclone_bucket_backup + b2r_pathprefix_remote + b2r_backup_name }}"
 b2r_backup_rclone_command: "rclone {{ b2r_rclone_valt_send_method }} {{ b2r_rclone_args_backup_string }} {{ b2r_backup_rclone_source }} {{ b2r_backup_rclone_destiny }}"
 
-# b2r_recovery_rclone_source: "{{ b2r_dir_b2rlocalbucket.path }}{{ b2r_pathprefix_remote }}{{ b2r_backup_name }}"
-b2r_recovery_rclone_source: "{{ b2r_rclone_bucket_backup + b2r_pathprefix_remote + b2r_backup_name }}"
-b2r_recovery_rclone_destiny: "{{ b2r_dir_mydumpermyloader.path }}"
-b2r_recovery_rclone_command: "rclone {{ b2r_rclone_valt_receive_method }} {{ b2r_rclone_args_recovery_string }} {{ b2r_backup_source }} {{ b2r_backup_destiny }}"
+# b2r_restore_rclone_source: "{{ b2r_dir_b2rlocalbucket.path }}{{ b2r_pathprefix_remote }}{{ b2r_backup_name }}"
+b2r_restore_rclone_source: "{{ b2r_rclone_bucket_backup + b2r_pathprefix_remote + b2r_backup_name }}"
+b2r_restore_rclone_destiny: "{{ b2r_dir_mydumpermyloader.path }}"
+b2r_restore_rclone_command: "rclone {{ b2r_rclone_valt_receive_method }} {{ b2r_rclone_args_restore_string }} {{ b2r_backup_source }} {{ b2r_backup_destiny }}"
 
-## b2r_mydumper_outputdir: "{{ b2r_dir_mydumpermyloader.path }}"
-## b2r_myloader_diretory: "{{ b2r_dir_mydumpermyloader.path }}"
+b2r_mydumper_outputdir: "{{ b2r_dir_mydumpermyloader.path }}"
+b2r_myloader_diretory: "{{ b2r_dir_mydumpermyloader.path }}"
 # b2r_mydumper_outputdir: "{{ b2r_now.path }}"
 # b2r_myloader_diretory: "{{ b2r_now.path }}"
 

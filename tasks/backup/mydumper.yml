@@ -24,7 +24,7 @@
     path: "{{ b2r_mydumper_outputdir }}"
     #dest: "{{ b2r_mydumper_outputdir }}.xz"
     dest: "/var/local/b2r/temp/output.xz"
-    format: "xz"
+    # format: "xz"
     force_archive: yes
     remove: yes
   register: archive_command_result
