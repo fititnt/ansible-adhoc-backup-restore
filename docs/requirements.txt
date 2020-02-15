@@ -1,0 +1,3 @@
+sphinx_rtd_theme
+# sphinx_theme atually is what is on https://github.com/fititnt/ansible-syntactic-sugar
+# but lets see if it will work on readthedocs (fititnt, 2020-02-15 00:19 BRT)

@@ -1,10 +1,10 @@
 galaxy_info:
-  role_name: "adhoc_backup_rclone_restore"
+  role_name: "adhoc_backup_restore"
   author: "Emerson Rocha <rocha(at)ieee.org>"
   description: |
-    Full Ad Hoc backup/restore for MariaDB/MySQL with performance
-    optimized mydumper/myloader for export/import full database servers
-    and rclone for remote storage
+    Ad-Hoc Backup Restore (abbreviated: abr), released as and very extensible
+    Ansible role, allows control the full workflow of backup, storage, and restore
+    of anything supported by it's drivers.
   company: Etica.AI
   license: Unlicense
   min_ansible_version: 2.9
@@ -55,4 +55,3 @@ galaxy_info:
 dependencies: []
   # List your role dependencies here, one per line. Be sure to remove the '[]' above,
   # if you add dependencies to this list.
-  

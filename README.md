@@ -1,4 +1,13 @@
-# Ansible Role for Ad Hoc Backup Restore v0.6.0
+# Ad-Hoc Backup Restore ("abr") with Ansible
+**Ad-Hoc Backup Restore (abbreviated: `abr`), released as an very extensible
+Ansible role, allows control the full workflow of backup, storage, and restore
+of anything supported by it's drivers.**
+
+While it _may_ be executed automated (e.g. running via [Ansible AWX](https://github.com/ansible/awx)) the main reason to exist have an _somewhat standard_ workflow to humans do
+_Ad-Hoc backups_ (quick backups) **OR** _Ad-Hoc restore_.
+
+<!--
+
 **Ansible Role to performn Ad Hoc backup/restore for MariaDB/MySQL/Galera Cluster.
 Uses [mydumper/myloader](https://github.com/maxbube/mydumper) for performance
 otimized export/import of COMPLETE server and optimal send/receive using
@@ -7,6 +16,9 @@ otimized export/import of COMPLETE server and optimal send/receive using
 Note: this role is otimized for Ad Hoc (e.g. executed with human intervention)
 instead of automated cron backups.
 
+-->
+
+<!--
 Requirements
 ------------
 
@@ -40,3 +52,5 @@ Author Information
 ------------------
 
 An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+
+-->

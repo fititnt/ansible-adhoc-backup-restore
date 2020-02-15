@@ -1,16 +1,48 @@
-.. Ansible Ad-Hoc Backup Restore documentation master file, created by
-   sphinx-quickstart on Fri Feb 14 23:56:32 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. include:: Includes.txt
 
-Welcome to Ansible Ad-Hoc Backup Restore's documentation!
-=========================================================
+.. Ad-Hoc Backup Restore (abbreviated: abr), released as an very extensible
+   Ansible role, allows control the full workflow of backup, storage, and
+   restore of anything supported by it's drivers.
+
+################################################
+Ad-Hoc Backup Restore ("`abr`") documentation
+################################################
+
+.. |image-maturity-technology-preview| image:: https://img.shields.io/badge/Maturity-technology--preview-informational
+    :alt: Maturity: Technology Preview
+
+|image-maturity-technology-preview| **Ad-Hoc Backup Restore
+(abbreviated: `abr`), released as an very extensible Ansible role, allows
+control the full workflow of backup, storage, and restore of anything
+supported by it's drivers.**
+
+While it *may* be executed automated (e.g. running via
+`Ansible AWX <https://github.com/ansible/awx>`_ the main reason to exist have
+an *somewhat standard* workflow to humans do *Ad-Hoc backups* (quick backups)
+**OR** *Ad-Hoc restore*.
+
+
+*************
+Installation
+*************
+
+If you are new to Ansible, we recommend read our :doc:`installation`. TL;DR:
+
+.. code-block:: bash
+
+  # "a2s is installable as an Ansible role and is distributed over Ansible Galaxy
+  ansible-galaxy install fititnt.syntactic_sugar
+
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
-
+   installation
+   quickstart
+   api
+   todo
+   alternatives
 
 Indices and tables
 ==================
