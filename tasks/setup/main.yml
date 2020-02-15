@@ -3,65 +3,65 @@
 # FILE:            {{ role_path }}/tasks/setup/main.yml
 # LICENSE:         Public Domain
 
-# - name: "b2r:{{ b2r_mode }} | setup | TODO message"
+# - name: "abr:{{ abr_mode }} | setup | TODO message"
 #   debug:
 #     msg: "Work in progress"
 
-- name: "b2r:{{ b2r_mode }} | setup | b2r"
+- name: "abr:{{ abr_mode }} | setup | abr"
   include: "{{ setup_item }}"
   with_first_found:
-    - "{{ role_path }}/tasks/setup/b2r/{{ b2r_mode }}.yml"
-    - "{{ role_path }}/tasks/setup/b2r/main.yml"
+    - "{{ role_path }}/tasks/setup/abr/{{ abr_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/abr/main.yml"
     - "{{ role_path }}/tasks/setup/none.yml"
   loop_control:
     loop_var: "setup_item"
   vars:
-    setup_none_message: "No setup required for b2r itself"
+    setup_none_message: "No setup required for abr itself"
 
-- name: "b2r:{{ b2r_mode }} | setup | driver {{ b2r_driver }}"
+- name: "abr:{{ abr_mode }} | setup | driver {{ abr_driver }}"
   include: "{{ setup_item }}"
   with_first_found:
-    - "{{ role_path }}/tasks/setup/{{ b2r_driver }}/{{ b2r_mode }}.yml"
-    - "{{ role_path }}/tasks/setup/{{ b2r_driver }}/main.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_driver }}/{{ abr_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_driver }}/main.yml"
     - "{{ role_path }}/tasks/setup/none.yml"
   loop_control:
     loop_var: "setup_item"
   vars:
-    setup_none_message: "No special setup configured for driver {{ b2r_driver }}"
+    setup_none_message: "No special setup configured for driver {{ abr_driver }}"
 
-- name: "b2r:{{ b2r_mode }} | setup | {{ b2r_driver_rclone }}"
+- name: "abr:{{ abr_mode }} | setup | {{ abr_driver_rclone }}"
   include: "{{ setup_item }}"
   with_first_found:
-    - "{{ role_path }}/tasks/setup/{{ b2r_driver_rclone }}/{{ b2r_mode }}.yml"
-    - "{{ role_path }}/tasks/setup/{{ b2r_driver_rclone }}/main.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_driver_rclone }}/{{ abr_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_driver_rclone }}/main.yml"
     - "{{ role_path }}/tasks/setup/none.yml"
   loop_control:
     loop_var: "setup_item"
   vars:
-    setup_none_message: "No special setup configured for rclone strategy {{ b2r_driver_rclone }}"
+    setup_none_message: "No special setup configured for rclone strategy {{ abr_driver_rclone }}"
 
-- name: "b2r:{{ b2r_mode }} | setup | compression strategy {{ b2r_driver_compression }}"
+- name: "abr:{{ abr_mode }} | setup | compression strategy {{ abr_driver_compression }}"
   include: "{{ setup_item }}"
   with_first_found:
-    - "{{ role_path }}/tasks/setup/{{ b2r_driver_compression }}/{{ b2r_mode }}.yml"
-    - "{{ role_path }}/tasks/setup/{{ b2r_driver_compression }}/main.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_driver_compression }}/{{ abr_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_driver_compression }}/main.yml"
     - "{{ role_path }}/tasks/setup/none.yml"
   loop_control:
     loop_var: "setup_item"
   when:
-    - "(b2r_driver_compression is defined) and (b2r_driver_compression) and (b2r_driver_compression|length > 0)"
+    - "(abr_driver_compression is defined) and (abr_driver_compression) and (abr_driver_compression|length > 0)"
   vars:
-    setup_none_message: "No special setup configured for compression strategy {{ b2r_driver_compression }}"
+    setup_none_message: "No special setup configured for compression strategy {{ abr_driver_compression }}"
 
-- name: "b2r:{{ b2r_mode }} | setup | encryption strategy {{ b2r_driver_encryption }}"
+- name: "abr:{{ abr_mode }} | setup | encryption strategy {{ abr_driver_encryption }}"
   include: "{{ setup_item }}"
   with_first_found:
-    - "{{ role_path }}/tasks/setup/{{ b2r_driver_encryption }}/{{ b2r_mode }}.yml"
-    - "{{ role_path }}/tasks/setup/{{ b2r_driver_encryption }}/main.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_driver_encryption }}/{{ abr_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_driver_encryption }}/main.yml"
     - "{{ role_path }}/tasks/setup/none.yml"
   loop_control:
     loop_var: "setup_item"
   when:
-    - "(b2r_driver_encryption is defined) and (b2r_driver_encryption) and (b2r_driver_encryption|length > 0)"
+    - "(abr_driver_encryption is defined) and (abr_driver_encryption) and (abr_driver_encryption|length > 0)"
   vars:
-    setup_none_message: "No special setup configured for encryption strategy {{ b2r_driver_encryption }}"
+    setup_none_message: "No special setup configured for encryption strategy {{ abr_driver_encryption }}"

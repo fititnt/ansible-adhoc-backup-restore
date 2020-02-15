@@ -3,6 +3,6 @@
 # FILE:            {{ role_path }}/tasks/setup/none.yml
 # LICENSE:         Public Domain
 
-- name: "b2r:{{ b2r_mode }} | setup | none"
+- name: "abr:{{ abr_mode }} | setup | none"
   debug:
     msg: "{{ setup_none_message }}"

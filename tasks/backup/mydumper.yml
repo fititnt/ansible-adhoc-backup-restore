@@ -3,13 +3,13 @@
 # FILE:            {{ role_path }}/tasks/backup/mydumper.yml
 # LICENSE:         Public Domain
 
-- name: "b2r | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
+- name: "abr | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
   debug:
     msg:
-      b2r_mydumper_outputdir: "{{ b2r_mydumper_outputdir | default('undefined') }}"
-      # result: "{{ (b2r_database is defined and b2r_database and b2r_database|length > 0) }}"
-      # result2: "{{ (b2r_database is defined and b2r_database and b2r_database|length > 0) | ternary('_aaaaa_', '_bbbb_', '_isnull_')}}"
-      # result: "{{ ((b2r_database is defined and b2r_database and b2r_database|length > 0) | ternary('_' + b2r_database + '_', '_all-databases_')) }}"
+      abr_mydumper_outputdir: "{{ abr_mydumper_outputdir | default('undefined') }}"
+      # result: "{{ (abr_database is defined and abr_database and abr_database|length > 0) }}"
+      # result2: "{{ (abr_database is defined and abr_database and abr_database|length > 0) | ternary('_aaaaa_', '_bbbb_', '_isnull_')}}"
+      # result: "{{ ((abr_database is defined and abr_database and abr_database|length > 0) | ternary('_' + abr_database + '_', '_all-databases_')) }}"
     verbosity: 1
 
 ## Sanity Check: mydumper/myloader must have way to contact the DB server ______
@@ -19,17 +19,17 @@
   stat:
     path: "~/.my.cnf"
   when:
-    - "(b2r_dbserver_password is not sameas null)"
+    - "(abr_dbserver_password is not sameas null)"
   register: dot_my_cnf
 
 - name: "~/.my.cnf assert"
   assert:
     that:
-        - "(dot_my_cnf.stat.exists) or (b2r_dbserver_password is none)"
+        - "(dot_my_cnf.stat.exists) or (abr_dbserver_password is none)"
     success_msg: "~/.my.cnf exists. mydumper will use this file"
     fail_msg: |
         Please do at least one of these strategies:
-        1. (quick) Set: b2r_dbserver_password value
+        1. (quick) Set: abr_dbserver_password value
         2. (recommended) create file on ~/.my.cnf where with:
 
         [client]
@@ -39,16 +39,16 @@
 - name: "Run prepared mydumper_command"
   shell: >
     mydumper
-    --outputdir='{{ b2r_mydumper_outputdir }}'
-    {{ b2r_mydumper_append | default('') }}
+    --outputdir='{{ abr_mydumper_outputdir }}'
+    {{ abr_mydumper_append | default('') }}
   register: mydumper_command_result
 
 # TODO: move to compress (fititnt, 2020-02014 09:14 BRT)
-- name: "Compress {{ b2r_mydumper_outputdir }} into /var/local/b2r/temp/output.xz"
+- name: "Compress {{ abr_mydumper_outputdir }} into /var/local/abr/temp/output.xz"
   archive:
-    path: "{{ b2r_mydumper_outputdir }}"
-    #dest: "{{ b2r_mydumper_outputdir }}.xz"
-    dest: "/var/local/b2r/temp/output.xz"
+    path: "{{ abr_mydumper_outputdir }}"
+    #dest: "{{ abr_mydumper_outputdir }}.xz"
+    dest: "/var/local/abr/temp/output.xz"
     # format: "xz"
     force_archive: yes
     remove: yes
@@ -56,10 +56,10 @@
 
 - name: "Inform new path of file (before was a folder)"
   set_fact:
-    # b2r_backup_rclone_source: "{{ b2r_mydumper_outputdir }}.xz"
-    b2r_backup_rclone_source: "/var/local/b2r/temp/output.xz"
+    # abr_backup_rclone_source: "{{ abr_mydumper_outputdir }}.xz"
+    abr_backup_rclone_source: "/var/local/abr/temp/output.xz"
 
-- name: "b2r | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
+- name: "abr | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
   debug:
     msg:
       mydumper_command_result: "{{ mydumper_command_result | default('undefined') }}"

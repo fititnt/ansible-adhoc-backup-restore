@@ -1,11 +1,11 @@
 ---
 
-# FILE:            {{ role_path }}/tasks/setup/b2r/main.yml
+# FILE:            {{ role_path }}/tasks/setup/abr/main.yml
 # LICENSE:         Public Domain
 # SEE:             https://askubuntu.com/questions/575679/what-is-the-default-location-for-backup-files-of-another-server/754155#754155
 
-- name: "b2r:{{ b2r_mode }} | setup | b2r | Manange b2r base directories"
-# - name: "b2r | setup-b2r-filesystem | Manange b2r base directories"
+- name: "abr:{{ abr_mode }} | setup | abr | Manange abr base directories"
+# - name: "abr | setup-abr-filesystem | Manange abr base directories"
   file:
     path: "{{ item.path }}"
     state: "{{ item.state | default('directory') }}"
@@ -28,10 +28,10 @@
     setype: "{{ item.setype | default(omit) }}"
     seuser: "{{ item.seuser | default(omit) }}"
     unsafe_writes: "{{ item.unsafe_writes | default(omit) }}"
-  with_items: "{{ b2r_fs_dirs }}"
+  with_items: "{{ abr_fs_dirs }}"
 
-- name: "b2r:{{ b2r_mode }} | setup | b2r: Manange b2r directory for this specific backup/restore"
-# - name: "b2r | setup-b2r-filesystem | Manange b2r directory for this specific backup/restore"
+- name: "abr:{{ abr_mode }} | setup | abr: Manange abr directory for this specific backup/restore"
+# - name: "abr | setup-abr-filesystem | Manange abr directory for this specific backup/restore"
   file:
     path: "{{ item.path }}"
     state: "{{ item.state | default('directory') }}"
@@ -55,8 +55,8 @@
     seuser: "{{ item.seuser | default(omit) }}"
     unsafe_writes: "{{ item.unsafe_writes | default(omit) }}"
   with_items:
-    - "{{ b2r_dir_mydumpermyloader }}"
+    - "{{ abr_dir_mydumpermyloader }}"
   when:
-    - "(b2r_mode is sameas 'backup') or (b2r_mode is sameas 'restore')"
-    # - "(b2r_pathprefix_local is not defined) or (b2r_pathprefix_local|lenght > 0)"
+    - "(abr_mode is sameas 'backup') or (abr_mode is sameas 'restore')"
+    # - "(abr_pathprefix_local is not defined) or (abr_pathprefix_local|lenght > 0)"
     

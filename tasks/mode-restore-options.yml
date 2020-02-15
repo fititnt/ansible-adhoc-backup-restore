@@ -3,11 +3,11 @@
 # FILE:            {{ role_path }}/tasks/mode-restore-options.yml
 # LICENSE:         Public Domain
 
-- name: "b2r:{{ b2r_mode }} | mode-restore-options | TODO message"
+- name: "abr:{{ abr_mode }} | mode-restore-options | TODO message"
   debug:
     msg: "Work in progress"
 
-- name: "b2r:{{ b2r_mode }} | mode-restore-options | setup/main.yml"
+- name: "abr:{{ abr_mode }} | mode-restore-options | setup/main.yml"
   include: "setup/main.yml"
   when:
-    - "(b2r_skip_setup|bool is sameas false)"
+    - "(abr_skip_setup|bool is sameas false)"

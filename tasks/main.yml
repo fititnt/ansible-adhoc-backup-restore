@@ -3,16 +3,16 @@
 # FILE:            {{ role_path }}/tasks/main.yml
 # LICENSE:         Public Domain
 
-- name: "b2r | B2R {{ b2r_version }} Welcome message | Mode: {{ b2r_mode }}"
+- name: "abr | ABR {{ abr_version }} Welcome message | Mode: {{ abr_mode }}"
   debug:
     msg:
-      # aaaa: "{{ (b2r_database is defined and b2r_database|bool) | type_debug }}"
-      # bbbb: "{{ (b2r_database is defined and b2r_database|bool) | ternary('_aa', '__bb', '__ccc') }}"
-      # aaaa: "{{ ((b2r_database is defined and b2r_database|bool) | ternary('__' + b2r_database, '__all-databases', '__all-databases')) }}"
-      b2r:
-        b2r_fs_dirs: "{{ b2r_fs_dirs }}"
-        # b2r_backup_disabled: "{{ b2r_backup_disabled }}"
-        # b2r_restore_disabled: "{{ b2r_restore_disabled }}"
+      # aaaa: "{{ (abr_database is defined and abr_database|bool) | type_debug }}"
+      # bbbb: "{{ (abr_database is defined and abr_database|bool) | ternary('_aa', '__bb', '__ccc') }}"
+      # aaaa: "{{ ((abr_database is defined and abr_database|bool) | ternary('__' + abr_database, '__all-databases', '__all-databases')) }}"
+      abr:
+        abr_fs_dirs: "{{ abr_fs_dirs }}"
+        # abr_backup_disabled: "{{ abr_backup_disabled }}"
+        # abr_restore_disabled: "{{ abr_restore_disabled }}"
       node:
         os: "{{ ansible_os_family | default('undefined') | lower }}"
         dist: "{{ ansible_distribution | default('undefined') | lower }}"
@@ -26,84 +26,84 @@
         ansible_run_tags: "{{ ansible_run_tags | default('undefined') }}"
         ansible_skip_tags: "{{ ansible_skip_tags | default('undefined') }}"
   tags:
-    - b2r
+    - abr
     - always
 
 ## Variable loading based on node Operational System ___________________________
-- name: "b2r | OS Family variables (Override with b2r_vars_osfamily)"
+- name: "abr | OS Family variables (Override with abr_vars_osfamily)"
   include_vars: "{{ item }}"
   with_first_found:
-    - "{{ (b2r_vars_osfamily is defined) | ternary(b2r_vars_osfamily, 'name-of-a-file-that-does-not-exist.yml') }}"
+    - "{{ (abr_vars_osfamily is defined) | ternary(abr_vars_osfamily, 'name-of-a-file-that-does-not-exist.yml') }}"
     - "os-family/{{ ansible_os_family | default('undefined') | lower }}.yml"
     - "os-family/{{ (ansible_os_family is defined) | ternary('untested','unknown') }}.yml"
   tags:
     - always
 
 ### DRAFT of v0.5.0 new standard, START ________________________________________
-- name: "{{ b2r_mode }}.yml"
-  include: "mode-{{ b2r_mode }}.yml"
+- name: "{{ abr_mode }}.yml"
+  include: "mode-{{ abr_mode }}.yml"
 
 ### DRAFT of v0.5.0 new standard, END __________________________________________
-## Run each b2r subcomponent ___________________________________________________
+## Run each abr subcomponent ___________________________________________________
 
-# - name: "setup-b2r-filesystem/main.yml"
-#   include: setup-b2r-filesystem/main.yml
+# - name: "setup-abr-filesystem/main.yml"
+#   include: setup-abr-filesystem/main.yml
 #   tags:
-#     - setup-b2r-filesystem
+#     - setup-abr-filesystem
 #   when:
-#     - b2r_setup_b2r_filesystem is sameas true
+#     - abr_setup_abr_filesystem is sameas true
 
 # - name: "setup-mydumper-mloader/main.yml"
 #   include: setup-mydumper-mloader/main.yml
 #   tags:
 #     - setup-mydumper-mloader
 #   when:
-#     - b2r_setup_mydumper_myloader is sameas true
+#     - abr_setup_mydumper_myloader is sameas true
 
 # - name: "setup-rclone/main.yml"
 #   include: setup-rclone/main.yml
 #   tags:
 #     - setup-rclone
 #   when:
-#     - b2r_setup_rclone is sameas true
+#     - abr_setup_rclone is sameas true
 
 # - name: "backup/main.yml"
 #   include: backup/main.yml
 #   tags:
 #     - backup
 #   when:
-#     - (b2r_mode == "backup")
-#     - (b2r_backup_disabled|bool is sameas false)
+#     - (abr_mode == "backup")
+#     - (abr_backup_disabled|bool is sameas false)
 
 # - name: "valt-send/main.yml"
 #   include: valt-send/main.yml
 #   tags:
 #     - valt-send
 #   when:
-#     - (b2r_mode == "backup")
-#     - (b2r_valt_send_disabled|bool is sameas false)
+#     - (abr_mode == "backup")
+#     - (abr_valt_send_disabled|bool is sameas false)
 
 # - name: "valt-receive/main.yml"
 #   include: valt-receive/main.yml
 #   tags:
 #     - valt-receive
 #   when:
-#     - (b2r_mode == "restore")
-#     - (b2r_valt_receive_disabled|bool is sameas false)
+#     - (abr_mode == "restore")
+#     - (abr_valt_receive_disabled|bool is sameas false)
 
 # - name: "full-temp-backup-before-restore/main.yml"
 #   include: full-temp-backup-before-restore/main.yml
 #   tags:
 #     - full-temp-backup-before-restore
 #   when:
-#     - (b2r_mode == "restore")
-#     - (b2r_paranoid == true)
-#     - (b2r_valt_restore_disabled|bool is sameas false)
+#     - (abr_mode == "restore")
+#     - (abr_paranoid == true)
+#     - (abr_valt_restore_disabled|bool is sameas false)
 
 # - name: "restore/main.yml"
 #   include: restore/main.yml
 #   tags:
 #     - restore
 #   when:
-#     - (b2r_mode == "restore")
-#     - (b2r_valt_restore_disabled is sameas false)
+#     - (abr_mode == "restore")
+#     - (abr_valt_restore_disabled is sameas false)

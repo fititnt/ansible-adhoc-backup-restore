@@ -3,36 +3,36 @@
 # FILE:            {{ role_path }}/tasks/mode-restore.yml
 # LICENSE:         Public Domain
 
-- name: "b2r:{{ b2r_mode }} | mode-restore | TODO message"
+- name: "abr:{{ abr_mode }} | mode-restore | TODO message"
   debug:
     msg: "Work in progress"
 
-- name: "b2r:{{ b2r_mode }} | mode-restore-options | setup/main.yml"
+- name: "abr:{{ abr_mode }} | mode-restore-options | setup/main.yml"
   include: "setup/main.yml"
   when:
-    - "(b2r_skip_setup|bool is sameas false)"
+    - "(abr_skip_setup|bool is sameas false)"
 
 - name: "valt-receive/main.yml"
   include: valt-receive/main.yml
 #   tags:
 #     - valt-receive
 #   when:
-#     - (b2r_mode == "restore")
-#     - (b2r_valt_receive_disabled|bool is sameas false)
+#     - (abr_mode == "restore")
+#     - (abr_valt_receive_disabled|bool is sameas false)
 
 - name: "full-temp-backup-before-restore/main.yml"
   include: full-temp-backup-before-restore/main.yml
 #   tags:
 #     - full-temp-backup-before-restore
   when:
-    - (b2r_paranoid == true)
-#     - (b2r_mode == "restore")
-#     - (b2r_valt_restore_disabled|bool is sameas false)
+    - (abr_paranoid == true)
+#     - (abr_mode == "restore")
+#     - (abr_valt_restore_disabled|bool is sameas false)
 
 - name: "restore/main.yml"
   include: restore/main.yml
 #   tags:
 #     - restore
 #   when:
-#     - (b2r_mode == "restore")
-#     - (b2r_valt_restore_disabled is sameas false)
+#     - (abr_mode == "restore")
+#     - (abr_valt_restore_disabled is sameas false)

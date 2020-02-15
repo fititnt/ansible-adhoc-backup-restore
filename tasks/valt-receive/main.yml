@@ -3,6 +3,6 @@
 # FILE:            {{ role_path }}/tasks/valt-receive/main.yml
 # LICENSE:         Public Domain
 
-- name: "b2r | valt-receive | TODO message"
+- name: "abr | valt-receive | TODO message"
   debug:
     msg: "Work in progress"

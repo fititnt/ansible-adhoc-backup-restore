@@ -3,6 +3,6 @@
 # FILE:            {{ role_path }}/tasks/encrypt/main.yml
 # LICENSE:         Public Domain
 
-- name: "b2r | encrypt | TODO message"
+- name: "abr | encrypt | TODO message"
   debug:
     msg: "Work in progress"

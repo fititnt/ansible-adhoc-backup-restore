@@ -4,21 +4,21 @@
 # LICENSE:         Public Domain
 # SEE:             https://docs.ansible.com/ansible/latest/modules/package_module.html
 
-- name: "b2r:{{ b2r_mode }} | setup | mariadb-mydumper"
-# - name: "b2r | setup-mydumper-mloader"
+- name: "abr:{{ abr_mode }} | setup | mariadb-mydumper"
+# - name: "abr | setup-mydumper-mloader"
   block:
-    - name: "b2r:{{ b2r_mode }} | setup | mariadb-mydumper | install {{ b2r_packages_mydumpermyloader }}"
+    - name: "abr:{{ abr_mode }} | setup | mariadb-mydumper | install {{ abr_packages_mydumpermyloader }}"
       package:
-        name: "{{ b2r_packages_mydumpermyloader }}"
+        name: "{{ abr_packages_mydumpermyloader }}"
         state: present
   rescue:
-    - name: "b2r:{{ b2r_mode }} | setup | mariadb-mydumper | user message"
+    - name: "abr:{{ abr_mode }} | setup | mariadb-mydumper | user message"
       fail:
         msg: >
           Default packages for mydumper/myloader not found.
 
           For imediate suggestion, you can disable this setup step with
-          'b2r_setup_mydumper_myloader: no' and then install manually.
+          'abr_setup_mydumper_myloader: no' and then install manually.
 
           Please consider open an issue / open a pull request to the maintainer
           repository.

@@ -3,6 +3,6 @@
 # FILE:            {{ role_path }}/tasks/full-temp-backup-before-restore/main.yml
 # LICENSE:         Public Domain
 
-- name: "b2r | full-temp-backup-before-restore | TODO message"
+- name: "abr | full-temp-backup-before-restore | TODO message"
   debug:
     msg: "Work in progress"

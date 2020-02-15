@@ -35,8 +35,8 @@
 # Note, actually  more systems are detected than these ones (the
 # distribution.py mention OpenBSD for example)
 
-# b2r_packages_mydumpermyloader:
+# abr_packages_mydumpermyloader:
 #   - mydumper
 
-# b2r_packages_rclone:
+# abr_packages_rclone:
 #   - rclone

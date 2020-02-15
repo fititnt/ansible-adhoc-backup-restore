@@ -3,21 +3,21 @@
 # FILE:            {{ role_path }}/tasks/setup/rclone/main.yml
 # LICENSE:         Public Domain
 
-- name: "b2r:{{ b2r_mode }} | setup | mariadb-mydumper"
-# - name: "b2r:{{ b2r_mode }} | setup | rclone"
+- name: "abr:{{ abr_mode }} | setup | mariadb-mydumper"
+# - name: "abr:{{ abr_mode }} | setup | rclone"
   block:
-    - name: "b2r:{{ b2r_mode }} | setup | rclone | install {{ b2r_packages_rclone }}"
+    - name: "abr:{{ abr_mode }} | setup | rclone | install {{ abr_packages_rclone }}"
       package:
-        name: "{{ b2r_packages_rclone }}"
+        name: "{{ abr_packages_rclone }}"
         state: present
   rescue:
-    - name: "b2r:{{ b2r_mode }} | setup | rclone | user message"
+    - name: "abr:{{ abr_mode }} | setup | rclone | user message"
       fail:
         msg: >
           Default packages for rclone not found.
 
           For imediate suggestion, you can disable this setup step with
-          'b2r_setup_rclone: no' and then install manually.
+          'abr_setup_rclone: no' and then install manually.
 
           Please consider open an issue / open a pull request to the maintainer
           repository.

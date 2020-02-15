@@ -3,6 +3,6 @@
 # FILE:            {{ role_path }}/tasks/decompress/main.yml
 # LICENSE:         Public Domain
 
-- name: "b2r | decompress | TODO message"
+- name: "abr | decompress | TODO message"
   debug:
     msg: "Work in progress"

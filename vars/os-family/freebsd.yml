@@ -10,5 +10,5 @@
 
 # For me: https://www.cyberciti.biz/faq/how-to-prepare-freebsd-server-to-be-managed-by-ansible-tool/
 
-b2r_internal_root_user: 'root'
-b2r_internal_root_group: 'wheel'
+abr_internal_root_user: 'root'
+abr_internal_root_group: 'wheel'

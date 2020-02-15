@@ -1,4 +1,4 @@
-# Ansible Role for Ad Hoc Backup RClone Restore Workflow v0.5.0
+# Ansible Role for Ad Hoc Backup Restore v0.6.0
 **Ansible Role to performn Ad Hoc backup/restore for MariaDB/MySQL/Galera Cluster.
 Uses [mydumper/myloader](https://github.com/maxbube/mydumper) for performance
 otimized export/import of COMPLETE server and optimal send/receive using

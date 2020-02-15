@@ -5,95 +5,95 @@
 
 ### DRAFT of v0.5.0 new standard, START ________________________________________
 # Affect name of the backups
-b2r_uid: "{{ inventory_hostname_short }}"
-b2r_timestamped: true
+abr_uid: "{{ inventory_hostname_short }}"
+abr_timestamped: true
 
-b2r_mode: "restore-options"    # Options: 'backup', 'restore', 'restore-options'
-b2r_skip_setup: false
-b2r_driver: "mariadb-mydumper" # Options: "mariadb-mydumper"
-b2r_driver_compression: "ansible-archive" # Options: "mariadb-mydumper"
-b2r_driver_encryption: null # Options: none
-b2r_driver_rclone: "rclone" # We actually dont plan to release non-rclone, but you can use to customize
-b2r_paranoid: true
+abr_mode: "restore-options"    # Options: 'backup', 'restore', 'restore-options'
+abr_skip_setup: false
+abr_driver: "mariadb-mydumper" # Options: "mariadb-mydumper"
+abr_driver_compression: "ansible-archive" # Options: "mariadb-mydumper"
+abr_driver_encryption: null # Options: none
+abr_driver_rclone: "rclone" # We actually dont plan to release non-rclone, but you can use to customize
+abr_paranoid: true
 
-b2r_bucket: ":local:/var/local/b2r/b2r-local-bucket/" # See also b2r_rclone_bucket_backup/b2r_rclone_bucket_restore
-b2r_prefix: "" # See also b2r_pathprefix_local/b2r_pathprefix_remote
-b2r_rclone_enviroment: {}
-# b2r_rclone_enviroment:
+abr_bucket: ":local:/var/local/abr/abr-local-bucket/" # See also abr_rclone_bucket_backup/abr_rclone_bucket_restore
+abr_prefix: "" # See also abr_pathprefix_local/abr_pathprefix_remote
+abr_rclone_enviroment: {}
+# abr_rclone_enviroment:
 #   RCLONE_B2_ACCOUNT: "000b3e7..."
 #   RCLONE_B2_KEY: "K000pyk..."
 
-b2r_rclone_args: {}
-# b2r_rclone_args: {
+abr_rclone_args: {}
+# abr_rclone_args: {
 #   '--b2-account': "000b3e7...",
 #   '--b2-key': "K000pyk..."
 # }
 
-b2r_name_separator: "__"
-b2r_timestamp: "{{ ansible_date_time.iso8601_basic_short }}"
+abr_name_separator: "__"
+abr_timestamp: "{{ ansible_date_time.iso8601_basic_short }}"
 
-b2r_task_main_backup: "{{ role_path }}/tasks/backup/{{ b2r_driver }}.yml"
-b2r_task_main_restore: "{{ role_path }}/tasks/restore/{{ b2r_driver }}.yml"
-b2r_task_main_restore_options: "{{ role_path }}/tasks/restore-options/main.yml"
-b2r_task_compression_backup: "{{ role_path }}/tasks/compress/{{ b2r_driver_compression | default('none', true) }}.yml"
-b2r_task_compression_restore: "{{ role_path }}/tasks/decompress/{{ b2r_driver_compression | default('none', true) }}.yml"
-b2r_task_encryption_backup: "{{ role_path }}/tasks/compress/{{ b2r_driver_encryption | default('none', true) }}.yml"
-b2r_task_encryption_restore: "{{ role_path }}/tasks/decompress/{{ b2r_driver_encryption | default('none', true) }}.yml"
-b2r_task_rclone_backup: "{{ role_path }}/tasks/compress/{{ b2r_driver_rclone }}.yml"
-b2r_task_rclone_restore: "{{ role_path }}/tasks/decompress/{{ b2r_driver_rclone }}.yml"
+abr_task_main_backup: "{{ role_path }}/tasks/backup/{{ abr_driver }}.yml"
+abr_task_main_restore: "{{ role_path }}/tasks/restore/{{ abr_driver }}.yml"
+abr_task_main_restore_options: "{{ role_path }}/tasks/restore-options/main.yml"
+abr_task_compression_backup: "{{ role_path }}/tasks/compress/{{ abr_driver_compression | default('none', true) }}.yml"
+abr_task_compression_restore: "{{ role_path }}/tasks/decompress/{{ abr_driver_compression | default('none', true) }}.yml"
+abr_task_encryption_backup: "{{ role_path }}/tasks/compress/{{ abr_driver_encryption | default('none', true) }}.yml"
+abr_task_encryption_restore: "{{ role_path }}/tasks/decompress/{{ abr_driver_encryption | default('none', true) }}.yml"
+abr_task_rclone_backup: "{{ role_path }}/tasks/compress/{{ abr_driver_rclone }}.yml"
+abr_task_rclone_restore: "{{ role_path }}/tasks/decompress/{{ abr_driver_rclone }}.yml"
 
 ### DRAFT of v0.5.0 new standard, END __________________________________________
 
 ### Most common variables to change, start _____________________________________
-# Check b2r_database var if you dont want FULL backup or FULL server restore
-# b2r_mode: "undefined-mode-select-backup-or-restore" # Options: backup or restore
-b2r_name: "{{ b2r_default_summary }}" # Example: myhostname__all-databases__20200213T052730
-# b2r_rclone_bucket: ":local:/var/local/b2r/b2r-local-bucket/" # See also b2r_rclone_bucket_backup/b2r_rclone_bucket_restore
-b2r_pathprefix: "" # See also b2r_pathprefix_local/b2r_pathprefix_remote
-# b2r_paranoid: yes # if you are running in production and is ok to do full-temp-backup-before-restore
+# Check abr_database var if you dont want FULL backup or FULL server restore
+# abr_mode: "undefined-mode-select-backup-or-restore" # Options: backup or restore
+abr_name: "{{ abr_default_summary }}" # Example: myhostname__all-databases__20200213T052730
+# abr_rclone_bucket: ":local:/var/local/abr/abr-local-bucket/" # See also abr_rclone_bucket_backup/abr_rclone_bucket_restore
+abr_pathprefix: "" # See also abr_pathprefix_local/abr_pathprefix_remote
+# abr_paranoid: yes # if you are running in production and is ok to do full-temp-backup-before-restore
 
-## Exclusive to: b2r_mode: backup ..............................................
-b2r_backup_timestamped: yes # Example 'no': myhostname__all-databases
-b2r_backup_compress: false
+## Exclusive to: abr_mode: backup ..............................................
+abr_backup_timestamped: yes # Example 'no': myhostname__all-databases
+abr_backup_compress: false
 
-## Exclusive to: b2r_mode: restore ............................................
-b2r_restore_timestamp: "" # Example: 20200213T052730, ignore when 'b2r_backup_timestamped: no'
-b2r_restore_database: ""  # If you export all databases, but want import just one, use it
-b2r_restore_tables: []    # If want just specific databases
-# b2r_restore_customrclone: ""
+## Exclusive to: abr_mode: restore ............................................
+abr_restore_timestamp: "" # Example: 20200213T052730, ignore when 'abr_backup_timestamped: no'
+abr_restore_database: ""  # If you export all databases, but want import just one, use it
+abr_restore_tables: []    # If want just specific databases
+# abr_restore_customrclone: ""
 
 ### Most common variables to change, end _______________________________________
 
 # MariaDB/MySQL/Galera Cluster _________________________________________________
 
-b2r_database: null         # -B, --database: Database to dump (defalts to ALL databases, including system databases!)
-b2r_tables_list: ""        # --tables-list: Comma delimited table list to dump (does not exclude regex option)
-b2r_regex: ""              # -x, --regex: Regular expression for 'db.table' matching
-b2r_no_schemas: null       # -m, --no-schemas: Do not dump table schemas with the data
-b2r_no_data: null          # -d, --no-data: Do not dump table data
+abr_database: null         # -B, --database: Database to dump (defalts to ALL databases, including system databases!)
+abr_tables_list: ""        # --tables-list: Comma delimited table list to dump (does not exclude regex option)
+abr_regex: ""              # -x, --regex: Regular expression for 'db.table' matching
+abr_no_schemas: null       # -m, --no-schemas: Do not dump table schemas with the data
+abr_no_data: null          # -d, --no-data: Do not dump table data
 
 # Server to export/import
-b2r_dbserver_user: root     # -u, --user: Username with privileges to run the dump
-b2r_dbserver_password: null # -p, --password: User password
-b2r_dbserver_host: null     # --host: The host to connect to
-b2r_dbserver_port: null     # -P, --port: TCP/IP port to connect to
-b2r_dbserver_socket: null   # -S, --socket: UNIX domain socket file to use for connection
+abr_dbserver_user: root     # -u, --user: Username with privileges to run the dump
+abr_dbserver_password: null # -p, --password: User password
+abr_dbserver_host: null     # --host: The host to connect to
+abr_dbserver_port: null     # -P, --port: TCP/IP port to connect to
+abr_dbserver_socket: null   # -S, --socket: UNIX domain socket file to use for connection
 
 # For features not implemented, please use the following parameters
-b2r_mydumper_append: null  # String to append to mydumper shell command
-b2r_myloader_append: null  # String to append to myloader shell command
+abr_mydumper_append: null  # String to append to mydumper shell command
+abr_myloader_append: null  # String to append to myloader shell command
 
 # RCLONE _______________________________________________________________________
 
-b2r_rclone_bucket_type: "local"
+abr_rclone_bucket_type: "local"
 
-# b2r_rclone_enviroment: {}
-# # b2r_rclone_enviroment:
+# abr_rclone_enviroment: {}
+# # abr_rclone_enviroment:
 # #   RCLONE_B2_ACCOUNT: "000b3e7..."
 # #   RCLONE_B2_KEY: "K000pyk..."
 
-# b2r_rclone_args: {}
-# # b2r_rclone_args: {
+# abr_rclone_args: {}
+# # abr_rclone_args: {
 # #   '--b2-account': "000b3e7...",
 # #   '--b2-key': "K000pyk..."
 # # }
@@ -103,22 +103,22 @@ b2r_rclone_bucket_type: "local"
 # (e.g. the backup for security reason ONLY ALLOW WRITE, but not reads) and
 # to restore (e.g. a key that, via human intervention, may allow list remote
 # options) the user can customize both
-b2r_rclone_bucket_backup: "{{ b2r_rclone_bucket }}"
-b2r_rclone_bucket_restore: "{{ b2r_rclone_bucket }}"
-b2r_rclone_enviroment_backup: "{{ b2r_rclone_enviroment }}"
-b2r_rclone_enviroment_restore: "{{ b2r_rclone_enviroment }}"
-b2r_rclone_args_backup: "{{ b2r_rclone_args }}"
-b2r_rclone_args_restore: "{{ b2r_rclone_args }}"
+abr_rclone_bucket_backup: "{{ abr_rclone_bucket }}"
+abr_rclone_bucket_restore: "{{ abr_rclone_bucket }}"
+abr_rclone_enviroment_backup: "{{ abr_rclone_enviroment }}"
+abr_rclone_enviroment_restore: "{{ abr_rclone_enviroment }}"
+abr_rclone_args_backup: "{{ abr_rclone_args }}"
+abr_rclone_args_restore: "{{ abr_rclone_args }}"
 
 
-b2r_rclone_valt_send_method: "move" # Move files from source to dest https://rclone.org/commands/rclone_move/
-# b2r_rclone_valt_send_method: "copy" # Copy files from source to dest, skipping already copied https://rclone.org/commands/rclone_move/
-# b2r_rclone_valt_send_method: "sync" # Make source and dest identical, modifying destination only https://rclone.org/commands/rclone_sync/
+abr_rclone_valt_send_method: "move" # Move files from source to dest https://rclone.org/commands/rclone_move/
+# abr_rclone_valt_send_method: "copy" # Copy files from source to dest, skipping already copied https://rclone.org/commands/rclone_move/
+# abr_rclone_valt_send_method: "sync" # Make source and dest identical, modifying destination only https://rclone.org/commands/rclone_sync/
 
-b2r_rclone_valt_receive_method: "copy"
+abr_rclone_valt_receive_method: "copy"
 
 # @see https://rclone.org/docs/#environment-variables
-# b2r_rclone_enviroment:
+# abr_rclone_enviroment:
 #   RCLONE_YOUR_CUSTOM_VAR: "here."
 #   RCLONE_ANOTHER_VAR: "here"
 
@@ -130,109 +130,109 @@ b2r_rclone_valt_receive_method: "copy"
 #    - run full-temp-backup-before-restore
 #    - It will take additional time (it will backup all databases on target reserver)
 #    - It may fill your disks (if your database is big and the target directory is on small disk)
-# b2r_paranoid: false
+# abr_paranoid: false
 
 ## Other variables _____________________________________________________________
 
-b2r_setup_mydumper_myloader: yes
-b2r_setup_rclone: yes
-# b2r_setup_b2r_filesystem: yes
-# b2r_backup_disabled: no # Force disable backup, even if b2r_mode: backup
-# b2r_restore_disabled: no  # Force disable backup, even if b2r_mode: restore
-# b2r_valt_send_disabled: no
-# b2r_valt_receive_disabled: no
-# b2r_mode: "undefined-mode-select-backup-or-restore"
+abr_setup_mydumper_myloader: yes
+abr_setup_rclone: yes
+# abr_setup_abr_filesystem: yes
+# abr_backup_disabled: no # Force disable backup, even if abr_mode: backup
+# abr_restore_disabled: no  # Force disable backup, even if abr_mode: restore
+# abr_valt_send_disabled: no
+# abr_valt_receive_disabled: no
+# abr_mode: "undefined-mode-select-backup-or-restore"
 
 ## Filesystem __________________________________________________________________
 
 ### Backup/restore step .......................................................
 # If you dont want to store all backups on same base folder, you can customize
 # here
-b2r_pathprefix_local: "{{ b2r_pathprefix }}"
-b2r_pathprefix_remote: "{{ b2r_pathprefix }}"
-# b2r_backupdir: "{{ b2r_name }}{{ (b2r_summary_append_timestamp|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '')) }}"
+abr_pathprefix_local: "{{ abr_pathprefix }}"
+abr_pathprefix_remote: "{{ abr_pathprefix }}"
+# abr_backupdir: "{{ abr_name }}{{ (abr_summary_append_timestamp|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '')) }}"
 
 # The default base dir respect Filesystem Hierarchy Standard 3.0
-b2r_dir_mydumpermyloader:
-  # Default path: /var/local/b2r/backups/{{ b2r_pathprefix }}{{ b2r_name }}/
-  path: "{{ b2r_dir_backup.path }}{{ b2r_pathprefix_local }}{{ b2r_backup_name }}/"
-  owner: "{{ b2r_fs_owner }}" # Default: root
-  group: "{{ b2r_internal_root_group }}" # Default: root/wheel
-  mode: "{{ b2r_fs_mode }}" # Default: "0700"
+abr_dir_mydumpermyloader:
+  # Default path: /var/local/abr/backups/{{ abr_pathprefix }}{{ abr_name }}/
+  path: "{{ abr_dir_backup.path }}{{ abr_pathprefix_local }}{{ abr_backup_name }}/"
+  owner: "{{ abr_fs_owner }}" # Default: root
+  group: "{{ abr_internal_root_group }}" # Default: root/wheel
+  mode: "{{ abr_fs_mode }}" # Default: "0700"
   state: directory
   recurse: yes
   # serole: ...
   # setype: ...
-  # Check {{ role_path }}/tasks/setup-b2r-filesystem/main.yml for all options!
+  # Check {{ role_path }}/tasks/setup-abr-filesystem/main.yml for all options!
 
 ### Setup step .................................................................
 
-# With 'b2r_setup_b2r_filesystem: yes', b2r_dirs is used to prepare local
+# With 'abr_setup_abr_filesystem: yes', abr_dirs is used to prepare local
 # filesystem. You can append other directories here
-b2r_fs_dirs:
-  - "{{ b2r_dir_base }}"
-  - "{{ b2r_dir_restoretempfolder }}"
-  - "{{ b2r_dir_backup }}"
-  - "{{ b2r_dir_mydumperdaemon }}"
-  - "{{ b2r_dir_paranoidmode }}"
-  - "{{ b2r_dir_b2rlocalbucket }}"
+abr_fs_dirs:
+  - "{{ abr_dir_base }}"
+  - "{{ abr_dir_restoretempfolder }}"
+  - "{{ abr_dir_backup }}"
+  # - "{{ abr_dir_mydumperdaemon }}"
+  - "{{ abr_dir_paranoidmode }}"
+  - "{{ abr_dir_abrlocalbucket }}"
 
 # You do not plan to run always as root? Customize this
-b2r_fs_owner: "{{ b2r_internal_root_user }}" # root
-b2r_fs_group: "{{ b2r_internal_root_group }}" # root/wheel
-b2r_fs_mode: "0700"
+abr_fs_owner: "{{ abr_internal_root_user }}" # root
+abr_fs_group: "{{ abr_internal_root_group }}" # root/wheel
+abr_fs_mode: "0700"
 
 # The default base dir respect Filesystem Hierarchy Standard 3.0
-b2r_dir_base: 
-  path: "/var/local/b2r/"
-  owner: "{{ b2r_fs_owner }}"
-  group: "{{ b2r_internal_root_group }}"
-  mode: "{{ b2r_fs_mode }}"
+abr_dir_base: 
+  path: "/var/local/abr/"
+  owner: "{{ abr_fs_owner }}"
+  group: "{{ abr_internal_root_group }}"
+  mode: "{{ abr_fs_mode }}"
   state: directory
   # recurse: yes
   # serole: ...
   # setype: ...
-  # Check {{ role_path }}/tasks/setup-b2r-filesystem/main.yml for all options!
+  # Check {{ role_path }}/tasks/setup-abr-filesystem/main.yml for all options!
 
-b2r_dir_restoretempfolder:
-  path: "{{ b2r_dir_base.path }}temp/"
-  owner: "{{ b2r_fs_owner }}"
-  group: "{{ b2r_internal_root_group }}"
-  mode: "{{ b2r_fs_mode }}"
+abr_dir_restoretempfolder:
+  path: "{{ abr_dir_base.path }}temp/"
+  owner: "{{ abr_fs_owner }}"
+  group: "{{ abr_internal_root_group }}"
+  mode: "{{ abr_fs_mode }}"
   state: directory
 
-b2r_dir_backup:
-  path: "{{ b2r_dir_base.path }}backups/"
-  owner: "{{ b2r_fs_owner }}"
-  group: "{{ b2r_internal_root_group }}"
-  mode: "{{ b2r_fs_mode }}"
+abr_dir_backup:
+  path: "{{ abr_dir_base.path }}backups/"
+  owner: "{{ abr_fs_owner }}"
+  group: "{{ abr_internal_root_group }}"
+  mode: "{{ abr_fs_mode }}"
   state: directory
 
-# Not implemented, but the folder at least exist if you want to implement
-b2r_dir_mydumperdaemon:
-  path: "{{ b2r_dir_base.path }}mydumper-daemon"
-  owner: "{{ b2r_fs_owner }}"
-  group: "{{ b2r_internal_root_group }}"
-  mode: "{{ b2r_fs_mode }}"
+# # Not implemented, but the folder at least exist if you want to implement
+# abr_dir_mydumperdaemon:
+#   path: "{{ abr_dir_base.path }}mydumper-daemon"
+#   owner: "{{ abr_fs_owner }}"
+#   group: "{{ abr_internal_root_group }}"
+#   mode: "{{ abr_fs_mode }}"
+#   state: directory
+
+abr_dir_paranoidmode:
+  path: "{{ abr_dir_base.path }}full-temp-backup-before-restore/"
+  owner: "{{ abr_fs_owner }}"
+  group: "{{ abr_internal_root_group }}"
+  mode: "{{ abr_fs_mode }}"
   state: directory
 
-b2r_dir_paranoidmode:
-  path: "{{ b2r_dir_base.path }}full-temp-backup-before-restore/"
-  owner: "{{ b2r_fs_owner }}"
-  group: "{{ b2r_internal_root_group }}"
-  mode: "{{ b2r_fs_mode }}"
-  state: directory
-
-b2r_dir_b2rlocalbucket:
-  path: "{{ b2r_dir_base.path }}b2r-local-bucket/"
-  owner: "{{ b2r_fs_owner }}"
-  group: "{{ b2r_internal_root_group }}"
-  mode: "{{ b2r_fs_mode }}"
+abr_dir_abrlocalbucket:
+  path: "{{ abr_dir_base.path }}abr-local-bucket/"
+  owner: "{{ abr_fs_owner }}"
+  group: "{{ abr_internal_root_group }}"
+  mode: "{{ abr_fs_mode }}"
   state: directory
 
 ## ADVANCED: backup/restore other databases ____________________________________
 
-# If you want to reuse b2r for mongodump (MongDB), pg_dump (PostgreSQL),
+# If you want to reuse abr for mongodump (MongDB), pg_dump (PostgreSQL),
 # redis-cli bgsave (Redis), create your custom task file and edit this:
-b2r_backup_taskfile: "{{ role_path }}/tasks/backup/mydumper.yml"
-b2r_restore_taskfile: "{{ role_path }}/tasks/restore/myloader.yml"
+abr_backup_taskfile: "{{ role_path }}/tasks/backup/mydumper.yml"
+abr_restore_taskfile: "{{ role_path }}/tasks/restore/myloader.yml"
