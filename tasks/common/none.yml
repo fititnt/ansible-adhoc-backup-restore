@@ -1,0 +1,10 @@
+---
+
+# FILE:            {{ role_path }}/tasks/common/none.yml
+# LICENSE:         Public Domain
+# DESCRIPTION:     This file is loaded when one or more potential files COULD
+#                  be loaded, but none where fould. It does not means fail.
+
+- name: "abr:{{ abr_mode }} | none"
+  debug:
+    msg: "{{ none_message }}"

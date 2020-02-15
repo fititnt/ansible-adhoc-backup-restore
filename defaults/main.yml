@@ -32,6 +32,10 @@ abr_rclone_args: {}
 abr_name_separator: "__"
 abr_timestamp: "{{ ansible_date_time.iso8601_basic_short }}"
 
+# abr role, if you have new files or custom overrides for its internal
+# tasks files under overrides/roles/adhoc_backup_restore/, it will use yours
+abr_overrides_directory: "{{ playbook_dir }}/overrides/roles/adhoc_backup_restore/"
+
 abr_task_main_backup: "{{ role_path }}/tasks/backup/{{ abr_driver }}.yml"
 abr_task_main_restore: "{{ role_path }}/tasks/restore/{{ abr_driver }}.yml"
 abr_task_main_restore_options: "{{ role_path }}/tasks/restore-options/main.yml"
@@ -126,7 +130,7 @@ abr_rclone_valt_receive_method: "copy"
 # @see https://dba.stackexchange.com/questions/99007/how-does-mydumpers-use-savepoints-option-reduce-metadata-locking
 
 # Paranoid Mode ________________________________________________________________
-# If enabled: 
+# If enabled:
 #    - run full-temp-backup-before-restore
 #    - It will take additional time (it will backup all databases on target reserver)
 #    - It may fill your disks (if your database is big and the target directory is on small disk)
@@ -183,7 +187,7 @@ abr_fs_group: "{{ abr_internal_root_group }}" # root/wheel
 abr_fs_mode: "0700"
 
 # The default base dir respect Filesystem Hierarchy Standard 3.0
-abr_dir_base: 
+abr_dir_base:
   path: "/var/local/abr/"
   owner: "{{ abr_fs_owner }}"
   group: "{{ abr_internal_root_group }}"

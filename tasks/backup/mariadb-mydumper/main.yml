@@ -1,6 +1,6 @@
 ---
 
-# FILE:            {{ role_path }}/tasks/backup/mydumper.yml
+# FILE:            {{ role_path }}/tasks/backup/mariadb-mydumper/main.yml
 # LICENSE:         Public Domain
 
 - name: "abr | backup | debug (requires -v, -vv, -vvv, or -vvvv)"

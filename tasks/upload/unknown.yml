@@ -1,8 +1,0 @@
----
-
-# FILE:            {{ role_path }}/tasks/upload/unknown.yml
-# LICENSE:         Public Domain
-
-- name: "abr:{{ abr_mode }} | upload | unknown"
-  fail:
-    msg: "{{ upload_unknown_message }}"

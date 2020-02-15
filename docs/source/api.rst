@@ -19,7 +19,30 @@
 .. _ref-standard-apis:
 
 **************
-Drivers
+`abr_mode`
+**************
+
+When running `abr` it alwas have one mode enabled. By default it is
+`abr_mode: restore-options`.
+
+`backup`
+=========
+
+Source code: `tasks/mode-backup.yml <https://github.com/fititnt/ansible-adhoc-backup-restore/blob/master/tasks/mode-backup.yml>`_
+
+`restore`
+=========
+
+Source code: `tasks/mode-restore.yml <https://github.com/fititnt/ansible-adhoc-backup-restore/blob/master/tasks/mode-restore.yml>`_
+
+`restore-options`
+=================
+
+
+Source code: `tasks/mode-restore-options.yml <https://github.com/fititnt/ansible-adhoc-backup-restore/blob/master/tasks/mode-restore-options.yml>`_
+
+**************
+`abr_driver`
 **************
 
 .. tip::

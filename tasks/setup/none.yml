@@ -1,8 +1,0 @@
----
-
-# FILE:            {{ role_path }}/tasks/setup/none.yml
-# LICENSE:         Public Domain
-
-- name: "abr:{{ abr_mode }} | setup | none"
-  debug:
-    msg: "{{ setup_none_message }}"

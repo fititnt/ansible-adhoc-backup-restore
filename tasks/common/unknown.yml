@@ -1,0 +1,11 @@
+---
+
+# FILE:            {{ role_path }}/tasks/common/unknown.yml
+# LICENSE:         Public Domain
+# DESCRIPTION:     This file is loaded when one or more potential files SHOULD
+#                  be loaded, but none where fould. It's very likely an error
+#                  and user should be warned about it.
+
+- name: "abr:{{ abr_mode }} | unknown"
+  fail:
+    msg: "{{ unknown_message }}"

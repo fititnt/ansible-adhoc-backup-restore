@@ -3,5 +3,19 @@
 # FILE:            {{ role_path }}/tasks/backup/main.yml
 # LICENSE:         Public Domain
 
-- name: "backup/main.yml"
-  include: "{{ abr_backup_taskfile }}"
+# - name: "backup/main.yml"
+#   include: "{{ abr_backup_taskfile }}"
+
+  # abr_driver
+
+- name: "abr:{{ abr_mode }} | backup"
+  include: "{{ include_task_backup_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/backup/{{ abr_driver | default('dont-exist') }}/main.yml"
+    - "{{ role_path }}/tasks/backup/{{ abr_driver | default('dont-exist') }}/main.yml"
+    - "{{ abr_overrides_directory }}/tasks/common/unknown.yml"
+    - "{{ role_path }}/tasks/common/unknown.yml"
+  loop_control:
+    loop_var: "include_task_backup_item"
+  vars:
+    unknown_message: "Critical error! backup driver '{{ abr_driver }}' not found on {{ role_path }} or {{ abr_overrides_directory }}"

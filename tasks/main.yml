@@ -41,7 +41,14 @@
 
 ### DRAFT of v0.5.0 new standard, START ________________________________________
 - name: "{{ abr_mode }}.yml"
-  include: "mode-{{ abr_mode }}.yml"
+  # include: "mode-{{ abr_mode }}.yml"
+  include: "{{ include_task_mode_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/mode-{{ abr_mode }}.yml"
+    - "{{ role_path }}/tasks/mode-{{ abr_mode }}.yml"
+  loop_control:
+    loop_var: "include_task_mode_item"
+
 
 ### DRAFT of v0.5.0 new standard, END __________________________________________
 ## Run each abr subcomponent ___________________________________________________
