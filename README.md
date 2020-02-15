@@ -1,10 +1,22 @@
-# Ad-Hoc Backup Restore ("abr") with Ansible
+# `abr`Ad-Hoc Backup Restore with Ansible
 **Ad-Hoc Backup Restore (abbreviated: `abr`), released as an very extensible
 Ansible role, allows control the full workflow of backup, storage, and restore
 of anything supported by it's drivers.**
 
 While it _may_ be executed automated (e.g. running via [Ansible AWX](https://github.com/ansible/awx)) the main reason to exist have an _somewhat standard_ workflow to humans do
 _Ad-Hoc backups_ (quick backups) **OR** _Ad-Hoc restore_.
+
+## Usage
+
+Visite the complete official documentation at <https://ansible-adhoc-backup-restore.readthedocs.io/>
+
+### Quickstart
+
+```bash
+# Too long didn't read:
+# "abr is installable as an Ansible role and is distributed over Ansible Galaxy
+ansible-galaxy install fititnt.adhoc_backup_restore
+```
 
 <!--
 

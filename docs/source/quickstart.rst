@@ -15,18 +15,21 @@ Quickstart
 
   <hr />
 
-
-****************************************
-New to Ansible
-****************************************
-
-- https://www.ansible.com/resources/videos/quick-start-video
-
 ****************************************
 `abr` step by step
 ****************************************
 
-Topico 1
+Restore Options
+================
+
+.. code-block:: yaml
+  :caption: todo2.yml
+  :name: todo2
+  :linenos:
+
+  # TODO...
+
+Backup
 ==============
 
 .. code-block:: yaml
@@ -36,7 +39,7 @@ Topico 1
 
   # TODO...
 
-Topico 2
+Restore
 ==============
 
 .. code-block:: yaml
@@ -45,3 +48,14 @@ Topico 2
   :linenos:
 
   # TODO...
+
+
+****************************************
+What if I'm new to Ansible?
+****************************************
+
+.. note::
+
+  TODO: improve this explanation.
+
+- https://www.ansible.com/resources/videos/quick-start-video

@@ -41,6 +41,7 @@ If you are new to Ansible, we recommend read our :doc:`installation`. TL;DR:
    installation
    quickstart
    api
+   standards
    todo
    alternatives
 
