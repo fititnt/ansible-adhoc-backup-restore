@@ -35,48 +35,48 @@
   vars:
     none_message: "No special setup configured for driver {{ abr_driver }}"
 
-- name: "abr:{{ abr_mode }} | setup | {{ abr_driver_rclone }}"
+- name: "abr:{{ abr_mode }} | setup | {{ abr_strategy_synchronization }}"
   include: "{{ setup_item }}"
   with_first_found:
-    - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_driver_rclone }}/{{ abr_mode }}.yml"
-    - "{{ role_path }}/tasks/setup/{{ abr_driver_rclone }}/{{ abr_mode }}.yml"
-    - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_driver_rclone }}/main.yml"
-    - "{{ role_path }}/tasks/setup/{{ abr_driver_rclone }}/main.yml"
+    - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_strategy_synchronization }}/{{ abr_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_strategy_synchronization }}/{{ abr_mode }}.yml"
+    - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_strategy_synchronization }}/main.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_strategy_synchronization }}/main.yml"
     - "{{ abr_overrides_directory }}/tasks/common/none.yml"
     - "{{ role_path }}/tasks/common/none.yml"
   loop_control:
     loop_var: "setup_item"
   vars:
-    none_message: "No special setup configured for rclone strategy {{ abr_driver_rclone }}"
+    none_message: "No special setup configured for rclone strategy {{ abr_strategy_synchronization }}"
 
-- name: "abr:{{ abr_mode }} | setup | compression strategy {{ abr_driver_compression }}"
+- name: "abr:{{ abr_mode }} | setup | compression strategy {{ abr_strategy_compression }}"
   include: "{{ setup_item }}"
   with_first_found:
-    - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_driver_compression }}/{{ abr_mode }}.yml"
-    - "{{ role_path }}/tasks/setup/{{ abr_driver_compression }}/{{ abr_mode }}.yml"
-    - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_driver_compression }}/main.yml"
-    - "{{ role_path }}/tasks/setup/{{ abr_driver_compression }}/main.yml"
+    - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_strategy_compression }}/{{ abr_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_strategy_compression }}/{{ abr_mode }}.yml"
+    - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_strategy_compression }}/main.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_strategy_compression }}/main.yml"
     - "{{ abr_overrides_directory }}/tasks/common/none.yml"
     - "{{ role_path }}/tasks/common/none.yml"
   loop_control:
     loop_var: "setup_item"
   when:
-    - "(abr_driver_compression is defined) and (abr_driver_compression) and (abr_driver_compression|length > 0)"
+    - "(abr_strategy_compression is defined) and (abr_strategy_compression) and (abr_strategy_compression|length > 0)"
   vars:
-    none_message: "No special setup configured for compression strategy {{ abr_driver_compression }}"
+    none_message: "No special setup configured for compression strategy {{ abr_strategy_compression }}"
 
-- name: "abr:{{ abr_mode }} | setup | encryption strategy {{ abr_driver_encryption }}"
+- name: "abr:{{ abr_mode }} | setup | encryption strategy {{ abr_strategy_encryption }}"
   include: "{{ setup_item }}"
   with_first_found:
-    - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_driver_encryption }}/{{ abr_mode }}.yml"
-    - "{{ role_path }}/tasks/setup/{{ abr_driver_encryption }}/{{ abr_mode }}.yml"
-    - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_driver_encryption }}/main.yml"
-    - "{{ role_path }}/tasks/setup/{{ abr_driver_encryption }}/main.yml"
+    - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_strategy_encryption }}/{{ abr_mode }}.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_strategy_encryption }}/{{ abr_mode }}.yml"
+    - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_strategy_encryption }}/main.yml"
+    - "{{ role_path }}/tasks/setup/{{ abr_strategy_encryption }}/main.yml"
     - "{{ abr_overrides_directory }}/tasks/common/none.yml"
     - "{{ role_path }}/tasks/common/none.yml"
   loop_control:
     loop_var: "setup_item"
   when:
-    - "(abr_driver_encryption is defined) and (abr_driver_encryption) and (abr_driver_encryption|length > 0)"
+    - "(abr_strategy_encryption is defined) and (abr_strategy_encryption) and (abr_strategy_encryption|length > 0)"
   vars:
-    none_message: "No special setup configured for encryption strategy {{ abr_driver_encryption }}"
+    none_message: "No special setup configured for encryption strategy {{ abr_strategy_encryption }}"

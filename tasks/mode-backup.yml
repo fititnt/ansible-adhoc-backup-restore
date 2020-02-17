@@ -3,10 +3,6 @@
 # FILE:            {{ role_path }}/tasks/mode-backup.yml
 # LICENSE:         Public Domain
 
-# - name: "abr:{{ abr_mode }} | mode-backup | TODO message"
-#   debug:
-#     msg: "Work in progress"
-
 - name: "abr:{{ abr_mode }} | mode-backup | setup/main.yml"
   # include: "setup/main.yml"
   include: "{{ include_task_mode_backup_setup_item }}"
@@ -53,11 +49,3 @@
     - "{{ role_path }}/tasks/upload/main.yml"
   loop_control:
     loop_var: "include_task_mode_backup_upload_item"
-
-# - name: "abr:{{ abr_mode }} | mode-backup | valt-send/main.yml"
-#   include: valt-send/main.yml
-#   tags:
-#     - valt-send
-#   when:
-#     - (abr_mode == "backup")
-#     - (abr_valt_send_disabled|bool is sameas false)

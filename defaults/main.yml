@@ -11,9 +11,10 @@ abr_timestamped: true
 abr_mode: "restore-options"    # Options: 'backup', 'restore', 'restore-options'
 abr_skip_setup: false
 abr_driver: "mariadb-mydumper" # Options: "mariadb-mydumper"
-abr_driver_compression: "ansible-archive" # Options: "mariadb-mydumper"
-abr_driver_encryption: null # Options: none
-abr_driver_rclone: "rclone" # We actually dont plan to release non-rclone, but you can use to customize
+abr_strategy_compression: "ansible-archive" # Options: "mariadb-mydumper"
+abr_strategy_encryption: null # Options: none
+abr_strategy_conversion: null # Options: none, maybe 'sqlines'
+abr_strategy_synchronization: "rclone"
 abr_paranoid: true
 
 abr_bucket: ":local:/var/local/abr/abr-local-bucket/" # See also abr_rclone_bucket_backup/abr_rclone_bucket_restore
@@ -39,12 +40,12 @@ abr_overrides_directory: "{{ playbook_dir }}/overrides/roles/adhoc_backup_restor
 abr_task_main_backup: "{{ role_path }}/tasks/backup/{{ abr_driver }}.yml"
 abr_task_main_restore: "{{ role_path }}/tasks/restore/{{ abr_driver }}.yml"
 abr_task_main_restore_options: "{{ role_path }}/tasks/restore-options/main.yml"
-abr_task_compression_backup: "{{ role_path }}/tasks/compress/{{ abr_driver_compression | default('none', true) }}.yml"
-abr_task_compression_restore: "{{ role_path }}/tasks/decompress/{{ abr_driver_compression | default('none', true) }}.yml"
-abr_task_encryption_backup: "{{ role_path }}/tasks/compress/{{ abr_driver_encryption | default('none', true) }}.yml"
-abr_task_encryption_restore: "{{ role_path }}/tasks/decompress/{{ abr_driver_encryption | default('none', true) }}.yml"
-abr_task_rclone_backup: "{{ role_path }}/tasks/compress/{{ abr_driver_rclone }}.yml"
-abr_task_rclone_restore: "{{ role_path }}/tasks/decompress/{{ abr_driver_rclone }}.yml"
+abr_task_compression_backup: "{{ role_path }}/tasks/compress/{{ abr_strategy_compression | default('none', true) }}.yml"
+abr_task_compression_restore: "{{ role_path }}/tasks/decompress/{{ abr_strategy_compression | default('none', true) }}.yml"
+abr_task_encryption_backup: "{{ role_path }}/tasks/compress/{{ abr_strategy_encryption | default('none', true) }}.yml"
+abr_task_encryption_restore: "{{ role_path }}/tasks/decompress/{{ abr_strategy_encryption | default('none', true) }}.yml"
+abr_task_rclone_backup: "{{ role_path }}/tasks/compress/{{ abr_strategy_synchronization }}.yml"
+abr_task_rclone_restore: "{{ role_path }}/tasks/decompress/{{ abr_strategy_synchronization }}.yml"
 
 ### DRAFT of v0.5.0 new standard, END __________________________________________
 
