@@ -3,7 +3,7 @@
 # FILE:            {{ role_path }}/tasks/main.yml
 # LICENSE:         Public Domain
 
-- name: "{{ abr__task_prefix }} | ABR {{ abr_version }} Welcome message | Mode: {{ abr_mode }}"
+- name: "{{ abr__task_prefix }} | ABR {{ abr_version }} Welcome message"
   debug:
     msg:
       # aaaa: "{{ (abr_database is defined and abr_database|bool) | type_debug }}"

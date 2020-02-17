@@ -3,11 +3,11 @@
 # FILE:            {{ role_path }}/tasks/setup/main.yml
 # LICENSE:         Public Domain
 
-# - name: "abr:{{ abr_mode }} | setup | TODO message"
+# - name: "{{ abr__task_prefix }} | setup | TODO message"
 #   debug:
 #     msg: "Work in progress"
 
-- name: "abr:{{ abr_mode }} | setup | abr"
+- name: "{{ abr__task_prefix }} | setup | abr"
   include: "{{ setup_item }}"
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/setup/abr/{{ abr_mode }}.yml"
@@ -21,7 +21,7 @@
   vars:
     none_message: "No setup required for abr itself"
 
-- name: "abr:{{ abr_mode }} | setup | driver {{ abr_driver }}"
+- name: "{{ abr__task_prefix }} | setup | driver {{ abr_driver }}"
   include: "{{ setup_item }}"
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_driver }}/{{ abr_mode }}.yml"
@@ -35,7 +35,7 @@
   vars:
     none_message: "No special setup configured for driver {{ abr_driver }}"
 
-- name: "abr:{{ abr_mode }} | setup | {{ abr_strategy_synchronization }}"
+- name: "{{ abr__task_prefix }} | setup | {{ abr_strategy_synchronization }}"
   include: "{{ setup_item }}"
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_strategy_synchronization }}/{{ abr_mode }}.yml"
@@ -49,7 +49,7 @@
   vars:
     none_message: "No special setup configured for rclone strategy {{ abr_strategy_synchronization }}"
 
-- name: "abr:{{ abr_mode }} | setup | compression strategy {{ abr_strategy_compression }}"
+- name: "{{ abr__task_prefix }} | setup | compression strategy {{ abr_strategy_compression }}"
   include: "{{ setup_item }}"
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_strategy_compression }}/{{ abr_mode }}.yml"
@@ -65,7 +65,7 @@
   vars:
     none_message: "No special setup configured for compression strategy {{ abr_strategy_compression }}"
 
-- name: "abr:{{ abr_mode }} | setup | encryption strategy {{ abr_strategy_encryption }}"
+- name: "{{ abr__task_prefix }} | setup | encryption strategy {{ abr_strategy_encryption }}"
   include: "{{ setup_item }}"
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/setup/{{ abr_strategy_encryption }}/{{ abr_mode }}.yml"

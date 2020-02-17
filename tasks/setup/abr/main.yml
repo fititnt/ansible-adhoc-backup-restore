@@ -4,7 +4,7 @@
 # LICENSE:         Public Domain
 # SEE:             https://askubuntu.com/questions/575679/what-is-the-default-location-for-backup-files-of-another-server/754155#754155
 
-- name: "abr:{{ abr_mode }} | setup | abr | Manange abr base directories"
+- name: "{{ abr__task_prefix }} | setup | abr | Manange abr base directories"
 # - name: "abr | setup-abr-filesystem | Manange abr base directories"
   file:
     path: "{{ item.path }}"
@@ -30,7 +30,7 @@
     unsafe_writes: "{{ item.unsafe_writes | default(omit) }}"
   with_items: "{{ abr_fs_dirs }}"
 
-- name: "abr:{{ abr_mode }} | setup | abr: Manange abr directory for this specific backup/restore"
+- name: "{{ abr__task_prefix }} | setup | abr: Manange abr directory for this specific backup/restore"
 # - name: "abr | setup-abr-filesystem | Manange abr directory for this specific backup/restore"
   file:
     path: "{{ item.path }}"
@@ -59,4 +59,3 @@
   when:
     - "(abr_mode is sameas 'backup') or (abr_mode is sameas 'restore')"
     # - "(abr_pathprefix_local is not defined) or (abr_pathprefix_local|lenght > 0)"
-    

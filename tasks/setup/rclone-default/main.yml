@@ -1,17 +1,17 @@
 ---
 
-# FILE:            {{ role_path }}/tasks/setup/rclone/main.yml
+# FILE:            {{ role_path }}/tasks/setup/rclone-default/main.yml
 # LICENSE:         Public Domain
 
-- name: "abr:{{ abr_mode }} | setup | mariadb-mydumper"
-# - name: "abr:{{ abr_mode }} | setup | rclone"
+- name: "{{ abr__task_prefix }} | setup | rclone-default"
+# - name: "{{ abr__task_prefix }} | setup | rclone"
   block:
-    - name: "abr:{{ abr_mode }} | setup | rclone | install {{ abr_packages_rclone }}"
+    - name: "{{ abr__task_prefix }} | setup | rclone-default | install {{ abr_packages_rclone }}"
       package:
         name: "{{ abr_packages_rclone }}"
         state: present
   rescue:
-    - name: "abr:{{ abr_mode }} | setup | rclone | user message"
+    - name: "{{ abr__task_prefix }} | setup | rclone | user message"
       fail:
         msg: >
           Default packages for rclone not found.

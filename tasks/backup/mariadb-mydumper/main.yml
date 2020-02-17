@@ -3,26 +3,25 @@
 # FILE:            {{ role_path }}/tasks/backup/mariadb-mydumper/main.yml
 # LICENSE:         Public Domain
 
-- name: "abr | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
-  debug:
-    msg:
-      abr_mydumper_outputdir: "{{ abr_mydumper_outputdir | default('undefined') }}"
-      # result: "{{ (abr_database is defined and abr_database and abr_database|length > 0) }}"
-      # result2: "{{ (abr_database is defined and abr_database and abr_database|length > 0) | ternary('_aaaaa_', '_bbbb_', '_isnull_')}}"
-      # result: "{{ ((abr_database is defined and abr_database and abr_database|length > 0) | ternary('_' + abr_database + '_', '_all-databases_')) }}"
-    verbosity: 1
+# - name: "abr | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
+#   debug:
+#     msg:
+#       abr_mydumper_outputdir: "{{ abr_mydumper_outputdir | default('undefined') }}"
+#       # result: "{{ (abr_database is defined and abr_database and abr_database|length > 0) }}"
+#       # result2: "{{ (abr_database is defined and abr_database and abr_database|length > 0) | ternary('_aaaaa_', '_bbbb_', '_isnull_')}}"
+#       # result: "{{ ((abr_database is defined and abr_database and abr_database|length > 0) | ternary('_' + abr_database + '_', '_all-databases_')) }}"
+#     verbosity: 1
 
 ## Sanity Check: mydumper/myloader must have way to contact the DB server ______
 
-# TODO: maybe move this to a rescue bloc if mydumper command fails? (fititnt, 2020-02-14 09:13 BRT)
-- name: "~/.my.cnf stat"
+- name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | ~/.my.cnf stat"
   stat:
     path: "~/.my.cnf"
   when:
     - "(abr_dbserver_password is not sameas null)"
   register: dot_my_cnf
 
-- name: "~/.my.cnf assert"
+- name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | ~/.my.cnf assert"
   assert:
     that:
         - "(dot_my_cnf.stat.exists) or (abr_dbserver_password is none)"
@@ -36,32 +35,44 @@
         user="{{ ansible_user_id }}"
         password="YourPasswordHere"
 
-- name: "Run prepared mydumper_command"
+- name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | prepare tempfolder"
+  tempfile:
+    state: directory
+    #suffix: "fs-folder"
+  register: abr_backup_tempfolder
+
+- name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | run mydumper"
   shell: >
     mydumper
-    --outputdir='{{ abr_mydumper_outputdir }}'
+    --outputdir='{{ abr_backup_tempfolder.path }}'
     {{ abr_mydumper_append | default('') }}
   register: mydumper_command_result
 
-# TODO: move to compress (fititnt, 2020-02014 09:14 BRT)
-- name: "Compress {{ abr_mydumper_outputdir }} into /var/local/abr/temp/output.xz"
-  archive:
-    path: "{{ abr_mydumper_outputdir }}"
-    #dest: "{{ abr_mydumper_outputdir }}.xz"
-    dest: "/var/local/abr/temp/output.xz"
-    # format: "xz"
-    force_archive: yes
-    remove: yes
-  register: archive_command_result
-
-- name: "Inform new path of file (before was a folder)"
+- name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | set_facts: prepare for next step"
   set_fact:
-    # abr_backup_rclone_source: "{{ abr_mydumper_outputdir }}.xz"
-    abr_backup_rclone_source: "/var/local/abr/temp/output.xz"
+    abr__steps: "{{ abr__steps | default([] + ['backup/mariadb-mydumper']) }}"
+    abr__path: "{{ abr_backup_tempfolder.path }}"
+    abr__type: "directory"
 
-- name: "abr | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
-  debug:
-    msg:
-      mydumper_command_result: "{{ mydumper_command_result | default('undefined') }}"
-      archive_command_result: "{{ archive_command_result | default('undefined') }}"
+# # TODO: move to compress (fititnt, 2020-02014 09:14 BRT)
+# - name: "Compress {{ abr_mydumper_outputdir }} into /var/local/abr/temp/output.xz"
+#   archive:
+#     path: "{{ abr_mydumper_outputdir }}"
+#     #dest: "{{ abr_mydumper_outputdir }}.xz"
+#     dest: "/var/local/abr/temp/output.xz"
+#     # format: "xz"
+#     force_archive: yes
+#     remove: yes
+#   register: archive_command_result
+
+# - name: "Inform new path of file (before was a folder)"
+#   set_fact:
+#     # abr_backup_rclone_source: "{{ abr_mydumper_outputdir }}.xz"
+#     abr_backup_rclone_source: "/var/local/abr/temp/output.xz"
+
+# - name: "abr | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
+#   debug:
+#     msg:
+#       mydumper_command_result: "{{ mydumper_command_result | default('undefined') }}"
+#       archive_command_result: "{{ archive_command_result | default('undefined') }}"
     # verbosity: 1
