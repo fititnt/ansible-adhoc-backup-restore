@@ -140,7 +140,7 @@ abr_rclone_valt_send_method: "move" # Move files from source to dest https://rcl
 # abr_rclone_valt_send_method: "copy" # Copy files from source to dest, skipping already copied https://rclone.org/commands/rclone_move/
 # abr_rclone_valt_send_method: "sync" # Make source and dest identical, modifying destination only https://rclone.org/commands/rclone_sync/
 
-abr_rclone_valt_receive_method: "copy"
+abr_download_rclone_method: "copy"
 
 # @see https://rclone.org/docs/#environment-variables
 # abr_rclone_enviroment:
@@ -196,8 +196,8 @@ abr_dir_mydumpermyloader:
 # filesystem. You can append other directories here
 abr_fs_dirs:
   - "{{ abr_dir_base }}"
-  - "{{ abr_dir_restoretempfolder }}"
-  - "{{ abr_dir_backup }}"
+  # - "{{ abr_dir_restoretempfolder }}"
+  # - "{{ abr_dir_backup }}"
   # - "{{ abr_dir_mydumperdaemon }}"
   - "{{ abr_dir_paranoidmode }}"
   - "{{ abr_dir_abrlocalbucket }}"
@@ -211,7 +211,7 @@ abr_fs_mode: "0700"
 abr_dir_base:
   path: "/var/local/abr/"
   owner: "{{ abr_fs_owner }}"
-  group: "{{ abr_internal_root_group }}"
+  group: "{{ abr_fs_group }}"
   mode: "{{ abr_fs_mode }}"
   state: directory
   # recurse: yes
@@ -219,39 +219,39 @@ abr_dir_base:
   # setype: ...
   # Check {{ role_path }}/tasks/setup-abr-filesystem/main.yml for all options!
 
-abr_dir_restoretempfolder:
-  path: "{{ abr_dir_base.path }}temp/"
-  owner: "{{ abr_fs_owner }}"
-  group: "{{ abr_internal_root_group }}"
-  mode: "{{ abr_fs_mode }}"
-  state: directory
+# abr_dir_restoretempfolder:
+#   path: "{{ abr_dir_base.path }}temp/"
+#   owner: "{{ abr_fs_owner }}"
+#   group: "{{ abr_internal_root_group }}"
+#   mode: "{{ abr_fs_mode }}"
+#   state: directory
 
-abr_dir_backup:
-  path: "{{ abr_dir_base.path }}backups/"
-  owner: "{{ abr_fs_owner }}"
-  group: "{{ abr_internal_root_group }}"
-  mode: "{{ abr_fs_mode }}"
-  state: directory
+# abr_dir_backup:
+#   path: "{{ abr_dir_base.path }}backups/"
+#   owner: "{{ abr_fs_owner }}"
+#   group: "{{ abr_fs_group }}"
+#   mode: "{{ abr_fs_mode }}"
+#   state: directory
 
 # # Not implemented, but the folder at least exist if you want to implement
 # abr_dir_mydumperdaemon:
 #   path: "{{ abr_dir_base.path }}mydumper-daemon"
 #   owner: "{{ abr_fs_owner }}"
-#   group: "{{ abr_internal_root_group }}"
+#   group: "{{ abr_fs_group }}"
 #   mode: "{{ abr_fs_mode }}"
 #   state: directory
 
 abr_dir_paranoidmode:
   path: "{{ abr_dir_base.path }}full-temp-backup-before-restore/"
   owner: "{{ abr_fs_owner }}"
-  group: "{{ abr_internal_root_group }}"
+  group: "{{ abr_fs_group }}"
   mode: "{{ abr_fs_mode }}"
   state: directory
 
 abr_dir_abrlocalbucket:
-  path: "{{ abr_dir_base.path }}abr-local-bucket/"
+  path: "{{ abr_dir_base.path }}bucket/"
   owner: "{{ abr_fs_owner }}"
-  group: "{{ abr_internal_root_group }}"
+  group: "{{ abr_fs_group }}"
   mode: "{{ abr_fs_mode }}"
   state: directory
 

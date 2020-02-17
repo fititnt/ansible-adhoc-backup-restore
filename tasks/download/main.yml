@@ -14,4 +14,4 @@
     loop_var: "task_download_item"
   vars:
     # unknown_message: "Critical error! Driver for download not found!"
-    unknown_message: "Critical error! download driver driver '{{ abr_strategy_synchronization }}' not found on {{ role_path }} and {{ abr_overrides_directory }}"
+    unknown_message: "Critical error! download driver '{{ abr_strategy_synchronization }}' not found on {{ role_path }} and {{ abr_overrides_directory }}"

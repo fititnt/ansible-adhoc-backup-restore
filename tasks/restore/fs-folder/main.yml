@@ -18,7 +18,8 @@
     # src: "{{ abr_fs_path_restore }}"
     # dest: "{{ abr_restore_tempfolder.path }}"
     # src: "{{ abr_restore_tempfolder.path }}"
-    src: "{{ abr__path }}"
+    # src: "{{ abr__path }}"
+    src: "{{ abr__path }}/" # Note the /. This is important with temp folders
     dest: "{{ abr_fs_path_restore }}"
     remote_src: yes
 

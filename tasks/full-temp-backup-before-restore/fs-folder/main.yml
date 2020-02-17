@@ -1,0 +1,35 @@
+---
+
+# FILE:            {{ role_path }}/tasks/fs-folder/main.yml
+# LICENSE:         Public Domain
+
+- name: "abr | fs-folder | TODO message"
+  debug:
+    msg: "Work in progress"
+
+- name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | fs-folder | set_facts"
+  set_fact:
+    abr__ftbbr: "{{ abr_dir_paranoidmode.path }}/{{ abr_uid + '__' + abr_timestamp }}"
+
+- name: "abr:{{ abr_mode }} | full-temp-backup-before-restore | fs-folder | Create {{ abr__ftbbr }}"
+  file:
+    path: "{{ abr__ftbbr }}"
+    owner: "{{ abr_fs_owner }}"
+    group: "{{ abr_fs_group }}"
+    mode: "{{ abr_fs_mode }}"
+    state: directory
+
+- name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | fs-folder | copy {{ abr_fs_path_restore }} to {{ abr_backup_tempfolder.path }}"
+  copy:
+    src: "{{ abr_fs_path_restore }}" # We backup the RESTORE path (the one would be overriden)
+    dest: "{{ abr__ftbbr }}"
+    remote_src: yes
+
+- name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | fs-folder | User message"
+  debug:
+    msg: |
+      The contents from {{ abr_fs_path_restore }} have a copy at {{ abr__ftbbr }}.
+      This copy will not be deleted automaticaly (needs manual clean up).
+      The restore of this full-temp-backup-before-restore also does not have
+      automation to be restored and, if really necessary, you should restore
+      manually.

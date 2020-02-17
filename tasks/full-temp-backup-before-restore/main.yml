@@ -3,6 +3,17 @@
 # FILE:            {{ role_path }}/tasks/full-temp-backup-before-restore/main.yml
 # LICENSE:         Public Domain
 
-- name: "abr | full-temp-backup-before-restore | TODO message"
-  debug:
-    msg: "Work in progress"
+- name: "abr:{{ abr_mode }} | full-temp-backup-before-restore"
+  include: "{{ task_ftbbr_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/full-temp-backup-before-restore/{{ abr_driver | default('dont-exist') }}/main.yml"
+    - "{{ role_path }}/tasks/full-temp-backup-before-restore/{{ abr_driver | default('dont-exist') }}/main.yml"
+    - "{{ abr_overrides_directory }}/tasks/common/unknown.yml"
+    - "{{ role_path }}/tasks/common/unknown.yml"
+  loop_control:
+    loop_var: "task_ftbbr_item"
+  vars:
+    # unknown_message: "Critical error! Driver for download not found!"
+    unknown_message: "Critical error! full-temp-backup-before-restore driver '{{ abr_driver }}' not found on {{ role_path }} and {{ abr_overrides_directory }}"
+  when:
+    - "abr_paranoid|bool"
