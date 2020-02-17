@@ -1,0 +1,44 @@
+---
+
+# FILE:            {{ role_path }}/tasks/backup/ansible-archive/main.yml
+# LICENSE:         Public Domain
+
+# - name: "abr | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
+#   debug:
+#     msg:
+#       abr_mydumper_outputdir: "{{ abr_mydumper_outputdir | default('undefined') }}"
+#       # result: "{{ (abr_database is defined and abr_database and abr_database|length > 0) }}"
+#       # result2: "{{ (abr_database is defined and abr_database and abr_database|length > 0) | ternary('_aaaaa_', '_bbbb_', '_isnull_')}}"
+#       # result: "{{ ((abr_database is defined and abr_database and abr_database|length > 0) | ternary('_' + abr_database + '_', '_all-databases_')) }}"
+#     verbosity: 1
+
+- name: "{{ abr__task_prefix }} | compress | ansible-archive | prepare tempfolder"
+  tempfile:
+    state: file
+    suffix: "abr-compress-{{ abr_uid }}"
+  register: abr_compress_tempfile
+
+- name: "{{ abr__task_prefix }} | compress | ansible-archive | compress {{ abr__path }} on {{ abr_compress_tempfile.path }}"
+  archive:
+    path: "{{ abr__path }}"
+    #dest: "{{ abr_mydumper_outputdir }}.xz"
+    dest: "{{ abr_compress_tempfile.path }}"
+    format: "xz"
+    # force_archive: yes
+    # remove: yes
+  register: archive_command_result
+
+# - name: "{{ abr__task_prefix }} | compress | ansible-archive | run mydumper"
+#   shell: >
+#     mydumper
+#     --outputdir='{{ abr_compress_tempfolder.path }}'
+#     {{ abr_mydumper_append | default('') }}
+#   register: mydumper_command_result
+
+- name: "{{ abr__task_prefix }} | compress | ansible-archive | set_facts: prepare for next step"
+  set_fact:
+    abr__steps: "{{ abr__steps | default([] + ['compress/ansible-archive']) }}"
+    abr__path: "{{ abr_compress_tempfile.path }}"
+    # abr__filename: "{{ abr__filename + '.xz' }}"
+    abr__extension: "{{ (abr__extension | default('') ) + '.xz' }}"
+    abr__type: "file"

@@ -140,7 +140,8 @@ abr_rclone_args_backup: "{{ abr_rclone_args }}"
 abr_rclone_args_restore: "{{ abr_rclone_args }}"
 
 
-abr_rclone_valt_send_method: "move" # Move files from source to dest https://rclone.org/commands/rclone_move/
+# abr_rclone_valt_send_method: "move" # Move files from source to dest https://rclone.org/commands/rclone_move/
+abr_rclone_valt_send_method: "moveto" # Move files from source to dest https://rclone.org/commands/rclone_move/
 # abr_rclone_valt_send_method: "copy" # Copy files from source to dest, skipping already copied https://rclone.org/commands/rclone_move/
 # abr_rclone_valt_send_method: "sync" # Make source and dest identical, modifying destination only https://rclone.org/commands/rclone_sync/
 
@@ -200,7 +201,7 @@ abr_dir_mydumpermyloader:
 # filesystem. You can append other directories here
 abr_fs_dirs:
   - "{{ abr_dir_base }}"
-  # - "{{ abr_dir_restoretempfolder }}"
+  - "{{ abr_dir_temp }}"
   # - "{{ abr_dir_backup }}"
   # - "{{ abr_dir_mydumperdaemon }}"
   - "{{ abr_dir_paranoidmode }}"
@@ -223,12 +224,12 @@ abr_dir_base:
   # setype: ...
   # Check {{ role_path }}/tasks/setup-abr-filesystem/main.yml for all options!
 
-# abr_dir_restoretempfolder:
-#   path: "{{ abr_dir_base.path }}temp/"
-#   owner: "{{ abr_fs_owner }}"
-#   group: "{{ abr_internal_root_group }}"
-#   mode: "{{ abr_fs_mode }}"
-#   state: directory
+abr_dir_temp:
+  path: "{{ abr_dir_base.path }}temp/"
+  owner: "{{ abr_fs_owner }}"
+  group: "{{ abr_internal_root_group }}"
+  mode: "{{ abr_fs_mode }}"
+  state: directory
 
 # abr_dir_backup:
 #   path: "{{ abr_dir_base.path }}backups/"

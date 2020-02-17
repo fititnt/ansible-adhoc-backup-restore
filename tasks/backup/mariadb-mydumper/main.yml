@@ -53,6 +53,7 @@
     abr__steps: "{{ abr__steps | default([] + ['backup/mariadb-mydumper']) }}"
     abr__path: "{{ abr_backup_tempfolder.path }}"
     abr__type: "directory"
+    abr__temporary: true
 
 # # TODO: move to compress (fititnt, 2020-02014 09:14 BRT)
 # - name: "Compress {{ abr_mydumper_outputdir }} into /var/local/abr/temp/output.xz"

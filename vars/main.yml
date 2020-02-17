@@ -15,8 +15,10 @@ abr_now:
   encrypted: false
 
 abr__path: null
+# abr__filename: "{{ abr_backup_name }}"
+abr__extension: ""
 abr__type: file
-abr__encrypted: false
+abr__temporary: false
 abr__steps: []
 abr__debug_messages: []
 
@@ -38,7 +40,7 @@ abr_rclone_args_restore_string: "{{ abr_rclone_args_restore | to_json | regex_re
 # abr_backup_rclone_source: "{{ abr_now.path }}"
 abr_backup_rclone_source: "{{ abr__path }}"
 # abr_backup_rclone_destiny: "{{ (abr_internal_islocalbucket!bool) | ternary(abr_dir_abrlocalbucket.path + abr_pathprefix_remote + abr_backup_name, '' }}"
-abr_backup_rclone_destiny: "{{ abr_rclone_bucket_backup + abr_prefix + abr_backup_name }}"
+abr_backup_rclone_destiny: "{{ abr_rclone_bucket_backup + abr_prefix + abr_backup_name + abr__extension }}"
 abr_backup_rclone_command: "rclone {{ abr_rclone_valt_send_method }} {{ abr_rclone_args_backup_string }} {{ abr_backup_rclone_source }} {{ abr_backup_rclone_destiny }}"
 
 # abr_restore_rclone_source: "{{ abr_dir_abrlocalbucket.path }}{{ abr_pathprefix_remote }}{{ abr_backup_name }}"

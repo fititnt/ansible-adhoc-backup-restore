@@ -25,3 +25,4 @@
     abr__steps: "{{ abr__steps | default([] + ['backup/fs-folder']) }}"
     abr__path: "{{ abr_backup_tempfolder.path }}"
     abr__type: "directory"
+    abr__temporary: true

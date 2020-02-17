@@ -3,6 +3,14 @@
 # FILE:            {{ role_path }}/tasks/compress/main.yml
 # LICENSE:         Public Domain
 
-- name: "abr | compress | TODO message"
-  debug:
-    msg: "Work in progress"
+- name: "{{ abr__task_prefix }} | compress | include {{ abr_strategy_compression | default('dont-exist') }}"
+  include: "{{ include_task_compress_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/compress/{{ abr_strategy_compression | default('dont-exist') }}/main.yml"
+    - "{{ role_path }}/tasks/compress/{{ abr_strategy_compression | default('dont-exist') }}/main.yml"
+    - "{{ abr_overrides_directory }}/tasks/common/unknown.yml"
+    - "{{ role_path }}/tasks/common/unknown.yml"
+  loop_control:
+    loop_var: "include_task_compress_item"
+  vars:
+    unknown_message: "Critical error! compression strategy '{{ abr_strategy_compression }}' not found on {{ role_path }} or {{ abr_overrides_directory }}"
