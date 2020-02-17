@@ -3,6 +3,15 @@
 # FILE:            {{ role_path }}/tasks/download/main.yml
 # LICENSE:         Public Domain
 
-- name: "abr | download | TODO message"
-  debug:
-    msg: "Work in progress"
+- name: "abr:{{ abr_mode }} | download"
+  include: "{{ task_download_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/download/{{ abr_strategy_synchronization | default('dont-exist') }}/main.yml"
+    - "{{ role_path }}/tasks/download/{{ abr_strategy_synchronization | default('dont-exist') }}/main.yml"
+    - "{{ abr_overrides_directory }}/tasks/common/unknown.yml"
+    - "{{ role_path }}/tasks/common/unknown.yml"
+  loop_control:
+    loop_var: "task_download_item"
+  vars:
+    # unknown_message: "Critical error! Driver for download not found!"
+    unknown_message: "Critical error! download driver driver '{{ abr_strategy_synchronization }}' not found on {{ role_path }} and {{ abr_overrides_directory }}"

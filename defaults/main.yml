@@ -8,7 +8,16 @@
 abr_uid: "{{ inventory_hostname_short + '-' + abr_driver_group }}"
 abr_bucket: ":local:/var/local/abr/abr-local-bucket/" # See also abr_rclone_bucket_backup/abr_rclone_bucket_restore
 abr_prefix: "" # See also abr_pathprefix_local/abr_pathprefix_remote
-abr_timestamped: true
+abr_timestamped: true # Append TS like "__20200217T120618" to abr_uid
+
+## Restore mode, start .........................................................
+# Define the exact UID to restore (including timestamp).
+abr_restore_uid: "{{ abr_uid }}" # Change this if 'abr_timestamped: false'
+# abr_mode: "restore"
+# abr_bucket: ...
+# abr_prefix: ...
+
+## Restore mode, end ...........................................................
 
 abr_mode: "restore-options"    # Options: 'backup', 'restore', 'restore-options'
 abr_skip_setup: false
@@ -36,8 +45,11 @@ abr_timestamp: "{{ ansible_date_time.iso8601_basic_short }}"
 
 ### Drivers: FS ________________________________________________________________
 abr_fs_path: null
-
 abr_fs_options: {}
+
+# User can customize parameters for backup and restore if dont want use defaults
+abr_fs_path_backup: "{{ abr_fs_path }}"
+abr_fs_path_restore: "{{ abr_fs_path }}"
 abr_fs_options_backup: "{{ abr_fs_options }}"
 abr_fs_options_restore: "{{ abr_fs_options_restore }}"
 
@@ -116,8 +128,8 @@ abr_rclone_bucket_type: "local"
 # (e.g. the backup for security reason ONLY ALLOW WRITE, but not reads) and
 # to restore (e.g. a key that, via human intervention, may allow list remote
 # options) the user can customize both
-abr_rclone_bucket_backup: "{{ abr_rclone_bucket }}"
-abr_rclone_bucket_restore: "{{ abr_rclone_bucket }}"
+abr_rclone_bucket_backup: "{{ abr_bucket }}"
+abr_rclone_bucket_restore: "{{ abr_bucket }}"
 abr_rclone_enviroment_backup: "{{ abr_rclone_enviroment }}"
 abr_rclone_enviroment_restore: "{{ abr_rclone_enviroment }}"
 abr_rclone_args_backup: "{{ abr_rclone_args }}"

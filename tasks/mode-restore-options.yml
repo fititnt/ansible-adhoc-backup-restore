@@ -3,16 +3,16 @@
 # FILE:            {{ role_path }}/tasks/mode-restore-options.yml
 # LICENSE:         Public Domain
 
-- name: "abr:{{ abr_mode }} | mode-restore-options | TODO message"
+- name: "{{ abr__task_prefix }} | mode-restore-options | TODO message"
   debug:
     msg: "Work in progress"
 
-# - name: "abr:{{ abr_mode }} | mode-restore-options | setup/main.yml"
+# - name: "{{ abr__task_prefix }} | mode-restore-options | setup/main.yml"
 #   include: "setup/main.yml"
 #   when:
 #     - "(abr_skip_setup|bool is sameas false)"
 
-- name: "abr:{{ abr_mode }} | mode-restore-options | setup/main.yml"
+- name: "{{ abr__task_prefix }} | mode-restore-options | setup/main.yml"
   include: "{{ include_task_restore }}"
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/setup/main.yml"
@@ -22,12 +22,12 @@
   when:
     - "(abr_skip_setup|bool is sameas false)"
 
-- name: "abr:{{ abr_mode }} | mode-restore-options | restore-options/main.yml"
-  include: "{{ include_task_restore2 }}"
+- name: "{{ abr__task_prefix }} | mode-restore-options | restore-options/main.yml"
+  include: "{{ include_task_restore }}"
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/restore-options/main.yml"
     - "{{ role_path }}/tasks/restore-options/main.yml"
   loop_control:
-    loop_var: "include_task_restore2"
+    loop_var: "include_task_restore"
   # when:
   #   - "(abr_skip_setup|bool is sameas false)"

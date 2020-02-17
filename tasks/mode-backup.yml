@@ -3,8 +3,7 @@
 # FILE:            {{ role_path }}/tasks/mode-backup.yml
 # LICENSE:         Public Domain
 
-- name: "abr:{{ abr_mode }} | mode-backup | setup/main.yml"
-  # include: "setup/main.yml"
+- name: "{{ abr__task_prefix }} | mode-backup | setup/main.yml"
   include: "{{ include_task_mode_backup_setup_item }}"
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/setup/main.yml"
@@ -14,7 +13,7 @@
   when:
     - "(abr_skip_setup|bool is sameas false)"
 
-- name: "abr:{{ abr_mode }} | mode-backup | backup/main.yml"
+- name: "{{ abr__task_prefix }} | mode-backup | backup/main.yml"
   # include: backup/main.yml
   include: "{{ include_task_mode_backup_backup_item }}"
   with_first_found:
@@ -23,7 +22,7 @@
   loop_control:
     loop_var: "include_task_mode_backup_backup_item"
 
-- name: "abr:{{ abr_mode }} | mode-backup | compress/main.yml"
+- name: "{{ abr__task_prefix }} | mode-backup | compress/main.yml"
   # include: compress/main.yml
   include: "{{ include_task_mode_backup_compress_item }}"
   with_first_found:
@@ -32,7 +31,7 @@
   loop_control:
     loop_var: "include_task_mode_backup_compress_item"
 
-- name: "abr:{{ abr_mode }} | mode-backup | encrypt/main.yml"
+- name: "{{ abr__task_prefix }} | mode-backup | encrypt/main.yml"
   # include: encrypt/main.yml
   include: "{{ include_task_mode_backup_encrypt_item }}"
   with_first_found:
@@ -41,7 +40,7 @@
   loop_control:
     loop_var: "include_task_mode_backup_encrypt_item"
 
-- name: "abr:{{ abr_mode }} | mode-backup | upload/main.yml"
+- name: "{{ abr__task_prefix }} | mode-backup | upload/main.yml"
   # include: upload/main.yml
   include: "{{ include_task_mode_backup_upload_item }}"
   with_first_found:
@@ -49,3 +48,11 @@
     - "{{ role_path }}/tasks/upload/main.yml"
   loop_control:
     loop_var: "include_task_mode_backup_upload_item"
+
+- name: "{{ abr__task_prefix }} | mode-backup | restore-options/main.yml"
+  include: "{{ include_task_restore2 }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/restore-options/main.yml"
+    - "{{ role_path }}/tasks/restore-options/main.yml"
+  loop_control:
+    loop_var: "include_task_restore2"

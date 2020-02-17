@@ -3,7 +3,10 @@
 # FILE:            {{ role_path }}/vars/main.yml
 # LICENSE:         Public Domain
 
-abr_version: "v0.6.0"
+abr_version: "v0.7.0"
+
+abr__task_prefix: "Mode:{{ abr_mode | upper }} Bucket:'{{ abr_bucket | default(none) }}'"
+# abr__task_suffix: ""
 
 # abr_now DEPRECATED
 abr_now:
@@ -21,8 +24,10 @@ abr__debug_messages: []
 abr_default_summary: "{{ abr_uid + '__' + (abr_database | default('all-databases', true)) }}"
 
 # myhostname__all-databases__20200213T052730
-abr_backup_name: "{{ abr_name }}{{ ((abr_backup_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
-abr_restore_name: "{{ abr_name }}{{ ((abr_restore_timestamp|bool) | ternary('__' + abr_restore_timestamp, '', '')) }}"
+# abr_backup_name: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
+# abr_restore_name: "{{ abr_name }}{{ ((abr_restore_timestamp|bool) | ternary('__' + abr_restore_timestamp, '', '')) }}"
+abr_backup_name: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
+abr_restore_name: "{{ abr_restore_uid }}"
 
 abr_rclone_args_backup_string: "{{ abr_rclone_args_backup | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
 abr_rclone_args_restore_string: "{{ abr_rclone_args_restore | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
@@ -42,6 +47,8 @@ abr_restore_rclone_destiny: "{{ abr_dir_mydumpermyloader.path }}"
 abr_restore_rclone_command: "rclone {{ abr_rclone_valt_receive_method }} {{ abr_rclone_args_restore_string }} {{ abr_backup_source }} {{ abr_backup_destiny }}"
 
 abr_restore_options_rclone_command: "rclone lsd {{ abr_rclone_args_restore_string }} {{ abr_bucket + abr_prefix }}"
+
+abr__download_rclone_default_command: "{{ 'ls' }}"
 
 abr_mydumper_outputdir: "{{ abr_dir_mydumpermyloader.path }}"
 abr_myloader_diretory: "{{ abr_dir_mydumpermyloader.path }}"

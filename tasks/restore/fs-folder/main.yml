@@ -1,0 +1,30 @@
+---
+
+# FILE:            {{ role_path }}/tasks/restore/fs-folder/main.yml
+# LICENSE:         Public Domain
+
+# - name: "{{ abr__task_prefix }} | restore | fs-folder | set_facts: prepare for fs-folder"
+#   set_fact:
+#     abr_restore_src: "{{ abr__path | default('/error/source/not-exist', true) }}"
+
+- name: "{{ abr__task_prefix }} | restore | fs-folder | prepare tempfolder {{ abr__task_suffix }}"
+  tempfile:
+    state: directory
+    #suffix: "fs-folder"
+  register: abr_restore_tempfolder
+
+- name: "{{ abr__task_prefix }} | restore | fs-folder | copy source to tempfolder {{ abr__task_suffix }}"
+  copy:
+    # src: "{{ abr_fs_path_restore }}"
+    # dest: "{{ abr_restore_tempfolder.path }}"
+    # src: "{{ abr_restore_tempfolder.path }}"
+    src: "{{ abr__path }}"
+    dest: "{{ abr_fs_path_restore }}"
+    remote_src: yes
+
+- name: "{{ abr__task_prefix }} | restore | fs-folder | set_facts: prepare for next step {{ abr__task_suffix }}"
+  set_fact:
+    # abr__path: "{{ abr__path | default('/error/source/not-exist', true) }}"
+    abr__steps: "{{ abr__steps | default([] + ['restore/fs-folder']) }}"
+    abr__path: "{{ abr_fs_path_restore }}"
+    abr__type: "directory"

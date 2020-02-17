@@ -3,23 +3,23 @@
 # FILE:            {{ role_path }}/tasks/backup/fs-folder/main.yml
 # LICENSE:         Public Domain
 
-# - name: "abr:{{ abr_mode }} | backup | fs-folder | set_facts: prepare for fs-folder"
-#   set_fact:
-#     abr_backup_src: "{{ abr__path | default('/error/source/not-exist', true) }}"
+# TODO: allow create base folder to fix issues like
+#           fatal: [huginn_bravo]: FAILED! => {"changed": false, "msg": "Destination directory /root/teste-restore does not exist"}
+#       (fititnt, 2020-02-17 11:28 BRT)
 
-- name: "abr:{{ abr_mode }} | backup | fs-folder | prepare tempfolder"
+- name: "{{ abr__task_prefix }} | backup | fs-folder | prepare tempfolder"
   tempfile:
     state: directory
     #suffix: "fs-folder"
   register: abr_backup_tempfolder
 
-- name: "abr:{{ abr_mode }} | backup | fs-folder | copy source to tempfolder"
+- name: "{{ abr__task_prefix }} | backup | fs-folder | copy source to tempfolder"
   copy:
-    src: "{{ abr_fs_path }}"
+    src: "{{ abr_fs_path_backup }}"
     dest: "{{ abr_backup_tempfolder.path }}"
     remote_src: yes
 
-- name: "abr:{{ abr_mode }} | backup | fs-folder | set_facts: prepare for next step"
+- name: "{{ abr__task_prefix }} | backup | fs-folder | set_facts: prepare for next step"
   set_fact:
     # abr__path: "{{ abr__path | default('/error/source/not-exist', true) }}"
     abr__steps: "{{ abr__steps | default([] + ['backup/fs-folder']) }}"

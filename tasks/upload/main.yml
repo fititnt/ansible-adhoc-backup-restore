@@ -3,15 +3,15 @@
 # FILE:            {{ role_path }}/tasks/upload/main.yml
 # LICENSE:         Public Domain
 
-- name: "abr:{{ abr_mode }} | upload"
-  include: "{{ rclone_item }}"
+- name: "{{ abr__task_prefix }} | upload"
+  include: "{{ task_upload_item }}"
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/upload/{{ abr_strategy_synchronization | default('dont-exist') }}/main.yml"
     - "{{ role_path }}/tasks/upload/{{ abr_strategy_synchronization | default('dont-exist') }}/main.yml"
     - "{{ abr_overrides_directory }}/tasks/common/unknown.yml"
     - "{{ role_path }}/tasks/common/unknown.yml"
   loop_control:
-    loop_var: "rclone_item"
+    loop_var: "task_upload_item"
   vars:
     # unknown_message: "Critical error! Driver for upload not found!"
     unknown_message: "Critical error! Upload driver driver '{{ abr_strategy_synchronization }}' not found on {{ role_path }} and {{ abr_overrides_directory }}"

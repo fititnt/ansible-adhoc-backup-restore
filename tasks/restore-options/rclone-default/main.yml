@@ -5,15 +5,15 @@
 # SEE:             https://forum.rclone.org/t/can-rclone-be-run-solely-with-command-line-options-no-config-no-env-vars/6314/2
 # SEE:             https://github.com/rclone/rclone/issues/2449 (Title: Allow creation of backends from command line parameters)
 
-- name: "abr:{{ abr_mode }} | restore-options | rclone-default | debug (requires -v, -vv, -vvv, or -vvvv)"
-# - name: "abr | valt-send | debug (requires -v, -vv, -vvv, or -vvvv)"
-  debug:
-    msg:
-      teste: "{{ 'teste' }}"
-      # abr_backup_rclone_command: "{{ abr_backup_rclone_command | default('undefined') }}"
-      # abr_rclone_enviroment: "{{ abr_rclone_enviroment | default('undefined') }}"
-      # abr_backup_rclone_command: "{{ abr_backup_rclone_command | default('undefined') }}"
-    # verbosity: 1
+# - name: "abr:{{ abr_mode }} | restore-options | rclone-default | debug (requires -v, -vv, -vvv, or -vvvv)"
+# # - name: "abr | valt-send | debug (requires -v, -vv, -vvv, or -vvvv)"
+#   debug:
+#     msg:
+#       teste: "{{ 'teste' }}"
+#       # abr_backup_rclone_command: "{{ abr_backup_rclone_command | default('undefined') }}"
+#       # abr_rclone_enviroment: "{{ abr_rclone_enviroment | default('undefined') }}"
+#       # abr_backup_rclone_command: "{{ abr_backup_rclone_command | default('undefined') }}"
+#     # verbosity: 1
 
 # - name: "abr:{{ abr_mode }} | upload | rclone-default | set_facts: prepare"
 #   set_fact:
@@ -25,8 +25,9 @@
   environment: "{{ abr_rclone_enviroment }}"
   register: command_result
 
-- name: "abr:{{ abr_mode }} | restore-options | rclone-default | rclone-default"
+- name: "abr:{{ abr_mode }} | restore-options | rclone-default | options"
   debug:
     msg:
-      command_result: "{{ command_result | default('undefined') }}"
+      # command_result: "{{ command_result | default('undefined') }}"
+      options: "{{ command_result.stdout_lines | default('undefined') }}"
     # verbosity: 1

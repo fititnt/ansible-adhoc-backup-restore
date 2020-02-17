@@ -3,36 +3,28 @@
 # FILE:            {{ role_path }}/tasks/mode-restore.yml
 # LICENSE:         Public Domain
 
-- name: "abr:{{ abr_mode }} | mode-restore | TODO message"
-  debug:
-    msg: "Work in progress"
-
-- name: "abr:{{ abr_mode }} | mode-restore-options | setup/main.yml"
-  include: "setup/main.yml"
+- name: "{{ abr__task_prefix }} | mode-restore | setup/main.yml"
+  include: "{{ include_task_mode_restore_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/setup/main.yml"
+    - "{{ role_path }}/tasks/setup/main.yml"
+  loop_control:
+    loop_var: "include_task_mode_restore_item"
   when:
     - "(abr_skip_setup|bool is sameas false)"
 
-- name: "valt-receive/main.yml"
-  include: valt-receive/main.yml
-#   tags:
-#     - valt-receive
-#   when:
-#     - (abr_mode == "restore")
-#     - (abr_valt_receive_disabled|bool is sameas false)
+- name: "{{ abr__task_prefix }} | mode-restore | download/main.yml"
+  include: "{{ include_task_mode_restore_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/download/main.yml"
+    - "{{ role_path }}/tasks/download/main.yml"
+  loop_control:
+    loop_var: "include_task_mode_restore_item"
 
-- name: "full-temp-backup-before-restore/main.yml"
-  include: full-temp-backup-before-restore/main.yml
-#   tags:
-#     - full-temp-backup-before-restore
-  when:
-    - (abr_paranoid == true)
-#     - (abr_mode == "restore")
-#     - (abr_valt_restore_disabled|bool is sameas false)
-
-- name: "restore/main.yml"
-  include: restore/main.yml
-#   tags:
-#     - restore
-#   when:
-#     - (abr_mode == "restore")
-#     - (abr_valt_restore_disabled is sameas false)
+- name: "{{ abr__task_prefix }} | mode-restore | restore/main.yml"
+  include: "{{ include_task_mode_restore_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/restore/main.yml"
+    - "{{ role_path }}/tasks/restore/main.yml"
+  loop_control:
+    loop_var: "include_task_mode_restore_item"

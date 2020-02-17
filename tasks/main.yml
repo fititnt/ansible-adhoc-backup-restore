@@ -3,7 +3,7 @@
 # FILE:            {{ role_path }}/tasks/main.yml
 # LICENSE:         Public Domain
 
-- name: "abr | ABR {{ abr_version }} Welcome message | Mode: {{ abr_mode }}"
+- name: "{{ abr__task_prefix }} | ABR {{ abr_version }} Welcome message | Mode: {{ abr_mode }}"
   debug:
     msg:
       # aaaa: "{{ (abr_database is defined and abr_database|bool) | type_debug }}"
@@ -30,7 +30,7 @@
     - always
 
 ## Variable loading based on node Operational System ___________________________
-- name: "abr | OS Family variables (Override with abr_vars_osfamily)"
+- name: "{{ abr__task_prefix }} | OS Family variables (Override with abr_vars_osfamily)"
   include_vars: "{{ item }}"
   with_first_found:
     - "{{ (abr_vars_osfamily is defined) | ternary(abr_vars_osfamily, 'name-of-a-file-that-does-not-exist.yml') }}"

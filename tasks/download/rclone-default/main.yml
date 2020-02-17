@@ -1,0 +1,49 @@
+---
+
+# FILE:            {{ role_path }}/tasks/download/rclone/main.yml
+# LICENSE:         Public Domain
+# SEE:             https://forum.rclone.org/t/can-rclone-be-run-solely-with-command-line-options-no-config-no-env-vars/6314/2
+# SEE:             https://github.com/rclone/rclone/issues/2449 (Title: Allow creation of backends from command line parameters)
+
+- name: "{{ abr__task_prefix }} | download | rclone-default | debug (requires -v, -vv, -vvv, or -vvvv)"
+# - name: "abr | valt-send | debug (requires -v, -vv, -vvv, or -vvvv)"
+  debug:
+    msg:
+      abr_rclone_enviroment: "{{ abr_rclone_enviroment | default('undefined') }}"
+      abr__download_rclone_default_command: "{{ abr__download_rclone_default_command | default('undefined') }}"
+    verbosity: 1
+
+- name: "{{ abr__task_prefix }} | download | rclone-default  | prepare tempfolder"
+  tempfile:
+    state: directory
+    #suffix: "fs-folder"
+  register: abr_download_tempfolder
+  when:
+    - true # TODO: implement, then test, some way to allow users skip tempfolder (fititnt, 2020-20-17 10:55 BRT)
+
+- name: "{{ abr__task_prefix }} | download | rclone-default | set_facts"
+  set_fact:
+    abr__path: "{{ abr_download_tempfolder.path }}"
+    abr__type: "directory"
+  when:
+    - true # TODO: implement, then test, some way to allow users skip tempfolder (fititnt, 2020-20-17 10:55 BRT)
+
+- name: "{{ abr__task_prefix }} | download | rclone-default | rclone command"
+# - name: "abr | valt-send | rclone command"
+  shell: "{{ abr__download_rclone_default_command }}"
+  environment: "{{ abr_rclone_enviroment }}"
+  register: command_result
+
+# - name: "{{ abr__task_prefix }} | download | rclone-default | debug (requires -v, -vv, -vvv, or -vvvv)"
+# # - name: "abr | valt-send | debug (requires -v, -vv, -vvv, or -vvvv)"
+#   debug:
+#     msg:
+#       command_result: "{{ command_result | default('undefined') }}"
+#     verbosity: 1
+
+- name: "{{ abr__task_prefix }} | download | rclone-default | set_facts"
+  set_fact:
+    # abr__path: "{{ abr__path | default('/error/source/not-exist', true) }}"
+    abr__steps: "{{ abr__steps | default([] + ['backup/fs-folder']) }}"
+    abr__path: "{{ abr_download_tempfolder.path }}"
+    abr__type: "directory"
