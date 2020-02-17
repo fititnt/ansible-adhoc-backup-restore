@@ -3,6 +3,19 @@
 # FILE:            {{ role_path }}/tasks/restore-options/main.yml
 # LICENSE:         Public Domain
 
-- name: "abr | restore-options | TODO message"
-  debug:
-    msg: "TODO: we should at least list concents of the remote folder where the backup was uploaded"
+# - name: "abr | restore-options | TODO message"
+#   debug:
+#     msg: "TODO: we should at least list concents of the remote folder where the backup was uploaded"
+
+- name: "abr:{{ abr_mode }} | restore-options"
+  include: "{{ restore_options_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/restore-options/{{ abr_strategy_synchronization | default('dont-exist') }}/main.yml"
+    - "{{ role_path }}/tasks//restore-options/{{ abr_strategy_synchronization | default('dont-exist') }}/main.yml"
+    - "{{ abr_overrides_directory }}/tasks/common/unknown.yml"
+    - "{{ role_path }}/tasks/common/unknown.yml"
+  loop_control:
+    loop_var: "restore_options_item"
+  vars:
+    # unknown_message: "Critical error! Driver for upload not found!"
+    unknown_message: "Critical error! restore-options for abr_strategy_synchronization '{{ abr_strategy_synchronization }}' not found on {{ role_path }} and {{ abr_overrides_directory }}"

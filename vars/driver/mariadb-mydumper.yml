@@ -1,0 +1,7 @@
+---
+
+# FILE:            {{ role_path }}/vars/driver/mariadb-mydumper.yml
+# LICENSE:         Public Domain
+
+abr_driver_group: "mariadb"
+# abr_default_summary: "{{ abr_uid }}"

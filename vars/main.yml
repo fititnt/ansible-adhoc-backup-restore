@@ -5,14 +5,20 @@
 
 abr_version: "v0.6.0"
 
+# abr_now DEPRECATED
 abr_now:
   path: null
   type: file
   encrypted: false
 
+abr__path: null
+abr__type: file
+abr__encrypted: false
+abr__steps: []
+abr__debug_messages: []
 
 # my_host_all-databases_datetime
-abr_default_summary: "{{ inventory_hostname_short + '__' + (abr_database | default('all-databases', true)) }}"
+abr_default_summary: "{{ abr_uid + '__' + (abr_database | default('all-databases', true)) }}"
 
 # myhostname__all-databases__20200213T052730
 abr_backup_name: "{{ abr_name }}{{ ((abr_backup_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
@@ -24,15 +30,18 @@ abr_rclone_args_restore_string: "{{ abr_rclone_args_restore | to_json | regex_re
 # abr_internal_islocalbucket: "{{ abr_rclone_bucket == 'abr-local-bucket' }}"
 
 ### abr_backup_rclone_source: "{{ abr_dir_mydumpermyloader.path }}"
-abr_backup_rclone_source: "{{ abr_now.path }}"
+# abr_backup_rclone_source: "{{ abr_now.path }}"
+abr_backup_rclone_source: "{{ abr__path }}"
 # abr_backup_rclone_destiny: "{{ (abr_internal_islocalbucket!bool) | ternary(abr_dir_abrlocalbucket.path + abr_pathprefix_remote + abr_backup_name, '' }}"
-abr_backup_rclone_destiny: "{{ abr_rclone_bucket_backup + abr_pathprefix_remote + abr_backup_name }}"
+abr_backup_rclone_destiny: "{{ abr_rclone_bucket_backup + abr_prefix + abr_backup_name }}"
 abr_backup_rclone_command: "rclone {{ abr_rclone_valt_send_method }} {{ abr_rclone_args_backup_string }} {{ abr_backup_rclone_source }} {{ abr_backup_rclone_destiny }}"
 
 # abr_restore_rclone_source: "{{ abr_dir_abrlocalbucket.path }}{{ abr_pathprefix_remote }}{{ abr_backup_name }}"
-abr_restore_rclone_source: "{{ abr_rclone_bucket_backup + abr_pathprefix_remote + abr_backup_name }}"
+abr_restore_rclone_source: "{{ abr_rclone_bucket_backup + abr_prefix + abr_backup_name }}"
 abr_restore_rclone_destiny: "{{ abr_dir_mydumpermyloader.path }}"
 abr_restore_rclone_command: "rclone {{ abr_rclone_valt_receive_method }} {{ abr_rclone_args_restore_string }} {{ abr_backup_source }} {{ abr_backup_destiny }}"
+
+abr_restore_options_rclone_command: "rclone lsd {{ abr_rclone_args_restore_string }} {{ abr_bucket + abr_prefix }}"
 
 abr_mydumper_outputdir: "{{ abr_dir_mydumpermyloader.path }}"
 abr_myloader_diretory: "{{ abr_dir_mydumpermyloader.path }}"

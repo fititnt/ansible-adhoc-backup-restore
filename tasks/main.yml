@@ -39,7 +39,17 @@
   tags:
     - always
 
-### DRAFT of v0.5.0 new standard, START ________________________________________
+- name: "{{ abr_driver }}.yml"
+  # include: "mode-{{ abr_mode }}.yml"
+  include_vars: "{{ include_vars_driver_item }}"
+  with_first_found:
+    - files:
+        - "{{ abr_overrides_directory }}/vars/driver/{{ abr_driver }}.yml"
+        - "{{ role_path }}/vars/driver/{{ abr_driver }}.yml"
+      skip: true
+  loop_control:
+    loop_var: "include_vars_driver_item"
+
 - name: "{{ abr_mode }}.yml"
   # include: "mode-{{ abr_mode }}.yml"
   include: "{{ include_task_mode_item }}"
@@ -48,69 +58,3 @@
     - "{{ role_path }}/tasks/mode-{{ abr_mode }}.yml"
   loop_control:
     loop_var: "include_task_mode_item"
-
-
-### DRAFT of v0.5.0 new standard, END __________________________________________
-## Run each abr subcomponent ___________________________________________________
-
-# - name: "setup-abr-filesystem/main.yml"
-#   include: setup-abr-filesystem/main.yml
-#   tags:
-#     - setup-abr-filesystem
-#   when:
-#     - abr_setup_abr_filesystem is sameas true
-
-# - name: "setup-mydumper-mloader/main.yml"
-#   include: setup-mydumper-mloader/main.yml
-#   tags:
-#     - setup-mydumper-mloader
-#   when:
-#     - abr_setup_mydumper_myloader is sameas true
-
-# - name: "setup-rclone/main.yml"
-#   include: setup-rclone/main.yml
-#   tags:
-#     - setup-rclone
-#   when:
-#     - abr_setup_rclone is sameas true
-
-# - name: "backup/main.yml"
-#   include: backup/main.yml
-#   tags:
-#     - backup
-#   when:
-#     - (abr_mode == "backup")
-#     - (abr_backup_disabled|bool is sameas false)
-
-# - name: "valt-send/main.yml"
-#   include: valt-send/main.yml
-#   tags:
-#     - valt-send
-#   when:
-#     - (abr_mode == "backup")
-#     - (abr_valt_send_disabled|bool is sameas false)
-
-# - name: "valt-receive/main.yml"
-#   include: valt-receive/main.yml
-#   tags:
-#     - valt-receive
-#   when:
-#     - (abr_mode == "restore")
-#     - (abr_valt_receive_disabled|bool is sameas false)
-
-# - name: "full-temp-backup-before-restore/main.yml"
-#   include: full-temp-backup-before-restore/main.yml
-#   tags:
-#     - full-temp-backup-before-restore
-#   when:
-#     - (abr_mode == "restore")
-#     - (abr_paranoid == true)
-#     - (abr_valt_restore_disabled|bool is sameas false)
-
-# - name: "restore/main.yml"
-#   include: restore/main.yml
-#   tags:
-#     - restore
-#   when:
-#     - (abr_mode == "restore")
-#     - (abr_valt_restore_disabled is sameas false)

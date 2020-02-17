@@ -1,0 +1,9 @@
+---
+
+# FILE:            {{ role_path }}/tasks/backup/fs-copy/main.yml
+# LICENSE:         Public Domain
+
+- name: "abr:{{ abr_mode }} | backup | fs-folder"
+  tempfile:
+    state: directory
+    suffix: build

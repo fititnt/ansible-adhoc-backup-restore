@@ -5,20 +5,21 @@
 
 ### DRAFT of v0.5.0 new standard, START ________________________________________
 # Affect name of the backups
-abr_uid: "{{ inventory_hostname_short }}"
+abr_uid: "{{ inventory_hostname_short + '-' + abr_driver_group }}"
+abr_bucket: ":local:/var/local/abr/abr-local-bucket/" # See also abr_rclone_bucket_backup/abr_rclone_bucket_restore
+abr_prefix: "" # See also abr_pathprefix_local/abr_pathprefix_remote
 abr_timestamped: true
 
 abr_mode: "restore-options"    # Options: 'backup', 'restore', 'restore-options'
 abr_skip_setup: false
-abr_driver: "mariadb-mydumper" # Options: "mariadb-mydumper"
+abr_driver: "mariadb-mydumper" # Options: "mariadb-mydumper", 'fs-folder'
 abr_strategy_compression: "ansible-archive" # Options: "mariadb-mydumper"
 abr_strategy_encryption: null # Options: none
 abr_strategy_conversion: null # Options: none, maybe 'sqlines'
-abr_strategy_synchronization: "rclone"
+abr_strategy_synchronization: "rclone-default"
 abr_paranoid: true
 
-abr_bucket: ":local:/var/local/abr/abr-local-bucket/" # See also abr_rclone_bucket_backup/abr_rclone_bucket_restore
-abr_prefix: "" # See also abr_pathprefix_local/abr_pathprefix_remote
+
 abr_rclone_enviroment: {}
 # abr_rclone_enviroment:
 #   RCLONE_B2_ACCOUNT: "000b3e7..."
@@ -32,6 +33,13 @@ abr_rclone_args: {}
 
 abr_name_separator: "__"
 abr_timestamp: "{{ ansible_date_time.iso8601_basic_short }}"
+
+### Drivers: FS ________________________________________________________________
+abr_fs_path: null
+
+abr_fs_options: {}
+abr_fs_options_backup: "{{ abr_fs_options }}"
+abr_fs_options_restore: "{{ abr_fs_options_restore }}"
 
 # abr role, if you have new files or custom overrides for its internal
 # tasks files under overrides/roles/adhoc_backup_restore/, it will use yours
@@ -153,8 +161,8 @@ abr_setup_rclone: yes
 ### Backup/restore step .......................................................
 # If you dont want to store all backups on same base folder, you can customize
 # here
-abr_pathprefix_local: "{{ abr_pathprefix }}"
-abr_pathprefix_remote: "{{ abr_pathprefix }}"
+abr_pathprefix_local: "{{ abr_prefix }}" # DEPRECATED, REMOVE!
+abr_pathprefix_remote: "{{ abr_prefix }}" # DEPRECATED, REMOVE!
 # abr_backupdir: "{{ abr_name }}{{ (abr_summary_append_timestamp|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '')) }}"
 
 # The default base dir respect Filesystem Hierarchy Standard 3.0
