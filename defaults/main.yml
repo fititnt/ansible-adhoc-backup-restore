@@ -8,11 +8,11 @@
 abr_uid: "{{ inventory_hostname_short + '-' + abr_driver_group }}"
 abr_bucket: ":local:/var/local/abr/bucket/" # See also abr_rclone_bucket_backup/abr_rclone_bucket_restore
 abr_prefix: "" # See also abr_pathprefix_local/abr_pathprefix_remote
-abr_timestamped: true # Append TS like "__20200217T120618" to abr_uid
+abr_timestamped: false # Append TS like "__20200217T120618" to abr_uid
 
 ## Restore mode, start .........................................................
 # Define the exact UID to restore (including timestamp).
-abr_restore_uid: "{{ abr_uid }}" # Change this if 'abr_timestamped: false'
+abr_restore_uid: "{{ abr_uid }}" # Change this if 'abr_timestamped: true'
 # abr_mode: "restore"
 # abr_bucket: ...
 # abr_prefix: ...
@@ -22,7 +22,7 @@ abr_restore_uid: "{{ abr_uid }}" # Change this if 'abr_timestamped: false'
 abr_mode: "restore-options"    # Options: 'backup', 'restore', 'restore-options'
 abr_skip_setup: false
 abr_driver: "fs-default" # Options: "mariadb-mydumper", 'fs-default'
-abr_strategy_compression: "ansible-archive" # Options: "mariadb-mydumper"
+abr_strategy_compression: "ansible-archive" # Options: "ansible-archive", false
 abr_strategy_encryption: null # Options: none
 abr_strategy_conversion: null # Options: none, maybe 'sqlines'
 abr_strategy_synchronization: "rclone-default"
@@ -148,7 +148,7 @@ abr_rclone_valt_send_method: "copyto" # Move files from source to dest https://r
 # abr_rclone_valt_send_method: "copy" # Copy files from source to dest, skipping already copied https://rclone.org/commands/rclone_move/
 # abr_rclone_valt_send_method: "sync" # Make source and dest identical, modifying destination only https://rclone.org/commands/rclone_sync/
 
-abr_download_rclone_method: "copy"
+abr_download_rclone_method: "copyto"
 
 # @see https://rclone.org/docs/#environment-variables
 # abr_rclone_enviroment:

@@ -21,6 +21,16 @@
   loop_control:
     loop_var: "include_task_mode_restore_item"
 
+- name: "{{ abr__task_prefix }} | mode-restore | decompress/main.yml"
+  include: "{{ include_task_mode_restore_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/decompress/main.yml"
+    - "{{ role_path }}/tasks/decompress/main.yml"
+  when:
+    - "(abr_strategy_compression is defined) and (abr_strategy_compression)"
+  loop_control:
+    loop_var: "include_task_mode_restore_item"
+
 - name: "{{ abr__task_prefix }} | mode-restore | full-temp-backup-before-restore/main.yml"
   include: "{{ include_task_mode_restore_item }}"
   with_first_found:

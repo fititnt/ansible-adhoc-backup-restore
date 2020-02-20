@@ -21,6 +21,17 @@
     dest: "{{ abr__ftbbr }}"
     remote_src: yes
 
+- name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | fs-default | ls {{ abr__ftbbr }}"
+  command:
+    cmd: "ls -lha {{ abr__ftbbr }}"
+  register: command_ls
+
+- name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | fs-default | ls {{ abr__ftbbr }}, print"
+  debug:
+    msg:
+      command_ls_stdout_lines: "{{ command_ls.stdout_lines | default('undefined') }}"
+    # verbosity: 1
+
 - name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | fs-default | User message"
   debug:
     msg: |

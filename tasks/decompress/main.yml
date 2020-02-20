@@ -1,8 +1,22 @@
 ---
 
-# FILE:            {{ role_path }}/tasks/decompress/main.yml
+# FILE:            {{ role_path }}/tasks/dedecompress/main.yml
 # LICENSE:         Public Domain
 
-- name: "abr | decompress | TODO message"
-  debug:
-    msg: "Work in progress"
+# - name: "abr | decompress | TODO message"
+#   debug:
+#     msg: "Work in progress"
+
+- name: "{{ abr__task_prefix }} | decompress | include {{ abr_strategy_compression | default('dont-exist') }}"
+  include: "{{ include_task_decompress_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/decompress/{{ abr_strategy_compression | default('dont-exist') }}/main.yml"
+    - "{{ role_path }}/tasks/decompress/{{ abr_strategy_compression | default('dont-exist') }}/main.yml"
+    - "{{ abr_overrides_directory }}/tasks/common/unknown.yml"
+    - "{{ role_path }}/tasks/common/unknown.yml"
+  loop_control:
+    loop_var: "include_task_decompress_item"
+  vars:
+    unknown_message: |
+      Critical error! decompression strategy '{{ abr_strategy_compression }}'
+      not found on {{ role_path }} or {{ abr_overrides_directory }}

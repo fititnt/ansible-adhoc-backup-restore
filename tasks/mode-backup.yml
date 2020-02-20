@@ -28,6 +28,8 @@
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/compress/main.yml"
     - "{{ role_path }}/tasks/compress/main.yml"
+  when:
+    - "(abr_strategy_compression is defined) and (abr_strategy_compression)"
   loop_control:
     loop_var: "include_task_mode_backup_compress_item"
 
