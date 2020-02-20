@@ -48,3 +48,10 @@
         state: present
       when:
         - "ansible_os_family == 'Debian'"
+
+    - name: "https://rclone.org/install.sh needs curl unzip"
+      package:
+        name: ["unzip", "curl"]
+        state: present
+      # when:
+      #   - "ansible_os_family == 'Debian'"

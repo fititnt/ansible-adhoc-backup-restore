@@ -21,6 +21,7 @@ def test_www_site1_index_html(host):
     assert f.exists
     assert f.user == 'root'
     # assert f.group == 'root'
+    assert f.content_string == 'Hello World!'
 
 
 def test_www_site1_style_css(host):
@@ -29,6 +30,7 @@ def test_www_site1_style_css(host):
     assert f.exists
     assert f.user == 'root'
     # assert f.group == 'root'
+    assert f.content_string == '/* Put styles here */'
 
 
 def test_www_site1_script_js(host):
@@ -37,3 +39,4 @@ def test_www_site1_script_js(host):
     assert f.exists
     assert f.user == 'root'
     # assert f.group == 'root'
+    assert f.content_string == '/* JavaScript code here */'

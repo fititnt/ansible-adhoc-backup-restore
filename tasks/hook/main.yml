@@ -1,0 +1,13 @@
+---
+
+# FILE:            {{ role_path }}/tasks/hook/main.yml
+# LICENSE:         Public Domain
+
+# NOTE: This is a draft (fititnt, 2020-02-20 15:52 BRT)
+
+- name: "{{ abr__task_prefix }} | hook"
+  include_tasks: "{{ abr__hook.taskfile }}"
+  when:
+    - "(abr__hook.taskfile is defined)
+      and (abr__hook.taskfile)
+      and (abr__hook.taskfile|lenght > 0)"

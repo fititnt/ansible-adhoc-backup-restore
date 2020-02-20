@@ -23,6 +23,9 @@ provisioner:
   lint:
     name: ansible-lint
     enabled: false # TODO: re-enable later
+  options:
+    v: true
+    diff: true
 verifier:
   name: testinfra
   lint:

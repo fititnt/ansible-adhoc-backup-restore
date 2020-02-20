@@ -1,7 +1,0 @@
----
-
-# FILE:            {{ role_path }}/vars/driver/fs-folder.yml
-# LICENSE:         Public Domain
-
-abr_driver_group: "fs"
-abr_default_summary: "{{ abr_uid }}"

@@ -27,47 +27,55 @@
     msg:
       commmand_rclone_version: "{{ commmand_rclone_version }}"
 
-# New BSD installs may need to have bash instaled before.
-- name: "{{ abr__task_prefix }} | setup | rclone-default | shell: 'curl https://rclone.org/install.sh | sudo bash'"
-  shell:
-    cmd: "curl https://rclone.org/install.sh | sudo bash"
-  become: yes
+- name: "{{ abr__task_prefix }} | setup | rclone-default | Donwload https://rclone.org/install.sh"
+  get_url:
+    url: "https://rclone.org/install.sh"
+    dest: "{{ abr_dir_bin.path }}rclone-install.sh"
+    mode: 'u+rwx'
+    owner: "{{ abr_fs_owner }}"
+    group: "{{ abr_fs_group }}"
   when:
     - "(commmand_rclone_version.failed|bool)
       or ((abr_force_setup_rclone is defined) and (abr_force_setup_rclone|bool))"
 
-- name: "{{ abr__task_prefix }} | setup | rclone-default | rclone --version"
+- name: "{{ abr__task_prefix }} | setup | rclone-default | run {{ abr_dir_bin.path }}rclone-install.sh"
   command:
-    cmd: "rclone --version"
-  register: commmand_rclone_version
-  ignore_errors: true
+    cmd: "{{ abr_dir_bin.path }}rclone-install.sh"
+  register: commmand_rclone_install
+  when:
+    - "(commmand_rclone_version.failed|bool)
+      or ((abr_force_setup_rclone is defined) and (abr_force_setup_rclone|bool))"
+  # changed_when: false
+  # ignore_errors: true
 
-- name: "{{ abr__task_prefix }} | setup | rclone-default | rclone --version: print result"
-  debug:
-    msg:
-      commmand_rclone_version: "{{ commmand_rclone_version }}"
 
-  # creates:
-  #     commmand_rclone_version: "{{ commmand_rclone_version }}"
+# New BSD installs may need to have bash instaled before.
+# - name: "{{ abr__task_prefix }} | setup | rclone-default | shell: 'curl https://rclone.org/install.sh | sudo bash'"
+#   shell:
+#     cmd: "curl https://rclone.org/install.sh | sudo bash"
+#   become: yes
+#   register: commmand_rclone_install
+#   when:
+#     - "(commmand_rclone_version.failed|bool)
+#       or ((abr_force_setup_rclone is defined) and (abr_force_setup_rclone|bool))"
 
-# - name: "{{ abr__task_prefix }} | setup | rclone-default"
-# # - name: "{{ abr__task_prefix }} | setup | rclone"
-#   block:
-#     - name: "{{ abr__task_prefix }} | setup | rclone-default | install {{ abr_packages_rclone }}"
-#       package:
-#         name: "{{ abr_packages_rclone }}"
-#         state: present
-#   rescue:
-#     - name: "{{ abr__task_prefix }} | setup | rclone | user message"
-#       fail:
-#         msg: >
-#           Default packages for rclone not found.
+# - name: "{{ abr__task_prefix }} | setup | rclone-default | rclone --version"
+#   command:
+#     cmd: "rclone --version"
+#   register: commmand_rclone_version
+#   ignore_errors: true
+#   when:
+#     - "(commmand_rclone_version.failed|bool)
+#       or ((abr_force_setup_rclone is defined) and (abr_force_setup_rclone|bool))"
 
-#           For imediate suggestion, you can disable this setup step with
-#           'abr_setup_rclone: no' and then install manually.
-
-#           Please consider open an issue / open a pull request to the maintainer
-#           repository.
+# - name: "{{ abr__task_prefix }} | setup | rclone-default | rclone --version: print result"
+#   debug:
+#     msg:
+#       commmand_rclone_version: "{{ commmand_rclone_version | default('undefined') }}"
+#       commmand_rclone_install: "{{ commmand_rclone_install | default('undefined') }}"
+#   when:
+#     - "(commmand_rclone_version.failed|bool)
+#       or ((abr_force_setup_rclone is defined) and (abr_force_setup_rclone|bool))"
 
 # SEE https://forum.rclone.org/t/rclone-as-destination-for-borgbackup/12717
 # SEE https://ruderich.org/simon/notes/append-only-backups-with-restic-and-rclone

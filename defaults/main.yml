@@ -21,7 +21,7 @@ abr_restore_uid: "{{ abr_uid }}" # Change this if 'abr_timestamped: false'
 
 abr_mode: "restore-options"    # Options: 'backup', 'restore', 'restore-options'
 abr_skip_setup: false
-abr_driver: "fs-folder" # Options: "mariadb-mydumper", 'fs-folder'
+abr_driver: "fs-default" # Options: "mariadb-mydumper", 'fs-default'
 abr_strategy_compression: "ansible-archive" # Options: "mariadb-mydumper"
 abr_strategy_encryption: null # Options: none
 abr_strategy_conversion: null # Options: none, maybe 'sqlines'
@@ -181,22 +181,22 @@ abr_setup_rclone: yes
 ### Backup/restore step .......................................................
 # If you dont want to store all backups on same base folder, you can customize
 # here
-abr_pathprefix_local: "{{ abr_prefix }}" # DEPRECATED, REMOVE!
-abr_pathprefix_remote: "{{ abr_prefix }}" # DEPRECATED, REMOVE!
-# abr_backupdir: "{{ abr_name }}{{ (abr_summary_append_timestamp|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '')) }}"
+# abr_pathprefix_local: "{{ abr_prefix }}" # DEPRECATED, REMOVE!
+# abr_pathprefix_remote: "{{ abr_prefix }}" # DEPRECATED, REMOVE!
+# # abr_backupdir: "{{ abr_name }}{{ (abr_summary_append_timestamp|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '')) }}"
 
-# The default base dir respect Filesystem Hierarchy Standard 3.0
-abr_dir_mydumpermyloader:
-  # Default path: /var/local/abr/backups/{{ abr_pathprefix }}{{ abr_name }}/
-  path: "{{ abr_dir_backup.path }}{{ abr_pathprefix_local }}{{ abr_backup_name }}/"
-  owner: "{{ abr_fs_owner }}" # Default: root
-  group: "{{ abr_internal_root_group }}" # Default: root/wheel
-  mode: "{{ abr_fs_mode }}" # Default: "0700"
-  state: directory
-  recurse: yes
-  # serole: ...
-  # setype: ...
-  # Check {{ role_path }}/tasks/setup-abr-filesystem/main.yml for all options!
+# # # The default base dir respect Filesystem Hierarchy Standard 3.0
+# # abr_dir_mydumpermyloader:
+# #   # Default path: /var/local/abr/backups/{{ abr_pathprefix }}{{ abr_name }}/
+# #   path: "{{ abr_dir_backup.path }}{{ abr_pathprefix_local }}{{ abr_backup_name }}/"
+# #   owner: "{{ abr_fs_owner }}" # Default: root
+# #   group: "{{ abr_internal_root_group }}" # Default: root/wheel
+# #   mode: "{{ abr_fs_mode }}" # Default: "0700"
+# #   state: directory
+# #   recurse: yes
+# #   # serole: ...
+# #   # setype: ...
+# #   # Check {{ role_path }}/tasks/setup-abr-filesystem/main.yml for all options!
 
 ### Setup step .................................................................
 
@@ -205,6 +205,7 @@ abr_dir_mydumpermyloader:
 abr_fs_dirs:
   - "{{ abr_dir_base }}"
   - "{{ abr_dir_temp }}"
+  - "{{ abr_dir_bin }}"
   # - "{{ abr_dir_backup }}"
   # - "{{ abr_dir_mydumperdaemon }}"
   - "{{ abr_dir_paranoidmode }}"
@@ -230,7 +231,14 @@ abr_dir_base:
 abr_dir_temp:
   path: "{{ abr_dir_base.path }}temp/"
   owner: "{{ abr_fs_owner }}"
-  group: "{{ abr_internal_root_group }}"
+  group: "{{ abr_fs_group }}"
+  mode: "{{ abr_fs_mode }}"
+  state: directory
+
+abr_dir_bin:
+  path: "{{ abr_dir_base.path }}bin/"
+  owner: "{{ abr_fs_owner }}"
+  group: "{{ abr_fs_group }}"
   mode: "{{ abr_fs_mode }}"
   state: directory
 

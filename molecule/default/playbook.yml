@@ -5,7 +5,7 @@
   remote_user: root
   vars:
     abr_mode: backup
-    abr_driver: "fs-folder"
+    abr_driver: "fs-default"
     abr_fs_path: "/var/www/site-1/"
     abr_prefix: "www-site-1/"
     abr_timestamped: false
@@ -42,7 +42,7 @@
   remote_user: root
   vars:
     abr_mode: restore
-    abr_driver: "fs-folder"
+    abr_driver: "fs-default"
     abr_fs_path: "/var/www/site-1/"
     abr_prefix: "www-site-1/"
     abr_timestamped: false
@@ -50,6 +50,17 @@
     ansible_python_interpreter: /usr/bin/python3
   roles:
     - role: ansible-adhoc-backup-restore
+
+  pre_tasks:
+
+    - name: "ls /var/local/abr/bucket/www-site-1/"
+      shell: "ls /var/local/abr/bucket/www-site-1/"
+      register: output
+
+    - name: "ls /var/local/abr/bucket/www-site-1/ (print)"
+      debug:
+        msg:
+          output: "{{ output }}"
 
   # pre_tasks:
   #   - name: "Set ISCONTEINER=1"

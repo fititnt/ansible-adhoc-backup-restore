@@ -5,33 +5,16 @@
 # SEE:             https://forum.rclone.org/t/can-rclone-be-run-solely-with-command-line-options-no-config-no-env-vars/6314/2
 # SEE:             https://github.com/rclone/rclone/issues/2449 (Title: Allow creation of backends from command line parameters)
 
-- name: "{{ abr__task_prefix }} | upload | rclone-default | debug (requires -v, -vv, -vvv, or -vvvv)"
+- name: "{{ abr__task_prefix }} | upload | rclone-default | debug (requires -v)"
 # - name: "abr | valt-send | debug (requires -v, -vv, -vvv, or -vvvv)"
   debug:
     msg:
-      abr_rclone_enviroment: "{{ abr_rclone_enviroment | default('undefined') }}"
       abr_backup_rclone_command: "{{ abr_backup_rclone_command | default('undefined') }}"
+      abr_rclone_enviroment: "{{ abr_rclone_enviroment | default('undefined') }}"
     verbosity: 1
-
-# - name: "{{ abr__task_prefix }} | upload | rclone-default | rclone command"
-#   command: cat /etc/motd
-#   register: mymotd
-
-# - name: "{{ abr__task_prefix }} | upload | rclone-default | rclone command"
-# # - name: "abr | valt-send | rclone command"
-#   shell: "{{ abr_backup_rclone_command }}"
-#   environment: "{{ abr_rclone_enviroment }}"
-#   register: command_result
 
 - name: "{{ abr__task_prefix }} | upload | rclone-default | rclone command"
   command:
     cmd: "{{ abr_backup_rclone_command }}"
   environment: "{{ abr_rclone_enviroment }}"
   register: command_result
-
-# - name: "{{ abr__task_prefix }} | upload | rclone-default | debug (requires -v, -vv, -vvv, or -vvvv)"
-# # - name: "abr | valt-send | debug (requires -v, -vv, -vvv, or -vvvv)"
-#   debug:
-#     msg:
-#       command_result: "{{ command_result | default('undefined') }}"
-#     verbosity: 1

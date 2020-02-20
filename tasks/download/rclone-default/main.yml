@@ -16,7 +16,7 @@
 - name: "{{ abr__task_prefix }} | download | rclone-default  | prepare tempfolder"
   tempfile:
     state: directory
-    #suffix: "fs-folder"
+    #suffix: "fs-default"
   register: abr_download_tempfolder
   when:
     - true # TODO: implement, then test, some way to allow users skip tempfolder (fititnt, 2020-20-17 10:55 BRT)
@@ -51,7 +51,7 @@
 - name: "{{ abr__task_prefix }} | download | rclone-default | set_facts"
   set_fact:
     # abr__path: "{{ abr__path | default('/error/source/not-exist', true) }}"
-    abr__steps: "{{ abr__steps | default([] + ['backup/fs-folder']) }}"
+    abr__steps: "{{ abr__steps | default([] + ['backup/fs-default']) }}"
     abr__path: "{{ abr_download_tempfolder.path }}"
     abr__type: "directory"
     abr__temporary: true
