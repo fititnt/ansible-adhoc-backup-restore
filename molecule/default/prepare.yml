@@ -1,8 +1,50 @@
 ---
-- name: Prepare
+- name: "Prepare: setup-python.sh"
   hosts: all
   remote_user: root
   gather_facts: false
+  # vars:
+  #   ansible_python_interpreter: /usr/bin/python3
   pre_tasks:
     - name: "Prepare setup-python.sh"
       script: setup-python.sh
+
+- name: "Prepare: default"
+  hosts: all
+  remote_user: root
+  gather_facts: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+
+    - name: "/var/www/"
+      file:
+        path: "/var/www/"
+        state: directory
+
+    - name: "/var/www/site-1/"
+      file:
+        path: "/var/www/site-1/"
+        state: directory
+
+    - name: "/var/www/site-1/index.html: Hello World!"
+      copy:
+        content: "Hello World!"
+        dest: "/var/www/site-1/index.html"
+
+    - name: "/var/www/site-1/style.css: /* Put styles here */"
+      copy:
+        content: "/* Put styles here */"
+        dest: "/var/www/site-1/style.css"
+
+    - name: "/var/www/site-1/script.js: /* JavaScript code here */"
+      copy:
+        content: "/* JavaScript code here */"
+        dest: "/var/www/site-1/script.js"
+
+    - name: "Need for compression/ansible-archive default XZ format: install xz-utils (Debian)"
+      package:
+        name: "xz-utils"
+        state: present
+      when:
+        - "ansible_os_family == 'Debian'"

@@ -1,80 +1,53 @@
 ---
-- name: Converge
-  hosts: all
-  roles:
-    - role: ansible-adhoc-backup-restore
 
-- name: Converge
+- name: "Converge: backup"
   hosts: all
   remote_user: root
   vars:
+    abr_mode: backup
+    abr_driver: "fs-folder"
+    abr_fs_path: "/var/www/site-1/"
+    abr_prefix: "www-site-1/"
+    abr_timestamped: false
 
-    # a2s_hostname: "test-host.example.org"
+    ansible_python_interpreter: /usr/bin/python3
+  roles:
+    - role: ansible-adhoc-backup-restore
 
-    # a2s_etchosts:
-    #   - "127.0.0.1  site-a.local"
-    #   - "127.0.0.1  cdn.site-a.local"
-    #   - "127.0.0.1  site-b.local"
-    #   - "127.0.0.1  cdn.site-b.local"
+- name: "Converge: simulate data corruption"
+  hosts: all
+  remote_user: root
+  gather_facts: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
 
-    # a2s_groups:
-    #   - name: "cdns"
-    #   - name: "www-data"
+    - name: "/var/www/site-1/index.html: error error error"
+      copy:
+        content: "error error error!"
+        dest: "/var/www/site-1/index.html"
 
-    # # Create users
-    # a2s_users_default:
-    #   create_home: no
-    #   groups: ["www-data"]
+    - name: "/var/www/site-1/style.css: /* error error error */"
+      copy:
+        content: "/* error error error */"
+        dest: "/var/www/site-1/style.css"
 
-    # a2s_users:
-    #   - name: "app"
-    #   - name: "site-a"
-    #   - name: "site-b"
-    #   - name: "cdn-site-a"
-    #     groups: ["cdns", "www-data"]
-    #   - name: "cdn-site-b"
-    #     groups: ["cdns", "www-data"]
-    #   - name: "php-demo"
-    #   - name: "fititnt"
-    #     create_home: yes
-    #     authorized_keys:
-    #       - key: https://github.com/fititnt.keys
+    - name: "/var/www/site-1/script.js: /* error error error */"
+      copy:
+        content: "/* error error error */"
+        dest: "/var/www/site-1/script.js"
 
-    # # Create directories. a2s_directories_default allows create custom variables
-    # # like (var1 in item.var1) or reuse one variable (like owner in item.owner)
-    # a2s_directories_default:
-    #   path: "/var/www/html/{{ item.var1 }}/"
-    #   owner: "{{ item.var1 }}"
-    #   group: "www-data"
+- name: "Converge: restore"
+  hosts: all
+  remote_user: root
+  vars:
+    abr_mode: restore
+    abr_driver: "fs-folder"
+    abr_fs_path: "/var/www/site-1/"
+    abr_prefix: "www-site-1/"
+    abr_timestamped: false
 
-    # a2s_directories:
-    #   - path: /var/www/html
-    #     recurse: yes
-    #     owner: root
-    #     group: root
-    #     var1: null
-    #   - var1: "app"
-    #   - var1: "site-a"
-    #   - var1: "site-b"
-    #   - var1: "cdn-site-a"
-    #   - var1: "cdn-site-b"
-
-    # a2s_files_default:
-    #   group: "www-data"
-
-    # a2s_files:
-    #   - path: "/var/www/html/app/index.html"
-    #     content: "Hello world, app!"
-    #     owner: "app"
-
-    # # a2s_rclone: false
-    # a2s_devel_nginx: true
-
-    # ## If using devel-nginx AND running on containers without systemd
-    # ## If using hosts and have have issues to write on /etc/hosts
-    # # Set a2s_isconteiner: true to not make this role try enable a service
-    # a2s_isconteiner: true
-
+    ansible_python_interpreter: /usr/bin/python3
   roles:
     - role: ansible-adhoc-backup-restore
 

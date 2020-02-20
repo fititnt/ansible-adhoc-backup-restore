@@ -23,7 +23,7 @@
     path: "{{ abr__path }}"
     #dest: "{{ abr_mydumper_outputdir }}.xz"
     dest: "{{ abr_compress_tempfile.path }}"
-    format: "xz"
+    format: "{{ abr_compression_format }}"
     # force_archive: yes
     # remove: yes
   register: archive_command_result
@@ -40,5 +40,5 @@
     abr__steps: "{{ abr__steps | default([] + ['compress/ansible-archive']) }}"
     abr__path: "{{ abr_compress_tempfile.path }}"
     # abr__filename: "{{ abr__filename + '.xz' }}"
-    abr__extension: "{{ (abr__extension | default('') ) + '.xz' }}"
+    abr__extension: "{{ (abr__extension | default('') ) + '.' + abr_compression_format }}"
     abr__type: "file"

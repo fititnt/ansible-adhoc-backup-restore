@@ -41,11 +41,20 @@
     #suffix: "fs-folder"
   register: abr_backup_tempfolder
 
-- name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | run mydumper"
-  shell: >
-    mydumper
-    --outputdir='{{ abr_backup_tempfolder.path }}'
-    {{ abr_mydumper_append | default('') }}
+# - name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | run mydumper"
+#   shell: >
+#     mydumper
+#     --outputdir='{{ abr_backup_tempfolder.path }}'
+#     {{ abr_mydumper_append | default('') }}
+#   register: mydumper_command_result
+
+- name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | run mydumper" # noqa 301
+  command:
+    cmd: >
+      mydumper
+      --outputdir='{{ abr_backup_tempfolder.path }}'
+      {{ abr_mydumper_append | default('') }}
+    # warn: False
   register: mydumper_command_result
 
 - name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | set_facts: prepare for next step"

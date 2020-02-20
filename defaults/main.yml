@@ -21,7 +21,7 @@ abr_restore_uid: "{{ abr_uid }}" # Change this if 'abr_timestamped: false'
 
 abr_mode: "restore-options"    # Options: 'backup', 'restore', 'restore-options'
 abr_skip_setup: false
-abr_driver: "mariadb-mydumper" # Options: "mariadb-mydumper", 'fs-folder'
+abr_driver: "fs-folder" # Options: "mariadb-mydumper", 'fs-folder'
 abr_strategy_compression: "ansible-archive" # Options: "mariadb-mydumper"
 abr_strategy_encryption: null # Options: none
 abr_strategy_conversion: null # Options: none, maybe 'sqlines'
@@ -54,6 +54,9 @@ abr_fs_options_backup: "{{ abr_fs_options }}"
 abr_fs_options_restore: "{{ abr_fs_options_restore }}"
 
 ### Drivers: MariaDB ___________________________________________________________
+
+### Strategy/Compress: _________________________________________________________
+abr_compression_format: "xz"
 
 ### ... ________________________________________________________________________
 

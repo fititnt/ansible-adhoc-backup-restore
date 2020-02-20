@@ -19,9 +19,17 @@
 #   set_fact:
 #     abr_upload_rclone_command: "{{ abr__path | default('/error/source/not-exist', true) }}"
 
-- name: "abr:{{ abr_mode }} | restore-options | rclone-default | rclone command"
-# - name: "abr | valt-send | rclone command"
-  shell: "{{ abr_restore_options_rclone_command }}"
+# - name: "abr:{{ abr_mode }} | restore-options | rclone-default | rclone command"
+# # - name: "abr | valt-send | rclone command"
+#   shell: "{{ abr_restore_options_rclone_command }}"
+#   environment: "{{ abr_rclone_enviroment }}"
+#   register: command_result
+#   # warn: false
+
+- name: "abr:{{ abr_mode }} | restore-options | rclone-default | rclone command" # noqa 301
+  command:
+    cmd: "{{ abr_restore_options_rclone_command }}"
+    # warn: False
   environment: "{{ abr_rclone_enviroment }}"
   register: command_result
   # warn: false

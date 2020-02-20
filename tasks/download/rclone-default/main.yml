@@ -28,9 +28,17 @@
   when:
     - true # TODO: implement, then test, some way to allow users skip tempfolder (fititnt, 2020-20-17 10:55 BRT)
 
-- name: "{{ abr__task_prefix }} | download | rclone-default | rclone command"
+# - name: "{{ abr__task_prefix }} | download | rclone-default | rclone command"
+# # - name: "abr | valt-send | rclone command"
+#   shell: "{{ abr__download_rclone_default_command }}"
+#   environment: "{{ abr_rclone_enviroment }}"
+#   register: command_result
+
+- name: "{{ abr__task_prefix }} | download | rclone-default | rclone command" # noqa 301
 # - name: "abr | valt-send | rclone command"
-  shell: "{{ abr__download_rclone_default_command }}"
+  command:
+    cmd: "{{ abr__download_rclone_default_command }}"
+    # warn: False
   environment: "{{ abr_rclone_enviroment }}"
   register: command_result
 
