@@ -18,4 +18,7 @@
     loop_var: "restore_options_item"
   vars:
     # unknown_message: "Critical error! Driver for upload not found!"
-    unknown_message: "Critical error! restore-options for abr_strategy_synchronization '{{ abr_strategy_synchronization }}' not found on {{ role_path }} and {{ abr_overrides_directory }}"
+    unknown_message: |
+      Critical error! restore-options for abr_strategy_synchronization
+      '{{ abr_strategy_synchronization }}' not found on {{ role_path }}
+      and {{ abr_overrides_directory }}
