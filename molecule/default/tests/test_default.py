@@ -42,10 +42,10 @@ def test_fs_directory_www_site1_script_js(host):
     assert f.content_string == '/* JavaScript code here */'
 
 
-def test_fs_file_www_singlefile_csv(host):
-    f = host.file('/var/www/single-file.csv')
+# def test_fs_file_www_singlefile_csv(host):
+#     f = host.file('/var/www/single-file.csv')
 
-    assert f.exists
-    assert f.user == 'root'
-    # assert f.group == 'root'
-    assert f.content_string == 'Hello World!'
+#     assert f.exists
+#     assert f.user == 'root'
+#     # assert f.group == 'root'
+#     assert f.content_string == 'Hello World!'

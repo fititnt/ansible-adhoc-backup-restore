@@ -28,7 +28,6 @@ abr_strategy_conversion: null # Options: none, maybe 'sqlines'
 abr_strategy_synchronization: "rclone-default"
 abr_paranoid: true
 
-
 abr_rclone_enviroment: {}
 # abr_rclone_enviroment:
 #   RCLONE_B2_ACCOUNT: "000b3e7..."

@@ -2,7 +2,12 @@
 
 # FILE:            {{ role_path }}/tasks/mode-backup.yml
 # LICENSE:         Public Domain
+# USAGE:
+#                 abr_driver: 'backup'
 
+# STEP 1: SETUP ________________________________________ (abr_skip_setup: false)
+#         Setup step will create directories used by ABR and will install
+#         dependencies based on enabled drivers and strategies
 - name: "{{ abr__task_prefix }} | mode-backup | setup/main.yml"
   include: "{{ include_task_mode_backup_setup_item }}"
   with_first_found:
@@ -13,8 +18,10 @@
   when:
     - "(abr_skip_setup|bool is sameas false)"
 
+# STEP 2: BACKUP MAIN TASK ________________________________ (abr_driver: backup)
+#         On this step, abr_driver convert whatever will need backup/restore
+#         to a format that other steps can undestand
 - name: "{{ abr__task_prefix }} | mode-backup | backup/main.yml"
-  # include: backup/main.yml
   include: "{{ include_task_mode_backup_backup_item }}"
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/backup/main.yml"
@@ -22,8 +29,22 @@
   loop_control:
     loop_var: "include_task_mode_backup_backup_item"
 
+# STEP 4: DATA CONVERSION ____________________________ (abr_strategy_conversion)
+#         This optimal and less frequent step may allow users to create own
+#         rotines to implement data conversion (like an intermediate step to
+#         convert an Oracle SQL dump to an MariaDB dump with sqlines)
+- name: "{{ abr__task_prefix }} | mode-restore | data-conversion/main.yml"
+  include: "{{ include_task_mode_restore_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/data-conversion/main.yml"
+    - "{{ role_path }}/tasks/data-conversion/main.yml"
+  when:
+    - "(abr_strategy_conversion is defined) and (abr_strategy_conversion)"
+  loop_control:
+    loop_var: "include_task_mode_restore_item"
+
+# STEP 5: COMPRESSION _______________________________ (abr_strategy_compression)
 - name: "{{ abr__task_prefix }} | mode-backup | compress/main.yml"
-  # include: compress/main.yml
   include: "{{ include_task_mode_backup_compress_item }}"
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/compress/main.yml"
@@ -33,15 +54,21 @@
   loop_control:
     loop_var: "include_task_mode_backup_compress_item"
 
+# STEP 6: ENCRYPT ____________________________________ (abr_strategy_encryption)
+# Security note: Compression -> Encryption is more efficent, but a bit less
+#                secure if you really paranoid. In this case, just disable
+#                compression
 - name: "{{ abr__task_prefix }} | mode-backup | encrypt/main.yml"
-  # include: encrypt/main.yml
   include: "{{ include_task_mode_backup_encrypt_item }}"
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/encrypt/main.yml"
     - "{{ role_path }}/tasks/encrypt/main.yml"
+  when:
+    - "(abr_strategy_encryption is defined) and (abr_strategy_encryption)"
   loop_control:
     loop_var: "include_task_mode_backup_encrypt_item"
 
+# STEP 7: UPLOAD _______________________________  (abr_strategy_synchronization)
 - name: "{{ abr__task_prefix }} | mode-backup | upload/main.yml"
   # include: upload/main.yml
   include: "{{ include_task_mode_backup_upload_item }}"
@@ -51,6 +78,9 @@
   loop_control:
     loop_var: "include_task_mode_backup_upload_item"
 
+# STEP 8: RESTORE OPTIONS ________________________ (abr_mode: "restore-options")
+#         By default, we will finish the backup mode with message that would
+#         show with restore-options mode
 - name: "{{ abr__task_prefix }} | mode-backup | restore-options/main.yml"
   include: "{{ include_task_restore2 }}"
   with_first_found:

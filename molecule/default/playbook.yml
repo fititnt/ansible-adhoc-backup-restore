@@ -15,19 +15,19 @@
   roles:
     - role: ansible-adhoc-backup-restore
 
-- name: "Converge: backup fs-file"
-  hosts: all
-  remote_user: root
-  vars:
-    abr_mode: backup
-    abr_driver: "fs-file"
-    abr_fs_path: "/var/www/single-file.csv"
-    abr_prefix: "csv-backups/"
-    abr_timestamped: false
+# - name: "Converge: backup fs-file"
+#   hosts: all
+#   remote_user: root
+#   vars:
+#     abr_mode: backup
+#     abr_driver: "fs-file"
+#     abr_fs_path: "/var/www/single-file.csv"
+#     abr_prefix: "csv-backups/"
+#     abr_timestamped: false
 
-    ansible_python_interpreter: /usr/bin/python3
-  roles:
-    - role: ansible-adhoc-backup-restore
+#     ansible_python_interpreter: /usr/bin/python3
+#   roles:
+#     - role: ansible-adhoc-backup-restore
 
 # Force need of restore playbooks ______________________________________________
 - name: "Converge: simulate data corruption"
@@ -73,19 +73,19 @@
   roles:
     - role: ansible-adhoc-backup-restore
 
-- name: "Converge: restore fs-file"
-  hosts: all
-  remote_user: root
-  vars:
-    abr_mode: restore
-    abr_driver: "fs-file"
-    abr_fs_path: "/var/www/single-file.csv"
-    abr_prefix: "csv-backups/"
-    abr_timestamped: false
+# - name: "Converge: restore fs-file"
+#   hosts: all
+#   remote_user: root
+#   vars:
+#     abr_mode: restore
+#     abr_driver: "fs-file"
+#     abr_fs_path: "/var/www/single-file.csv"
+#     abr_prefix: "csv-backups/"
+#     abr_timestamped: false
 
-    ansible_python_interpreter: /usr/bin/python3
-  roles:
-    - role: ansible-adhoc-backup-restore
+#     ansible_python_interpreter: /usr/bin/python3
+#   roles:
+#     - role: ansible-adhoc-backup-restore
 
   # pre_tasks:
   #   - name: "Set ISCONTEINER=1"

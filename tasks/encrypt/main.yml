@@ -6,3 +6,17 @@
 - name: "abr | encrypt | TODO message"
   debug:
     msg: "Work in progress"
+
+- name: "{{ abr__task_prefix }} | encrypt | include {{ abr_strategy_encryption | default('dont-exist') }}"
+  include: "{{ include_task_encrypt_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/encrypt/{{ abr_strategy_encryption | default('dont-exist') }}/main.yml"
+    - "{{ role_path }}/tasks/encrypt/{{ abr_strategy_encryption | default('dont-exist') }}/main.yml"
+    - "{{ abr_overrides_directory }}/tasks/common/unknown.yml"
+    - "{{ role_path }}/tasks/common/unknown.yml"
+  loop_control:
+    loop_var: "include_task_encrypt_item"
+  vars:
+    unknown_message: |
+      Critical error! encryption strategy '{{ abr_strategy_encryption }}'
+      not found on {{ role_path }} or {{ abr_overrides_directory }}
