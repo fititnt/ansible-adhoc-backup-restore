@@ -1,19 +1,19 @@
 ---
 
-# FILE:            {{ role_path }}/tasks/restore/fs-default/main.yml
+# FILE:            {{ role_path }}/tasks/restore/fs-file/main.yml
 # LICENSE:         Public Domain
 
-# - name: "{{ abr__task_prefix }} | restore | fs-default | set_facts: prepare for fs-default"
+# - name: "{{ abr__task_prefix }} | restore | fs-file | set_facts: prepare for fs-file"
 #   set_fact:
 #     abr_restore_src: "{{ abr__path | default('/error/source/not-exist', true) }}"
 
-- name: "{{ abr__task_prefix }} | restore | fs-default | prepare tempfolder"
+- name: "{{ abr__task_prefix }} | restore | fs-file | prepare tempfolder"
   tempfile:
     state: directory
-    #suffix: "fs-default"
+    #suffix: "fs-file"
   register: abr_restore_tempfolder
 
-- name: "{{ abr__task_prefix }} | restore | fs-default | copy '{{ abr__path }}/' to {{ abr_fs_path_restore }}"
+- name: "{{ abr__task_prefix }} | restore | fs-file | copy '{{ abr__path }}/' to {{ abr_fs_path_restore }}"
   copy:
     # src: "{{ abr_fs_path_restore }}"
     # dest: "{{ abr_restore_tempfolder.path }}"
@@ -23,20 +23,20 @@
     dest: "{{ abr_fs_path_restore }}"
     remote_src: yes
 
-- name: "{{ abr__task_prefix }} | restore | fs-default | ls {{ abr_fs_path_restore }}"
+- name: "{{ abr__task_prefix }} | restore | fs-file | ls {{ abr_fs_path_restore }}"
   command:
     cmd: "ls -lha {{ abr_fs_path_restore }}"
   register: command_ls
 
-- name: "{{ abr__task_prefix }} | restore | fs-default | ls {{ abr_fs_path_restore }}, print"
+- name: "{{ abr__task_prefix }} | restore | fs-file | ls {{ abr_fs_path_restore }}, print"
   debug:
     msg:
       command_ls_stdout_lines: "{{ command_ls.stdout_lines | default('undefined') }}"
     # verbosity: 1
 
-- name: "{{ abr__task_prefix }} | restore | fs-default | set_facts: prepare for next step"
+- name: "{{ abr__task_prefix }} | restore | fs-file | set_facts: prepare for next step"
   set_fact:
     # abr__path: "{{ abr__path | default('/error/source/not-exist', true) }}"
-    abr__steps: "{{ abr__steps | default([] + ['restore/fs-default']) }}"
+    abr__steps: "{{ abr__steps | default([] + ['restore/fs-file']) }}"
     abr__path: "{{ abr_fs_path_restore }}"
     abr__type: "directory"

@@ -22,6 +22,11 @@
         path: "/var/www/"
         state: directory
 
+    - name: "/var/www/single-file.csv"
+      copy:
+        content: "Hello World!"
+        dest: "/var/www/single-file.csv"
+
     - name: "/var/www/site-1/"
       file:
         path: "/var/www/site-1/"

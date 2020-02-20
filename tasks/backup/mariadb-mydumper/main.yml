@@ -38,7 +38,7 @@
 - name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | prepare tempfolder"
   tempfile:
     state: directory
-    #suffix: "fs-default"
+    #suffix: "fs-directory"
   register: abr_backup_tempfolder
 
 # - name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | run mydumper"

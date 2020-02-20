@@ -1,10 +1,10 @@
 ---
 
-# FILE:            {{ role_path }}/vars/driver/mariadb-mydumper.yml
+# FILE:            {{ role_path }}/vars/driver/fs-directory.yml
 # LICENSE:         Public Domain
 
-abr_driver_group: "mariadb"
-# abr_default_summary: "{{ abr_uid }}"
+abr_driver_group: "fs"
+abr_default_summary: "{{ abr_uid }}"
 
 abr__restore_uploaded_type: "file" # Options: 'file', 'directory' (e.g. uncompressed upload of several files)
 abr__restore_decompressed_type: "directory" # Options: 'file', 'directory' (e.g. after decompress, what format will be)

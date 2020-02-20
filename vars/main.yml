@@ -14,8 +14,8 @@ abr__task_prefix: "Mode:{{ abr_mode | upper }} Bucket:'{{ abr_bucket | default(n
 #   type: file
 #   encrypted: false
 
-abr__restore_uploaded_type: "file" # Options: 'file', 'directory' (e.g. uncompressed upload of several files)
-abr__restore_decompressed_type: "directory" # Options: 'file', 'directory' (e.g. after decompress, what format will be)
+# abr__restore_uploaded_type: "file" # Options: 'file', 'directory' (e.g. uncompressed upload of several files)
+# abr__restore_decompressed_type: "directory" # Options: 'file', 'directory' (e.g. after decompress, what format will be)
 
 abr__path: null
 # abr__filename: "{{ abr_backup_name }}"

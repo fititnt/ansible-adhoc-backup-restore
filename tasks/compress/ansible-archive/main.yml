@@ -20,7 +20,7 @@
 
 - name: "{{ abr__task_prefix }} | compress | ansible-archive | compress {{ abr__path }} on {{ abr_compress_tempfile.path }}"
   archive:
-    path: "{{ abr__path }}"
+    path: "{{ abr__path }}/"
     #dest: "{{ abr_mydumper_outputdir }}.xz"
     dest: "{{ abr_compress_tempfile.path }}"
     format: "{{ abr_compression_format }}"

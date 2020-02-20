@@ -1,0 +1,10 @@
+---
+
+# FILE:            {{ role_path }}/vars/driver/fs-file.yml
+# LICENSE:         Public Domain
+
+abr_driver_group: "fs"
+abr_default_summary: "{{ abr_uid }}"
+
+abr__restore_uploaded_type: "file" # Options: 'file', 'directory' (e.g. uncompressed upload of several files)
+abr__restore_decompressed_type: "file" # Options: 'file', 'directory' (e.g. after decompress, what format will be)
