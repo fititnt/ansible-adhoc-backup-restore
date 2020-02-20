@@ -142,9 +142,9 @@ abr_rclone_enviroment_restore: "{{ abr_rclone_enviroment }}"
 abr_rclone_args_backup: "{{ abr_rclone_args }}"
 abr_rclone_args_restore: "{{ abr_rclone_args }}"
 
-
 # abr_rclone_valt_send_method: "move" # Move files from source to dest https://rclone.org/commands/rclone_move/
-abr_rclone_valt_send_method: "moveto" # Move files from source to dest https://rclone.org/commands/rclone_move/
+# abr_rclone_valt_send_method: "moveto" # Move files from source to dest https://rclone.org/commands/rclone_move/
+abr_rclone_valt_send_method: "copyto" # Move files from source to dest https://rclone.org/commands/rclone_copyto/
 # abr_rclone_valt_send_method: "copy" # Copy files from source to dest, skipping already copied https://rclone.org/commands/rclone_move/
 # abr_rclone_valt_send_method: "sync" # Make source and dest identical, modifying destination only https://rclone.org/commands/rclone_sync/
 

@@ -2,25 +2,72 @@
 
 # FILE:            {{ role_path }}/tasks/setup/rclone-default/main.yml
 # LICENSE:         Public Domain
+# DESCRIPTION:     This files check for rclone --version and only try install
+#                  rclone if already not installed
+#
+# USAGE:           This file will skipt installation when:
+#                      1. 'rclone --version' fails
+#                      2. 'abr_force_setup_rclone: true'
+#
+# NOTE:            While most operational systems may have packages to install
+#                  RClone, some distributions may have older rclone version
+#                  that may fail with some of ABR commands. This is why we use
+#                  the "Script download and install" from https://rclone.org/downloads/
+#                  to intall the lastest stable version
 
-- name: "{{ abr__task_prefix }} | setup | rclone-default"
-# - name: "{{ abr__task_prefix }} | setup | rclone"
-  block:
-    - name: "{{ abr__task_prefix }} | setup | rclone-default | install {{ abr_packages_rclone }}"
-      package:
-        name: "{{ abr_packages_rclone }}"
-        state: present
-  rescue:
-    - name: "{{ abr__task_prefix }} | setup | rclone | user message"
-      fail:
-        msg: >
-          Default packages for rclone not found.
+- name: "{{ abr__task_prefix }} | setup | rclone-default | rclone --version"
+  command:
+    cmd: "rclone --version"
+  register: commmand_rclone_version
+  changed_when: false
+  ignore_errors: true
 
-          For imediate suggestion, you can disable this setup step with
-          'abr_setup_rclone: no' and then install manually.
+- name: "{{ abr__task_prefix }} | setup | rclone-default | rclone --version: print result"
+  debug:
+    msg:
+      commmand_rclone_version: "{{ commmand_rclone_version }}"
 
-          Please consider open an issue / open a pull request to the maintainer
-          repository.
+# New BSD installs may need to have bash instaled before.
+- name: "{{ abr__task_prefix }} | setup | rclone-default | shell: 'curl https://rclone.org/install.sh | sudo bash'"
+  shell:
+    cmd: "curl https://rclone.org/install.sh | sudo bash"
+  become: yes
+  when:
+    - "(commmand_rclone_version.failed|bool)
+      or ((abr_force_setup_rclone is defined) and (abr_force_setup_rclone|bool))"
+
+- name: "{{ abr__task_prefix }} | setup | rclone-default | rclone --version"
+  command:
+    cmd: "rclone --version"
+  register: commmand_rclone_version
+  ignore_errors: true
+
+- name: "{{ abr__task_prefix }} | setup | rclone-default | rclone --version: print result"
+  debug:
+    msg:
+      commmand_rclone_version: "{{ commmand_rclone_version }}"
+
+  # creates:
+  #     commmand_rclone_version: "{{ commmand_rclone_version }}"
+
+# - name: "{{ abr__task_prefix }} | setup | rclone-default"
+# # - name: "{{ abr__task_prefix }} | setup | rclone"
+#   block:
+#     - name: "{{ abr__task_prefix }} | setup | rclone-default | install {{ abr_packages_rclone }}"
+#       package:
+#         name: "{{ abr_packages_rclone }}"
+#         state: present
+#   rescue:
+#     - name: "{{ abr__task_prefix }} | setup | rclone | user message"
+#       fail:
+#         msg: >
+#           Default packages for rclone not found.
+
+#           For imediate suggestion, you can disable this setup step with
+#           'abr_setup_rclone: no' and then install manually.
+
+#           Please consider open an issue / open a pull request to the maintainer
+#           repository.
 
 # SEE https://forum.rclone.org/t/rclone-as-destination-for-borgbackup/12717
 # SEE https://ruderich.org/simon/notes/append-only-backups-with-restic-and-rclone

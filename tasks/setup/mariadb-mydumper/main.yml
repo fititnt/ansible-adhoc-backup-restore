@@ -11,6 +11,7 @@
       package:
         name: "{{ abr_packages_mydumpermyloader }}"
         state: present
+      become: yes
   rescue:
     - name: "{{ abr__task_prefix }} | setup | mariadb-mydumper | user message"
       fail:
