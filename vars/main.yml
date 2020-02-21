@@ -19,7 +19,18 @@ abr__task_prefix: "Mode:{{ abr_mode | upper }} Bucket:'{{ abr_bucket | default(n
 
 abr__path: null
 # abr__filename: "{{ abr_backup_name }}"
-abr__extension: ""
+#abr__extension: ""
+abr__extensions_arr: []
+abr__extension: "{{ abr__extensions_arr | join('.') }}"
+# User can customize abr_timestamp. If he doesent, we may populate if abr_timestamped: true
+# abr__timestamp: "{{ abr_timestamp | default((abr_timestamped|bool | ternary(ansible_date_time.iso8601_basic_short, '')), true) }}"
+# abr__timestamp2: "{{ (abr_timestamp or abr_timestamped) | ternary((abr_timestamp | default(ansible_date_time.iso8601_basic_short)), '') }}"
+# abr__timestamp: "__{{ abr_timestamp | default(ansible_date_time.iso8601_basic_short, true) }}"
+# abr__filename: "{{ abr_name }}{{ ((abr__timestamp|bool) | ternary('__' + abr__timestamp, '')) }}{{ '.' + abr__extension }}"
+
+# abr__filename: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + abr_timestamp, '', '')) }}{{ (abr__extension|length > 0) | ternary('.' + abr__extension, '', '') }}"
+abr__filename_timestamped: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + abr_timestamp, '', '')) }}"
+abr__filename_timestamped_withextensions: "{{ abr__filename_timestamped }}{{ (abr__extension|length > 0) | ternary('.' + abr__extension, '', '') }}"
 abr__type: file
 abr__temporary: false
 abr__steps: []
@@ -31,7 +42,7 @@ abr_default_summary: "{{ abr_uid + '__' + (abr_database | default('all-databases
 # myhostname__all-databases__20200213T052730
 # abr_backup_name: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
 # abr_restore_name: "{{ abr_name }}{{ ((abr_restore_timestamp|bool) | ternary('__' + abr_restore_timestamp, '', '')) }}"
-abr_backup_name: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
+abr_backup_name: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + abr_timestamp, '', '')) }}"
 abr_restore_name: "{{ abr_restore_uid }}"
 
 abr_rclone_args_backup_string: "{{ abr_rclone_args_backup | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"

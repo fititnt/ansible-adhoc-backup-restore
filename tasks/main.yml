@@ -50,6 +50,25 @@
   loop_control:
     loop_var: "include_vars_driver_item"
 
+- name: |
+    {{ abr__task_prefix }} | abr_strategy_encryption:
+    {{ abr_strategy_encryption | default('none') }},
+    Skip: {{ abr_skip_encryption | default('no', true)}}"
+  include_vars: "{{ include_vars_driver_item }}"
+  with_first_found:
+    - files:
+        - "{{ abr_overrides_directory }}/vars/strategy-encryption/{{ abr_strategy_encryption }}.yml"
+        - "{{ role_path }}/vars/strategy-encryption/{{ abr_strategy_encryption }}.yml"
+      skip: true
+  when:
+    - "(abr_strategy_encryption is defined)
+      and (abr_strategy_encryption)
+      and (abr_strategy_encryption|length > 0)"
+    - "(abr_skip_encryption is undefined)
+      or (abr_skip_encryption|bool is sameas false)"
+  loop_control:
+    loop_var: "include_vars_driver_item"
+
 - name: "{{ abr_mode }}.yml"
   # include: "mode-{{ abr_mode }}.yml"
   include: "{{ include_task_mode_item }}"

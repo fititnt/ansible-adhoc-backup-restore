@@ -8,3 +8,6 @@ abr_default_summary: "{{ abr_uid }}"
 
 abr__restore_uploaded_type: "file" # Options: 'file', 'directory' (e.g. uncompressed upload of several files)
 abr__restore_decompressed_type: "file" # Options: 'file', 'directory' (e.g. after decompress, what format will be)
+
+# abr__tarlike_extension: "tar"
+abr__compression_extension: "xz"

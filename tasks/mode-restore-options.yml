@@ -3,7 +3,7 @@
 # FILE:            {{ role_path }}/tasks/mode-restore-options.yml
 # LICENSE:         Public Domain
 # USAGE:
-#                 abr_driver: restore-options
+#                 abr_driver: 'restore-options'
 
 # STEP 1: SETUP ________________________________________ (abr_skip_setup: false)
 #         Setup step will create directories used by ABR and will install

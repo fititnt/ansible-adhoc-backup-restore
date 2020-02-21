@@ -1,0 +1,6 @@
+---
+
+# FILE:            {{ role_path }}/vars/strategy/base64-default.yml
+# LICENSE:         Public Domain
+
+abr__encryption_extension: "base64"
