@@ -19,7 +19,7 @@
     #suffix: "fs-directory"
     # This line may have issues when uploaded file was not a compressed file
     # Must check later (fititnt, 2020-02020 19:15 BRT)
-    suffix: "{{ abr_backup_name + (abr_strategy_compression | ternary('.' + abr_compression_format, '')) }}"
+    suffix: "{{ abr__filename_timestamped_withextensions }}"
   register: abr_download_temp
   when:
     - true # TODO: implement, then test, some way to allow users skip tempfolder (fititnt, 2020-20-17 10:55 BRT)

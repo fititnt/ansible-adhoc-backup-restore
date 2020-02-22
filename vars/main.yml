@@ -29,6 +29,7 @@ abr__extensions_arr: |
       ]
     | select | list }}
 abr__extension: "{{ abr__extensions_arr | join('.') }}"
+abr__filename_extension: "{{ (abr__extensions_arr|length > 0) | ternary('.' + (abr__extensions_arr | join('.')), '', '') }}"
 # User can customize abr_timestamp. If he doesent, we may populate if abr_timestamped: true
 # abr__timestamp: "{{ abr_timestamp | default((abr_timestamped|bool | ternary(ansible_date_time.iso8601_basic_short, '')), true) }}"
 # abr__timestamp2: "{{ (abr_timestamp or abr_timestamped) | ternary((abr_timestamp | default(ansible_date_time.iso8601_basic_short)), '') }}"
@@ -37,7 +38,7 @@ abr__extension: "{{ abr__extensions_arr | join('.') }}"
 
 # abr__filename: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + abr_timestamp, '', '')) }}{{ (abr__extension|length > 0) | ternary('.' + abr__extension, '', '') }}"
 abr__filename_timestamped: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + abr_timestamp, '', '')) }}"
-abr__filename_timestamped_withextensions: "{{ abr__filename_timestamped }}{{ (abr__extension|length > 0) | ternary('.' + abr__extension, '', '') }}"
+abr__filename_timestamped_withextensions: "{{ abr__filename_timestamped + abr__filename_extension }}"
 abr__type: file
 abr__temporary: false
 abr__steps: []

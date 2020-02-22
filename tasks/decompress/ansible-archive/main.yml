@@ -8,41 +8,54 @@
     state: "{{ abr__restore_decompressed_type }}"
     # state: file
     suffix: "abr-decompress-{{ abr_uid }}"
-  register: abr_decompress_tempfolder
+  register: abr_decompress_temp
 
-- name: "{{ abr__task_prefix }} | decompress | ansible-archive | decompress {{ abr__path }} on {{ abr_decompress_tempfolder.path }}"
+- name: "{{ abr__task_prefix }} | decompress | ansible-archive | decompress {{ abr__path }} on {{ abr_decompress_temp.path }}"
   unarchive:
     src: "{{ abr__path }}"
     #dest: "{{ abr_mydumper_outputdir }}.xz"
-    dest: "{{ abr_decompress_tempfolder.path }}"
+    dest: "{{ abr_decompress_temp.path }}"
     # format: "{{ abr_compression_format }}"
     # force_archive: yes
     # remove: yes
     remote_src: yes
   register: archive_command_result
+  when:
+    - "(abr__restore_decompressed_type is not defined) or (abr__restore_decompressed_type != 'file')"
 
-- name: "{{ abr__task_prefix }} | decompress |  ansible-archive | ls -lha {{ abr_decompress_tempfolder.path }}"
+# On very special situation where the file was not a tar.xz, but a single .xz file, we will need use shell command
+# instead of unarchive, since unarchive does not support single files
+- name: "{{ abr__task_prefix }} | decompress |  ansible-archive | xz -c --decompress {{ abr__path }} > {{ abr_decompress_temp.path }}"
+  shell:
+    cmd: "xz -c --decompress {{ abr__path }} > {{ abr_decompress_temp.path }}"
+  register: command_xz
+  when:
+    - "(abr__restore_decompressed_type is defined) and (abr__restore_decompressed_type == 'file')"
+    - "(abr_compression_format == 'xz')"
+
+- name: "{{ abr__task_prefix }} | decompress |  ansible-archive | ls -lha {{ abr_decompress_temp.path }}"
   command:
-    cmd: "ls -lha {{ abr_decompress_tempfolder.path }}"
+    cmd: "ls -lha {{ abr_decompress_temp.path }}"
   register: command_ls
 
-- name: "{{ abr__task_prefix }} | decompress |  ansible-archive | ls -lha {{ abr_decompress_tempfolder.path }}, print"
+- name: "{{ abr__task_prefix }} | decompress |  ansible-archive | ls -lha {{ abr_decompress_temp.path }}, print"
   debug:
     msg:
+      command_xz: "{{ command_xz | default(omit) }}"
       command_ls_stdout_lines: "{{ command_ls.stdout_lines | default('undefined') }}"
     # verbosity: 1
 
 # - name: "{{ abr__task_prefix }} | decompress | ansible-archive | run mydumper"
 #   shell: >
 #     mydumper
-#     --outputdir='{{ abr_decompress_tempfolder.path }}'
+#     --outputdir='{{ abr_decompress_temp.path }}'
 #     {{ abr_mydumper_append | default('') }}
 #   register: mydumper_command_result
 
 - name: "{{ abr__task_prefix }} | decompress | ansible-archive | set_facts: prepare for next step"
   set_fact:
     abr__steps: "{{ abr__steps | default([] + ['decompress/ansible-archive']) }}"
-    abr__path: "{{ abr_decompress_tempfolder.path }}"
+    abr__path: "{{ abr_decompress_temp.path }}"
     # abr__filename: "{{ abr__filename + '.xz' }}"
     abr__extension: "{{ (abr__extension | default('') ) + '.' + abr_compression_format }}"
     # abr__type: "file"

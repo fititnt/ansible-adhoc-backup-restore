@@ -11,6 +11,13 @@
     msg:
       abr_backup_rclone_command: "{{ abr_backup_rclone_command | default('undefined') }}"
       abr_rclone_enviroment: "{{ abr_rclone_enviroment | default('undefined') }}"
+      abr__extensions_arr: "{{ abr__extensions_arr | default('undefined') }}"
+      abr__extension: "{{ abr__extension | default('undefined') }}"
+      abr__extension2: "{{ abr__extension2 | default('undefined') }}"
+      abr__extension_aaa: "{{ abr__extensions_arr | join('.') }}"
+      abr__filename_extension: "{{ abr__filename_extension }}"
+      abr__filename_timestamped: "{{ abr__filename_timestamped | default('undefined') }}"
+      abr__filename_timestamped_withextensions: "{{ abr__filename_timestamped_withextensions | default('undefined') }}"
     verbosity: 1
 
 - name: "{{ abr__task_prefix }} | upload | rclone-default | rclone command"
