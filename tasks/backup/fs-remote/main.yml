@@ -1,0 +1,27 @@
+---
+
+# FILE:            {{ role_path }}/tasks/backup/fs-remote/main.yml
+# LICENSE:         Public Domain
+
+# TODO:            This file is a draft. Not implemented yet
+
+- name: "{{ abr__task_prefix }} | backup | fs-remote | prepare temp"
+  tempfile:
+    state: directory
+    #suffix: "fs-remote"
+    suffix: "_backup_{{ abr__filename_full_now }}"
+  register: abr_backup_temp
+
+- name: "{{ abr__task_prefix }} | backup | fs-remote | copy source to tempfolder"
+  copy:
+    src: "{{ abr_fs_path_backup }}"
+    dest: "{{ abr_backup_temp.path }}"
+    remote_src: yes
+
+- name: "{{ abr__task_prefix }} | backup | fs-remote | set_facts: prepare for next step"
+  set_fact:
+    # abr__path: "{{ abr__path | default('/error/source/not-exist', true) }}"
+    abr__steps: "{{ abr__steps | default([] + ['backup/fs-remote']) }}"
+    abr__path: "{{ abr_backup_temp.path }}/" # THIS / IS VERY IMPORTANT!
+    abr__type: "directory"
+    abr__temporary: true

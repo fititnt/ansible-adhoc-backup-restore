@@ -40,7 +40,6 @@
     - always
 
 - name: "{{ abr_driver }}.yml"
-  # include: "mode-{{ abr_mode }}.yml"
   include_vars: "{{ include_vars_driver_item }}"
   with_first_found:
     - files:
@@ -54,7 +53,7 @@
     {{ abr__task_prefix }} | abr_strategy_encryption:
     {{ abr_strategy_encryption | default('none') }},
     Skip: {{ abr_skip_encryption | default('no', true)}}"
-  include_vars: "{{ include_vars_driver_item }}"
+  include_vars: "{{ include_vars_encryption_item }}"
   with_first_found:
     - files:
         - "{{ abr_overrides_directory }}/vars/strategy-encryption/{{ abr_strategy_encryption }}.yml"
@@ -67,7 +66,26 @@
     - "(abr_skip_encryption is undefined)
       or (abr_skip_encryption|bool is sameas false)"
   loop_control:
-    loop_var: "include_vars_driver_item"
+    loop_var: "include_vars_encryption_item"
+
+- name: |
+    {{ abr__task_prefix }} | abr_strategy_compression:
+    {{ abr_strategy_compression | default('none') }},
+    Skip: {{ abr_skip_compression | default('no', true)}}"
+  include_vars: "{{ include_vars_compression_item }}"
+  with_first_found:
+    - files:
+        - "{{ abr_overrides_directory }}/vars/strategy-compression{{ abr_strategy_compression }}.yml"
+        - "{{ role_path }}/vars/strategy-compression/{{ abr_strategy_compression }}.yml"
+      skip: true
+  when:
+    - "(abr_strategy_compression is defined)
+      and (abr_strategy_compression)
+      and (abr_strategy_compression|length > 0)"
+    - "(abr_skip_compression is undefined)
+      or (abr_skip_compression|bool is sameas false)"
+  loop_control:
+    loop_var: "include_vars_compression_item"
 
 - name: "{{ abr_mode }}.yml"
   # include: "mode-{{ abr_mode }}.yml"

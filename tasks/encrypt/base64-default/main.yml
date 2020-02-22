@@ -3,7 +3,7 @@
 # FILE:            {{ role_path }}/tasks/encrypt/base64-default/main.yml
 # LICENSE:         Public Domain
 
-- name: "{{ abr__task_prefix }} | encrypt | base64-default | prepare tempfolder"
+- name: "{{ abr__task_prefix }} | encrypt | base64-default | prepare temp"
   tempfile:
     state: file
     suffix: "abr-encrypt-{{ abr_uid }}"
@@ -19,5 +19,5 @@
     abr__steps: "{{ abr__steps | default([] + ['encrypt/base64-default']) }}"
     abr__path: "{{ abr_encrypt_temp.path }}"
     # abr__filename: "{{ abr__filename + '.xz' }}"
-    abr__extension: "{{ (abr__extension | default('') ) + '.' + abr__encryption_extension }}"
+    # abr__extension: "{{ (abr__extension | default('') ) + '.' + abr__encryption_extension }}"
     abr__type: "file"

@@ -1,0 +1,77 @@
+---
+
+# FILE:            {{ role_path }}/tasks/backup/targz-default/main.yml
+# LICENSE:         Public Domain
+
+- name: "{{ abr__task_prefix }} | decompress | targz-default | prepare temp"
+  tempfile:
+    # state: "{{ abr__restore_decompressed_type }}"
+    state: directory
+    # state: file
+    # suffix: "abr-decompress-{{ abr_uid }}"
+    suffix: "_decompress_{{ abr__filename_full_now }}"
+  register: abr_decompress_temp
+
+- name: "{{ abr__task_prefix }} | decompress | targz-default | decompress {{ abr__path }} on {{ abr_decompress_temp.path }}"
+  unarchive:
+    src: "{{ abr__path }}"
+    #dest: "{{ abr_mydumper_outputdir }}.xz"
+    dest: "{{ abr_decompress_temp.path }}"
+    # format: "{{ abr_compression_format }}"
+    # force_archive: yes
+    # remove: yes
+    remote_src: yes
+    # list_files: "{{ (abr__restore_decompressed_type is defined) and (abr__restore_decompressed_type == 'file') }}"
+    list_files: yes # TODO: consider only list_files when abr__restore_decompressed_type == 'file'
+  register: archive_command_result
+  # when:
+  #   - "(abr__restore_decompressed_type is not defined) or (abr__restore_decompressed_type != 'file')"
+
+# On very special situation where the file was not a tar.xz, but a single .xz file, we will need use shell command
+# instead of unarchive, since unarchive does not support single files
+# - name: "{{ abr__task_prefix }} | decompress |  targz-default | xz -c --decompress {{ abr__path }} > {{ abr_decompress_temp.path }}"
+#   shell:
+#     cmd: "xz -c --decompress {{ abr__path }} > {{ abr_decompress_temp.path }}"
+#   register: command_xz
+#   when:
+#     - "(abr__restore_decompressed_type is defined) and (abr__restore_decompressed_type == 'file')"
+#     - "(abr_compression_format == 'xz')"
+
+- name: "{{ abr__task_prefix }} | decompress |  targz-default | ls -lha {{ abr_decompress_temp.path }}"
+  command:
+    cmd: "ls -lha {{ abr_decompress_temp.path }}"
+  register: command_ls
+
+- name: "{{ abr__task_prefix }} | decompress |  targz-default | ls -lha {{ abr_decompress_temp.path }}, print"
+  debug:
+    msg:
+      archive_command_result: "{{ archive_command_result | default(omit) }}"
+      command_ls_stdout_lines: "{{ command_ls.stdout_lines | default('undefined') }}"
+    # verbosity: 1
+
+# - name: "{{ abr__task_prefix }} | decompress | targz-default | run mydumper"
+#   shell: >
+#     mydumper
+#     --outputdir='{{ abr_decompress_temp.path }}'
+#     {{ abr_mydumper_append | default('') }}
+#   register: mydumper_command_result
+
+- name: "{{ abr__task_prefix }} | decompress | targz-default | set_facts: prepare for next step"
+  set_fact:
+    abr__steps: "{{ abr__steps | default([] + ['decompress/targz-default']) }}"
+    # abr__path: "{{ abr_decompress_temp.path }}"
+
+    # HERE THE MAGIC!
+    # If abr__restore_decompressed_type == 'file', even if user created using a tar.gz
+    # we will force the path here be exact the firt file found inside the directory
+    # and not the directory itself.
+    abr__path: "{{ ((abr__restore_decompressed_type == 'file') and (archive_command_result.files is defined)) |
+          ternary(
+            abr_decompress_temp.path + '/' + archive_command_result.files[0],
+            abr_decompress_temp.path
+          ) }}"
+
+    # abr__filename: "{{ abr__filename + '.xz' }}"
+    abr__extension: "{{ (abr__extension | default('') ) + '.' + abr_compression_format }}"
+    # abr__type: "file"
+    abr__type: "{{ abr__restore_decompressed_type }}" # Actually this may not be always a folder, but for now we will assume it is

@@ -7,7 +7,7 @@
   vars:
     abr_mode: backup
     abr_driver: "fs-directory"
-    abr_strategy_compression: "xz-default"
+    abr_strategy_compression: "targz-default"
     abr_strategy_encryption: "base64-default"
     abr_fs_path: "/var/www/site-1/"
     abr_prefix: "www-site-1/"
@@ -17,19 +17,24 @@
   roles:
     - role: ansible-adhoc-backup-restore
 
-# - name: "Converge: backup fs-file"
-#   hosts: all
-#   remote_user: root
-#   vars:
-#     abr_mode: backup
-#     abr_driver: "fs-file"
-#     abr_fs_path: "/var/www/single-file.csv"
-#     abr_prefix: "csv-backups/"
-#     abr_timestamped: false
+- name: "Converge: backup fs-file"
+  hosts: all
+  remote_user: root
+  vars:
 
-#     ansible_python_interpreter: /usr/bin/python3
-#   roles:
-#     - role: ansible-adhoc-backup-restore
+    abr_mode: backup
+
+    abr_uid: "single-file.csv"
+    abr_driver: "fs-file"
+    abr_strategy_compression: "targz-default"
+    abr_strategy_encryption: "base64-default"
+    abr_fs_path: "/var/www/single-file.csv"
+    abr_prefix: "csv-backups/"
+    abr_timestamped: false
+
+    ansible_python_interpreter: /usr/bin/python3
+  roles:
+    - role: ansible-adhoc-backup-restore
 
 # Force need of restore playbooks ______________________________________________
 - name: "Converge: simulate data corruption"
@@ -67,7 +72,7 @@
   vars:
     abr_mode: restore
     abr_driver: "fs-directory"
-    abr_strategy_compression: "xz-default"
+    abr_strategy_compression: "targz-default"
     abr_strategy_encryption: "base64-default"
     abr_fs_path: "/var/www/site-1/"
     abr_prefix: "www-site-1/"
@@ -77,19 +82,24 @@
   roles:
     - role: ansible-adhoc-backup-restore
 
-# - name: "Converge: restore fs-file"
-#   hosts: all
-#   remote_user: root
-#   vars:
-#     abr_mode: restore
-#     abr_driver: "fs-file"
-#     abr_fs_path: "/var/www/single-file.csv"
-#     abr_prefix: "csv-backups/"
-#     abr_timestamped: false
+- name: "Converge: restore fs-file"
+  hosts: all
+  remote_user: root
+  vars:
 
-#     ansible_python_interpreter: /usr/bin/python3
-#   roles:
-#     - role: ansible-adhoc-backup-restore
+    abr_mode: restore
+
+    abr_uid: "single-file.csv"
+    abr_driver: "fs-file"
+    abr_strategy_compression: "targz-default"
+    abr_strategy_encryption: "base64-default"
+    abr_fs_path: "/var/www/single-file.csv"
+    abr_prefix: "csv-backups/"
+    abr_timestamped: false
+
+    ansible_python_interpreter: /usr/bin/python3
+  roles:
+    - role: ansible-adhoc-backup-restore
 
   # pre_tasks:
   #   - name: "Set ISCONTEINER=1"

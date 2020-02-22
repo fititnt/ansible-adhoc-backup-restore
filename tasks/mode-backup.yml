@@ -78,18 +78,7 @@
   loop_control:
     loop_var: "include_task_mode_backup_upload_item"
 
-# STEP 8: RESTORE OPTIONS ________________________ (abr_mode: "restore-options")
-#         By default, we will finish the backup mode with message that would
-#         show with restore-options mode
-- name: "{{ abr__task_prefix }} | mode-backup | restore-options/main.yml"
-  include: "{{ include_task_mode_backup }}"
-  with_first_found:
-    - "{{ abr_overrides_directory }}/tasks/restore-options/main.yml"
-    - "{{ role_path }}/tasks/restore-options/main.yml"
-  loop_control:
-    loop_var: "include_task_mode_backup"
-
-# STEP 9: CLEANUP ____________________________________ (abr_skip_cleanup: false)
+# STEP 8: CLEANUP ____________________________________ (abr_skip_cleanup: false)
 - name: "{{ abr__task_prefix }} | mode-backup | restore-options/main.yml"
   include: "{{ include_task_mode_backup }}"
   with_first_found:
@@ -97,5 +86,16 @@
     - "{{ role_path }}/tasks/cleanup/main.yml"
   when:
     - "(abr_skip_cleanup is not defined) or  (abr_skip_cleanup|bool is sameas false)"
+  loop_control:
+    loop_var: "include_task_mode_backup"
+
+# STEP 9: RESTORE OPTIONS ________________________ (abr_mode: "restore-options")
+#         By default, we will finish the backup mode with message that would
+#         show with restore-options mode
+- name: "{{ abr__task_prefix }} | mode-backup | restore-options/main.yml"
+  include: "{{ include_task_mode_backup }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/restore-options/main.yml"
+    - "{{ role_path }}/tasks/restore-options/main.yml"
   loop_control:
     loop_var: "include_task_mode_backup"
