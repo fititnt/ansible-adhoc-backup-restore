@@ -7,6 +7,8 @@
   vars:
     abr_mode: backup
     abr_driver: "fs-directory"
+    abr_strategy_compression: "ansible-archive"
+    abr_strategy_encryption: "base64-default"
     abr_fs_path: "/var/www/site-1/"
     abr_prefix: "www-site-1/"
     abr_timestamped: false
@@ -65,6 +67,8 @@
   vars:
     abr_mode: restore
     abr_driver: "fs-directory"
+    abr_strategy_compression: "ansible-archive"
+    abr_strategy_encryption: "base64-default"
     abr_fs_path: "/var/www/site-1/"
     abr_prefix: "www-site-1/"
     abr_timestamped: false

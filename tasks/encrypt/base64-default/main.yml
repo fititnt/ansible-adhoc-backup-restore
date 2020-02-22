@@ -36,5 +36,5 @@
     abr__steps: "{{ abr__steps | default([] + ['encrypt/base64-default']) }}"
     abr__path: "{{ abr_encrypt_tempfile.path }}"
     # abr__filename: "{{ abr__filename + '.xz' }}"
-    abr__extension: "{{ (abr__extension | default('') ) + '.' + abr_encryption_format }}"
+    abr__extension: "{{ (abr__extension | default('') ) + '.' + abr__encryption_extension }}"
     abr__type: "file"

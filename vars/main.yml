@@ -20,7 +20,14 @@ abr__task_prefix: "Mode:{{ abr_mode | upper }} Bucket:'{{ abr_bucket | default(n
 abr__path: null
 # abr__filename: "{{ abr_backup_name }}"
 #abr__extension: ""
-abr__extensions_arr: []
+# abr__extensions_arr: []
+abr__extensions_arr: |
+  {{ [
+        (abr__tarlike_extension|default(false, true)),
+        (abr__compression_extension|default(false, true)),
+        (abr__encryption_extension|default(false, true)),
+      ]
+    | select | list }}
 abr__extension: "{{ abr__extensions_arr | join('.') }}"
 # User can customize abr_timestamp. If he doesent, we may populate if abr_timestamped: true
 # abr__timestamp: "{{ abr_timestamp | default((abr_timestamped|bool | ternary(ansible_date_time.iso8601_basic_short, '')), true) }}"
@@ -54,7 +61,8 @@ abr_rclone_args_restore_string: "{{ abr_rclone_args_restore | to_json | regex_re
 # abr_backup_rclone_source: "{{ abr_now.path }}"
 abr_backup_rclone_source: "{{ abr__path }}"
 # abr_backup_rclone_destiny: "{{ (abr_internal_islocalbucket!bool) | ternary(abr_dir_abrlocalbucket.path + abr_pathprefix_remote + abr_backup_name, '' }}"
-abr_backup_rclone_destiny: "{{ abr_rclone_bucket_backup + abr_prefix + abr_backup_name + abr__extension }}"
+# abr_backup_rclone_destiny: "{{ abr_rclone_bucket_backup + abr_prefix + abr_backup_name + abr__extension }}"
+abr_backup_rclone_destiny: "{{ abr_rclone_bucket_backup + abr_prefix + abr__filename_timestamped_withextensions }}"
 abr_backup_rclone_command: "rclone {{ abr_rclone_valt_send_method }} {{ abr_rclone_args_backup_string }} {{ abr_backup_rclone_source }} {{ abr_backup_rclone_destiny }}"
 
 # abr_restore_rclone_source: "{{ abr_dir_abrlocalbucket.path }}{{ abr_pathprefix_remote }}{{ abr_backup_name }}"
@@ -64,7 +72,9 @@ abr_restore_rclone_command: "rclone {{ abr_rclone_valt_receive_method }} {{ abr_
 
 abr_restore_options_rclone_command: "rclone lsd {{ abr_rclone_args_restore_string }} {{ abr_bucket + abr_prefix }}"
 
-abr__download_rclone_default_source: "{{ abr_rclone_bucket_restore + abr_prefix + abr_backup_name + (abr_strategy_compression | ternary('.' + abr_compression_format, '')) }}"
+# abr__download_rclone_default_source: "{{ abr_rclone_bucket_restore + abr_prefix + abr_backup_name + (abr_strategy_compression | ternary('.' + abr_compression_format, '')) }}"
+# abr__download_rclone_default_source: "{{ abr_rclone_bucket_restore + abr_prefix + abr_backup_name + abr__extension }}"
+abr__download_rclone_default_source: "{{ abr_rclone_bucket_restore + abr_prefix + abr__filename_timestamped_withextensions }}"
 abr__download_rclone_default_command: "rclone {{ abr_download_rclone_method }} {{ abr_rclone_args_restore_string }} {{ abr__download_rclone_default_source }} {{ abr__path }}"
 
 abr_mydumper_outputdir: "{{ abr_dir_mydumpermyloader.path }}"
