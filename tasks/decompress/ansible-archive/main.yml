@@ -7,7 +7,8 @@
   tempfile:
     state: "{{ abr__restore_decompressed_type }}"
     # state: file
-    suffix: "abr-decompress-{{ abr_uid }}"
+    # suffix: "abr-decompress-{{ abr_uid }}"
+    suffix: "_decompress_{{ abr__filename_full_now }}"
   register: abr_decompress_temp
 
 - name: "{{ abr__task_prefix }} | decompress | ansible-archive | decompress {{ abr__path }} on {{ abr_decompress_temp.path }}"

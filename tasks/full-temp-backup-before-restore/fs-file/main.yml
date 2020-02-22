@@ -15,11 +15,21 @@
     mode: "{{ abr_fs_mode }}"
     state: directory
 
-- name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | fs-file | copy {{ abr_fs_path_restore }} to {{ abr_backup_tempfolder.path }}"
-  copy:
-    src: "{{ abr_fs_path_restore }}" # We backup the RESTORE path (the one would be overriden)
-    dest: "{{ abr__ftbbr }}"
-    remote_src: yes
+- name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | fs-file | block"
+  block:
+    - name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | fs-file | copy {{ abr_fs_path_restore }} to {{ abr_backup_tempfolder.path }}"
+      copy:
+        src: "{{ abr_fs_path_restore }}" # We backup the RESTORE path (the one would be overriden)
+        dest: "{{ abr__ftbbr }}"
+        remote_src: yes
+  rescue:
+    - name: "Warn user that full-temp-backup-before-restore failed, but if is expected this step can be disabled"
+      fail:
+        msg: |
+          full-temp-backup-before-restore failed for {{ abr_fs_path_restore }}.
+          If you are doing a restore on a place that is suposed to not already
+          exist, please disable full-temp-backup-before-restore with:
+          'abr_paranoid: false'
 
 - name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | fs-file | ls {{ abr__ftbbr }}"
   command:

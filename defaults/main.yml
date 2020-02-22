@@ -7,13 +7,13 @@
 # Affect name of the backups
 abr_uid: "{{ inventory_hostname_short + '-' + abr_driver_group }}"
 abr_bucket: ":local:/var/local/abr/bucket/" # See also abr_rclone_bucket_backup/abr_rclone_bucket_restore
-abr_prefix: "" # See also abr_pathprefix_local/abr_pathprefix_remote
+abr_prefix: ""
 abr_timestamped: false # Append TS like "__20200217T120618" to abr_uid
 
 ## Restore mode, start .........................................................
 # Define the exact UID to restore (including timestamp).
 abr_restore_uid: "{{ abr_uid }}" # Change this if 'abr_timestamped: true'
-abr_restore_filename: "{{ abr_uid }}"
+abr_restore_filename: "{{ abr_uid }}" # Force filename on restore; ideal for "abr_driver: 'fs-file'"
 # abr_timestamp: null
 # abr_mode: "restore"
 # abr_bucket: ...
@@ -42,7 +42,6 @@ abr_rclone_args: {}
 #   '--b2-key': "K000pyk..."
 # }
 
-abr_name_separator: "__"
 abr_timestamp: "{{ ansible_date_time.iso8601_basic_short }}"
 
 ### Drivers: FS ________________________________________________________________
@@ -66,24 +65,14 @@ abr_compression_format: "xz"
 # tasks files under overrides/roles/adhoc_backup_restore/, it will use yours
 abr_overrides_directory: "{{ playbook_dir }}/overrides/roles/adhoc_backup_restore/"
 
-abr_task_main_backup: "{{ role_path }}/tasks/backup/{{ abr_driver }}.yml"
-abr_task_main_restore: "{{ role_path }}/tasks/restore/{{ abr_driver }}.yml"
-abr_task_main_restore_options: "{{ role_path }}/tasks/restore-options/main.yml"
-abr_task_compression_backup: "{{ role_path }}/tasks/compress/{{ abr_strategy_compression | default('none', true) }}.yml"
-abr_task_compression_restore: "{{ role_path }}/tasks/decompress/{{ abr_strategy_compression | default('none', true) }}.yml"
-abr_task_encryption_backup: "{{ role_path }}/tasks/compress/{{ abr_strategy_encryption | default('none', true) }}.yml"
-abr_task_encryption_restore: "{{ role_path }}/tasks/decompress/{{ abr_strategy_encryption | default('none', true) }}.yml"
-abr_task_rclone_backup: "{{ role_path }}/tasks/compress/{{ abr_strategy_synchronization }}.yml"
-abr_task_rclone_restore: "{{ role_path }}/tasks/decompress/{{ abr_strategy_synchronization }}.yml"
-
 ### DRAFT of v0.5.0 new standard, END __________________________________________
 
 ### Most common variables to change, start _____________________________________
 # Check abr_database var if you dont want FULL backup or FULL server restore
 # abr_mode: "undefined-mode-select-backup-or-restore" # Options: backup or restore
-abr_name: "{{ abr_default_summary }}" # Example: myhostname__all-databases__20200213T052730
+# abr_name: "{{ abr_default_summary }}" # Example: myhostname__all-databases__20200213T052730
 # abr_rclone_bucket: ":local:/var/local/abr/abr-local-bucket/" # See also abr_rclone_bucket_backup/abr_rclone_bucket_restore
-abr_pathprefix: "" # See also abr_pathprefix_local/abr_pathprefix_remote
+# abr_pathprefix: "" # See also abr_pathprefix_local/abr_pathprefix_remote
 # abr_paranoid: yes # if you are running in production and is ok to do full-temp-backup-before-restore
 
 ## Exclusive to: abr_mode: backup ..............................................

@@ -1,0 +1,19 @@
+---
+
+# FILE:            {{ role_path }}/tasks/backup/ansible-archive/main.yml
+# LICENSE:         Public Domain
+#
+# NOTE:           Somewhat equivalent to
+#                     rm -rf /tmp/ansible.*
+
+- name: "{{ abr__task_prefix }} | cleanup | abr_backup_temp"
+  file:
+    path: "{{ abr_backup_temp.path }}"
+    state: absent
+  when: "(abr_backup_temp is defined) and (abr_backup_temp.path is defined)"
+
+- name: "{{ abr__task_prefix }} | cleanup | abr_restore_temp"
+  file:
+    path: "{{ abr_restore_temp.path }}"
+    state: absent
+  when: "(abr_restore_temp is defined) and (abr_restore_temp.path is defined)"

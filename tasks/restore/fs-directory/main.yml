@@ -11,13 +11,14 @@
   tempfile:
     state: directory
     #suffix: "directory"
-  register: abr_restore_tempfolder
+    suffix: "_restore_{{ abr__filename_full_now }}"
+  register: abr_restore_temp
 
 - name: "{{ abr__task_prefix }} | restore | directory | copy '{{ abr__path }}/' to {{ abr_fs_path_restore }}"
   copy:
     # src: "{{ abr_fs_path_restore }}"
-    # dest: "{{ abr_restore_tempfolder.path }}"
-    # src: "{{ abr_restore_tempfolder.path }}"
+    # dest: "{{ abr_restore_temp.path }}"
+    # src: "{{ abr_restore_temp.path }}"
     # src: "{{ abr__path }}"
     src: "{{ abr__path }}/" # Note the /. This is important with temp folders
     dest: "{{ abr_fs_path_restore }}"

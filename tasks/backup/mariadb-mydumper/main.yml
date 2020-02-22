@@ -3,15 +3,6 @@
 # FILE:            {{ role_path }}/tasks/backup/mariadb-mydumper/main.yml
 # LICENSE:         Public Domain
 
-# - name: "abr | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
-#   debug:
-#     msg:
-#       abr_mydumper_outputdir: "{{ abr_mydumper_outputdir | default('undefined') }}"
-#       # result: "{{ (abr_database is defined and abr_database and abr_database|length > 0) }}"
-#       # result2: "{{ (abr_database is defined and abr_database and abr_database|length > 0) | ternary('_aaaaa_', '_bbbb_', '_isnull_')}}"
-#       # result: "{{ ((abr_database is defined and abr_database and abr_database|length > 0) | ternary('_' + abr_database + '_', '_all-databases_')) }}"
-#     verbosity: 1
-
 ## Sanity Check: mydumper/myloader must have way to contact the DB server ______
 
 - name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | ~/.my.cnf stat"
@@ -38,13 +29,14 @@
 - name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | prepare tempfolder"
   tempfile:
     state: directory
+    suffix: "_backup_{{ abr__filename_full_now }}"
     #suffix: "fs-directory"
-  register: abr_backup_tempfolder
+  register: abr_backup_temp
 
 # - name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | run mydumper"
 #   shell: >
 #     mydumper
-#     --outputdir='{{ abr_backup_tempfolder.path }}'
+#     --outputdir='{{ abr_backup_temp.path }}'
 #     {{ abr_mydumper_append | default('') }}
 #   register: mydumper_command_result
 
@@ -52,7 +44,7 @@
   command:
     cmd: >
       mydumper
-      --outputdir='{{ abr_backup_tempfolder.path }}'
+      --outputdir='{{ abr_backup_temp.path }}'
       {{ abr_mydumper_append | default('') }}
     # warn: False
   register: mydumper_command_result
@@ -60,7 +52,7 @@
 - name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | set_facts: prepare for next step"
   set_fact:
     abr__steps: "{{ abr__steps | default([] + ['backup/mariadb-mydumper']) }}"
-    abr__path: "{{ abr_backup_tempfolder.path }}"
+    abr__path: "{{ abr_backup_temp.path }}"
     abr__type: "directory"
     abr__temporary: true
 

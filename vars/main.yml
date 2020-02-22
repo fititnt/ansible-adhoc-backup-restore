@@ -3,24 +3,19 @@
 # FILE:            {{ role_path }}/vars/main.yml
 # LICENSE:         Public Domain
 
-abr_version: "v0.7.0"
+abr_version: "v0.8.0"
 
-abr__task_prefix: "Mode:{{ abr_mode | upper }} Bucket:'{{ abr_bucket | default(none) }}'"
-# abr__task_suffix: ""
+# abr__task_prefix: "Mode:{{ abr_mode | upper }} Bucket:'{{ abr_bucket | default(none) }}'"
+abr__task_prefix: "[{{ abr__filename_full_now }}] Mode:{{ abr_mode | upper }} Bucket:'{{ abr_bucket | default(none) }}'"
 
-# abr_now DEPRECATED
-# abr_now:
-#   path: null
-#   type: file
-#   encrypted: false
-
-# abr__restore_uploaded_type: "file" # Options: 'file', 'directory' (e.g. uncompressed upload of several files)
-# abr__restore_decompressed_type: "directory" # Options: 'file', 'directory' (e.g. after decompress, what format will be)
-
+abr__filename_timestamped: "{{ abr_uid }}{{ ((abr_timestamped|bool) | ternary('__' + abr_timestamp, '', '')) }}"
 abr__path: null
-# abr__filename: "{{ abr_backup_name }}"
-#abr__extension: ""
-# abr__extensions_arr: []
+abr__type: file
+abr__temporary: false
+abr__steps: []
+abr__debug_messages: []
+
+# abr__extensions_arr: Final extension based on all options
 abr__extensions_arr: |
   {{ [
         (abr__tarlike_extension|default(false, true)),
@@ -28,29 +23,30 @@ abr__extensions_arr: |
         (abr__encryption_extension|default(false, true)),
       ]
     | select | list }}
-abr__extension: "{{ abr__extensions_arr | join('.') }}"
-abr__filename_extension: "{{ (abr__extensions_arr|length > 0) | ternary('.' + (abr__extensions_arr | join('.')), '', '') }}"
-# User can customize abr_timestamp. If he doesent, we may populate if abr_timestamped: true
-# abr__timestamp: "{{ abr_timestamp | default((abr_timestamped|bool | ternary(ansible_date_time.iso8601_basic_short, '')), true) }}"
-# abr__timestamp2: "{{ (abr_timestamp or abr_timestamped) | ternary((abr_timestamp | default(ansible_date_time.iso8601_basic_short)), '') }}"
-# abr__timestamp: "__{{ abr_timestamp | default(ansible_date_time.iso8601_basic_short, true) }}"
-# abr__filename: "{{ abr_name }}{{ ((abr__timestamp|bool) | ternary('__' + abr__timestamp, '')) }}{{ '.' + abr__extension }}"
 
-# abr__filename: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + abr_timestamp, '', '')) }}{{ (abr__extension|length > 0) | ternary('.' + abr__extension, '', '') }}"
-abr__filename_timestamped: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + abr_timestamp, '', '')) }}"
+abr__extensions_arr_diff: [] # extensions to add/remove to discover extension now
+
+# abr__extension: "{{ abr__extensions_arr | join('.') }}"
+abr__filename_extension: "{{ (abr__extensions_arr|length > 0) | ternary('.' + (abr__extensions_arr | join('.')), '', '') }}"
 abr__filename_timestamped_withextensions: "{{ abr__filename_timestamped + abr__filename_extension }}"
-abr__type: file
-abr__temporary: false
-abr__steps: []
-abr__debug_messages: []
+
+# when_backuping: abr__extensions_arr_diff
+abr__filename_extension_when_backuping: "{{ (abr__extensions_arr_diff|length > 0) | ternary('.' + (abr__extensions_arr_diff | join('.')), '', '') }}"
+abr__filename_timestamped_withextensions_when_backuping: "{{ abr__filename_timestamped + abr__filename_extension_when_restoring }}"
+
+# when_restoring: abr__extensions_arr not in abr__extensions_arr_diff
+abr__filename_extension_when_restoring: "{{ (abr__extensions_arr|length > 0) | ternary('.' + ((abr__extensions_arr | difference(abr__extensions_arr_diff)) | join('.')), '', '') }}"
+abr__filename_timestamped_withextensions_when_restoring: "{{ abr__filename_timestamped + abr__filename_extension_when_restoring }}"
+
+abr__filename_full_now: "{{ (abr_mode == 'restore') | ternary(abr__filename_timestamped_withextensions_when_restoring, abr__filename_timestamped_withextensions_when_backuping) }}"
 
 # my_host_all-databases_datetime
 abr_default_summary: "{{ abr_uid + '__' + (abr_database | default('all-databases', true)) }}"
 
 # myhostname__all-databases__20200213T052730
-# abr_backup_name: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
-# abr_restore_name: "{{ abr_name }}{{ ((abr_restore_timestamp|bool) | ternary('__' + abr_restore_timestamp, '', '')) }}"
-abr_backup_name: "{{ abr_name }}{{ ((abr_timestamped|bool) | ternary('__' + abr_timestamp, '', '')) }}"
+# abr_backup_name: "{{ abr_uid }}{{ ((abr_timestamped|bool) | ternary('__' + ansible_date_time.iso8601_basic_short, '', '')) }}"
+# abr_restore_name: "{{ abr_uid }}{{ ((abr_restore_timestamp|bool) | ternary('__' + abr_restore_timestamp, '', '')) }}"
+abr_backup_name: "{{ abr_uid }}{{ ((abr_timestamped|bool) | ternary('__' + abr_timestamp, '', '')) }}"
 abr_restore_name: "{{ abr_restore_uid }}"
 
 abr_rclone_args_backup_string: "{{ abr_rclone_args_backup | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
@@ -78,16 +74,11 @@ abr_restore_options_rclone_command: "rclone lsd {{ abr_rclone_args_restore_strin
 abr__download_rclone_default_source: "{{ abr_rclone_bucket_restore + abr_prefix + abr__filename_timestamped_withextensions }}"
 abr__download_rclone_default_command: "rclone {{ abr_download_rclone_method }} {{ abr_rclone_args_restore_string }} {{ abr__download_rclone_default_source }} {{ abr__path }}"
 
-abr_mydumper_outputdir: "{{ abr_dir_mydumpermyloader.path }}"
-abr_myloader_diretory: "{{ abr_dir_mydumpermyloader.path }}"
-# abr_mydumper_outputdir: "{{ abr_now.path }}"
-# abr_myloader_diretory: "{{ abr_now.path }}"
-
 # To allow be reused by other tools, we will use standard names
 # @see https://www.tecmint.com/linux-password-protect-files-with-encryption/
-abr_active_directory: ""
-abr_active_file: ""
-abr_active_isencrypted: false
+# abr_active_directory: ""
+# abr_active_file: ""
+# abr_active_isencrypted: false
 
 abr_internal_root_user: 'root'
 abr_internal_root_group: 'root'

@@ -19,7 +19,7 @@
     #suffix: "fs-directory"
     # This line may have issues when uploaded file was not a compressed file
     # Must check later (fititnt, 2020-02020 19:15 BRT)
-    suffix: "{{ abr__filename_timestamped_withextensions }}"
+    suffix: "_download_{{ abr__filename_full_now }}"
   register: abr_download_temp
   when:
     - true # TODO: implement, then test, some way to allow users skip tempfolder (fititnt, 2020-20-17 10:55 BRT)

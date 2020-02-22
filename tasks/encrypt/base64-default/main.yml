@@ -14,23 +14,6 @@
     cmd: "base64 {{ abr__path | quote }} > {{ abr_encrypt_tempfile.path | quote }}"
   register: command_result
 
-# - name: "{{ abr__task_prefix }} | encrypt | base64-default | encrypt {{ abr__path }} on {{ abr_encrypt_tempfile.path }}"
-#   archive:
-#     path: "{{ abr__path }}/"
-#     #dest: "{{ abr_mydumper_outputdir }}.xz"
-#     dest: "{{ abr_encrypt_tempfile.path }}"
-#     format: "{{ abr_encryption_format }}"
-#     # force_archive: yes
-#     # remove: yes
-#   register: archive_command_result
-
-# - name: "{{ abr__task_prefix }} | encrypt | base64-default | run mydumper"
-#   shell: >
-#     mydumper
-#     --outputdir='{{ abr_encrypt_tempfolder.path }}'
-#     {{ abr_mydumper_append | default('') }}
-#   register: mydumper_command_result
-
 - name: "{{ abr__task_prefix }} | encrypt | base64-default | set_facts: prepare for next step"
   set_fact:
     abr__steps: "{{ abr__steps | default([] + ['encrypt/base64-default']) }}"

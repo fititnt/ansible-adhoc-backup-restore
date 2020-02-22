@@ -3,19 +3,11 @@
 # FILE:            {{ role_path }}/tasks/backup/ansible-archive/main.yml
 # LICENSE:         Public Domain
 
-# - name: "abr | backup | debug (requires -v, -vv, -vvv, or -vvvv)"
-#   debug:
-#     msg:
-#       abr_mydumper_outputdir: "{{ abr_mydumper_outputdir | default('undefined') }}"
-#       # result: "{{ (abr_database is defined and abr_database and abr_database|length > 0) }}"
-#       # result2: "{{ (abr_database is defined and abr_database and abr_database|length > 0) | ternary('_aaaaa_', '_bbbb_', '_isnull_')}}"
-#       # result: "{{ ((abr_database is defined and abr_database and abr_database|length > 0) | ternary('_' + abr_database + '_', '_all-databases_')) }}"
-#     verbosity: 1
-
 - name: "{{ abr__task_prefix }} | compress | ansible-archive | prepare tempfolder"
   tempfile:
     state: file
-    suffix: "abr-compress-{{ abr_uid }}"
+    # suffix: "abr-compress-{{ abr_uid }}"
+    suffix: "_compress_{{ abr__filename_full_now }}"
   register: abr_compress_tempfile
 
 - name: "{{ abr__task_prefix }} | compress | ansible-archive | compress {{ abr__path }} on {{ abr_compress_tempfile.path }}"

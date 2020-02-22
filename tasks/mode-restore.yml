@@ -122,3 +122,14 @@
     - "{{ role_path }}/tasks/restore/main.yml"
   loop_control:
     loop_var: "include_task_mode_restore_item"
+
+# STEP 8: CLEANUP ____________________________________ (abr_skip_cleanup: false)
+- name: "{{ abr__task_prefix }} | mode-restore | restore-options/main.yml"
+  include: "{{ include_task_mode_restore_item }}"
+  with_first_found:
+    - "{{ abr_overrides_directory }}/tasks/cleanup/main.yml"
+    - "{{ role_path }}/tasks/cleanup/main.yml"
+  when:
+    - "(abr_skip_cleanup is not defined) or  (abr_skip_cleanup|bool is sameas false)"
+  loop_control:
+    loop_var: "include_task_mode_restore_item"
