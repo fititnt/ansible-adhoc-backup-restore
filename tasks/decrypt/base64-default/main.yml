@@ -3,6 +3,10 @@
 # FILE:            {{ role_path }}/tasks/decrypt/base64-default/main.yml
 # LICENSE:         Public Domain
 
+- name: "{{ abr__task_prefix }} | decrypt | base64-default | set_facts"
+  set_fact:
+    abr__extensions_arr_diff: "{{ abr__extensions_arr_diff + [(abr__encryption_extension | default(''))] }}"
+
 - name: "{{ abr__task_prefix }} | decrypt | base64-default | prepare tempfolder"
   tempfile:
     state: file
@@ -16,27 +20,10 @@
     cmd: "base64 -d < {{ abr__path | quote }} > {{ abr_decrypt_temp.path | quote }}"
   register: command_result
 
-# - name: "{{ abr__task_prefix }} | decrypt | base64-default | decrypt {{ abr__path }} on {{ abr_decrypt_temp.path }}"
-#   archive:
-#     path: "{{ abr__path }}/"
-#     #dest: "{{ abr_mydumper_outputdir }}.xz"
-#     dest: "{{ abr_decrypt_temp.path }}"
-#     format: "{{ abr_decryption_format }}"
-#     # force_archive: yes
-#     # remove: yes
-#   register: archive_command_result
-
-# - name: "{{ abr__task_prefix }} | decrypt | base64-default | run mydumper"
-#   shell: >
-#     mydumper
-#     --outputdir='{{ abr_decrypt_tempfolder.path }}'
-#     {{ abr_mydumper_append | default('') }}
-#   register: mydumper_command_result
-
 - name: "{{ abr__task_prefix }} | decrypt | base64-default | set_facts: prepare for next step"
   set_fact:
     abr__steps: "{{ abr__steps | default([] + ['decrypt/base64-default']) }}"
     abr__path: "{{ abr_decrypt_temp.path }}"
     # abr__filename: "{{ abr__filename + '.xz' }}"
-    abr__extension: "{{ (abr__extension | default('') ) + '.' + abr__encryption_extension }}"
+    # abr__extension: "{{ (abr__extension | default('') ) + '.' + abr__encryption_extension }}"
     abr__type: "file"

@@ -1,36 +1,36 @@
 ---
 
-# FILE:            {{ role_path }}/tasks/backup/ansible-archive/main.yml
+# FILE:            {{ role_path }}/tasks/backup/xz-default/main.yml
 # LICENSE:         Public Domain
 
-- name: "{{ abr__task_prefix }} | compress | ansible-archive | prepare tempfolder"
+- name: "{{ abr__task_prefix }} | compress | xz-default | prepare tempfolder"
   tempfile:
     state: file
     # suffix: "abr-compress-{{ abr_uid }}"
     suffix: "_compress_{{ abr__filename_full_now }}"
-  register: abr_compress_tempfile
+  register: abr_compress_temp
 
-- name: "{{ abr__task_prefix }} | compress | ansible-archive | compress {{ abr__path }} on {{ abr_compress_tempfile.path }}"
+- name: "{{ abr__task_prefix }} | compress | xz-default | compress {{ abr__path }} on {{ abr_compress_temp.path }}"
   archive:
     path: "{{ abr__path }}/"
     #dest: "{{ abr_mydumper_outputdir }}.xz"
-    dest: "{{ abr_compress_tempfile.path }}"
+    dest: "{{ abr_compress_temp.path }}"
     format: "{{ abr_compression_format }}"
     # force_archive: yes
     # remove: yes
   register: archive_command_result
 
-# - name: "{{ abr__task_prefix }} | compress | ansible-archive | run mydumper"
+# - name: "{{ abr__task_prefix }} | compress | xz-default | run mydumper"
 #   shell: >
 #     mydumper
 #     --outputdir='{{ abr_compress_tempfolder.path }}'
 #     {{ abr_mydumper_append | default('') }}
 #   register: mydumper_command_result
 
-- name: "{{ abr__task_prefix }} | compress | ansible-archive | set_facts: prepare for next step"
+- name: "{{ abr__task_prefix }} | compress | xz-default | set_facts: prepare for next step"
   set_fact:
-    abr__steps: "{{ abr__steps | default([] + ['compress/ansible-archive']) }}"
-    abr__path: "{{ abr_compress_tempfile.path }}"
+    abr__steps: "{{ abr__steps | default([] + ['compress/xz-default']) }}"
+    abr__path: "{{ abr_compress_temp.path }}"
     # abr__filename: "{{ abr__filename + '.xz' }}"
     abr__extension: "{{ (abr__extension | default('') ) + '.' + abr_compression_format }}"
     abr__type: "file"

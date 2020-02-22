@@ -1,6 +1,6 @@
 ---
 
-# FILE:            {{ role_path }}/tasks/backup/ansible-archive/main.yml
+# FILE:            {{ role_path }}/tasks/backup/xz-default/main.yml
 # LICENSE:         Public Domain
 #
 # NOTE:           Somewhat equivalent to
@@ -17,3 +17,41 @@
     path: "{{ abr_restore_temp.path }}"
     state: absent
   when: "(abr_restore_temp is defined) and (abr_restore_temp.path is defined)"
+
+- name: "{{ abr__task_prefix }} | cleanup | abr_encrypt_temp"
+  file:
+    path: "{{ abr_encrypt_temp.path }}"
+    state: absent
+  when: "(abr_encrypt_temp is defined) and (abr_encrypt_temp.path is defined)"
+
+- name: "{{ abr__task_prefix }} | cleanup | abr_decrypt_temp"
+  file:
+    path: "{{ abr_decrypt_temp.path }}"
+    state: absent
+  when: "(abr_decrypt_temp is defined) and (abr_decrypt_temp.path is defined)"
+
+- name: "{{ abr__task_prefix }} | cleanup | abr_compress_temp"
+  file:
+    path: "{{ abr_compress_temp.path }}"
+    state: absent
+  when: "(abr_compress_temp is defined) and (abr_compress_temp.path is defined)"
+
+- name: "{{ abr__task_prefix }} | cleanup | abr_decompress_temp"
+  file:
+    path: "{{ abr_decompress_temp.path }}"
+    state: absent
+  when: "(abr_decompress_temp is defined) and (abr_decompress_temp.path is defined)"
+
+# No examples are using abr_datacovnersion_temp, but already have this rule
+- name: "{{ abr__task_prefix }} | cleanup | abr_datacovnersion_temp"
+  file:
+    path: "{{ abr_datacovnersion_temp.path }}"
+    state: absent
+  when: "(abr_datacovnersion_temp is defined) and (abr_datacovnersion_temp.path is defined)"
+
+# No examples are using abr_upload_temp, but already have this rule
+- name: "{{ abr__task_prefix }} | cleanup | abr_upload_temp"
+  file:
+    path: "{{ abr_upload_temp.path }}"
+    state: absent
+  when: "(abr_upload_temp is defined) and (abr_upload_temp.path is defined)"

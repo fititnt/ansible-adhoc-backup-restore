@@ -2,6 +2,7 @@
 
 # FILE:            {{ role_path }}/tasks/compress/main.yml
 # LICENSE:         Public Domain
+# SEE:             https://wiki.archlinux.org/index.php/Archiving_and_compression
 
 - name: "{{ abr__task_prefix }} | compress | include {{ abr_strategy_compression | default('dont-exist') }}"
   include: "{{ include_task_compress_item }}"

@@ -24,7 +24,7 @@ abr_restore_filename: "{{ abr_uid }}" # Force filename on restore; ideal for "ab
 abr_mode: "restore-options"    # Options: 'backup', 'restore', 'restore-options'
 abr_skip_setup: false
 abr_driver: "fs-directory" # Options: "mariadb-mydumper", 'fs-directory'
-abr_strategy_compression: "ansible-archive" # Options: "ansible-archive", false
+abr_strategy_compression: "xz-default" # Options: "xz-default", false
 abr_strategy_encryption: null # Options: none
 abr_skip_encryption: false
 abr_strategy_conversion: null # Options: none, maybe 'sqlines'

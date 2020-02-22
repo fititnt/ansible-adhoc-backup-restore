@@ -47,7 +47,7 @@
         content: "/* JavaScript code here */"
         dest: "/var/www/site-1/script.js"
 
-    - name: "Need for compression/ansible-archive default XZ format: install xz-utils (Debian)"
+    - name: "Need for compression/xz-default default XZ format: install xz-utils (Debian)"
       package:
         name: "xz-utils"
         state: present

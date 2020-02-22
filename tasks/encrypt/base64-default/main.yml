@@ -7,17 +7,17 @@
   tempfile:
     state: file
     suffix: "abr-encrypt-{{ abr_uid }}"
-  register: abr_encrypt_tempfile
+  register: abr_encrypt_temp
 
-- name: "{{ abr__task_prefix }} | encrypt | base64-default | base64 {{ abr__path }} > {{ abr_encrypt_tempfile.path }}, run"
+- name: "{{ abr__task_prefix }} | encrypt | base64-default | base64 {{ abr__path }} > {{ abr_encrypt_temp.path }}, run"
   shell:
-    cmd: "base64 {{ abr__path | quote }} > {{ abr_encrypt_tempfile.path | quote }}"
+    cmd: "base64 {{ abr__path | quote }} > {{ abr_encrypt_temp.path | quote }}"
   register: command_result
 
 - name: "{{ abr__task_prefix }} | encrypt | base64-default | set_facts: prepare for next step"
   set_fact:
     abr__steps: "{{ abr__steps | default([] + ['encrypt/base64-default']) }}"
-    abr__path: "{{ abr_encrypt_tempfile.path }}"
+    abr__path: "{{ abr_encrypt_temp.path }}"
     # abr__filename: "{{ abr__filename + '.xz' }}"
     abr__extension: "{{ (abr__extension | default('') ) + '.' + abr__encryption_extension }}"
     abr__type: "file"

@@ -25,17 +25,18 @@ abr__extensions_arr: |
     | select | list }}
 
 abr__extensions_arr_diff: [] # extensions to add/remove to discover extension now
+abr__extensions_arr_diff_clean: "{{ abr__extensions_arr_diff | select | list }}"
 
 # abr__extension: "{{ abr__extensions_arr | join('.') }}"
 abr__filename_extension: "{{ (abr__extensions_arr|length > 0) | ternary('.' + (abr__extensions_arr | join('.')), '', '') }}"
 abr__filename_timestamped_withextensions: "{{ abr__filename_timestamped + abr__filename_extension }}"
 
-# when_backuping: abr__extensions_arr_diff
-abr__filename_extension_when_backuping: "{{ (abr__extensions_arr_diff|length > 0) | ternary('.' + (abr__extensions_arr_diff | join('.')), '', '') }}"
+# when_backuping: abr__extensions_arr_diff_clean
+abr__filename_extension_when_backuping: "{{ (abr__extensions_arr_diff_clean|length > 0) | ternary('.' + (abr__extensions_arr_diff_clean | join('.')), '', '') }}"
 abr__filename_timestamped_withextensions_when_backuping: "{{ abr__filename_timestamped + abr__filename_extension_when_restoring }}"
 
-# when_restoring: abr__extensions_arr not in abr__extensions_arr_diff
-abr__filename_extension_when_restoring: "{{ (abr__extensions_arr|length > 0) | ternary('.' + ((abr__extensions_arr | difference(abr__extensions_arr_diff)) | join('.')), '', '') }}"
+# when_restoring: abr__extensions_arr not in abr__extensions_arr_diff_clean
+abr__filename_extension_when_restoring: "{{ (abr__extensions_arr|length > 0) | ternary('.' + ((abr__extensions_arr | difference(abr__extensions_arr_diff_clean)) | join('.')), '', '') }}"
 abr__filename_timestamped_withextensions_when_restoring: "{{ abr__filename_timestamped + abr__filename_extension_when_restoring }}"
 
 abr__filename_full_now: "{{ (abr_mode == 'restore') | ternary(abr__filename_timestamped_withextensions_when_restoring, abr__filename_timestamped_withextensions_when_backuping) }}"

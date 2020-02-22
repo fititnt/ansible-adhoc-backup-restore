@@ -2,10 +2,7 @@
 
 # FILE:            {{ role_path }}/tasks/dedecompress/main.yml
 # LICENSE:         Public Domain
-
-# - name: "abr | decompress | TODO message"
-#   debug:
-#     msg: "Work in progress"
+# SEE:             https://wiki.archlinux.org/index.php/Archiving_and_compression
 
 - name: "{{ abr__task_prefix }} | decompress | include {{ abr_strategy_compression | default('dont-exist') }}"
   include: "{{ include_task_decompress_item }}"
