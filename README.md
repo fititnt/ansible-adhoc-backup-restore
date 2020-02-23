@@ -4,19 +4,61 @@ Ansible role, allows control the full workflow of backup, storage, and restore
 of anything supported by it's drivers.**
 
 While it _may_ be executed automated (e.g. running via [Ansible AWX](https://github.com/ansible/awx)) the main reason to exist have an _somewhat standard_ workflow to humans do
-_Ad-Hoc backups_ (quick backups) **OR** _Ad-Hoc restore_.
+_Ad-Hoc backups_ (quick backups) **OR** _Ad-Hoc restore_
+<sup>(optional default `full-temp-backup-before-restore` )</sup>.
+
+Out-of-the-box Support 20+ persistent storage backends, Check
+<https://rclone.org/>.
 
 ## Usage
 
-Visite the complete official documentation at <https://ansible-adhoc-backup-restore.readthedocs.io/>
+Visit the complete official documentation at
+<https://ansible-adhoc-backup-restore.readthedocs.io/>.
 
-### Quickstart
+### TL;DR
+If you already know Ansible the "3 files to quick look" are [defaults/main.yml](defaults/main.yml),
+[tasks/mode-backup.yml](tasks/mode-backup.yml) and
+[tasks/mode-restore.yml](tasks/mode-restore.yml).
 
 ```bash
 # Too long didn't read:
 # "abr is installable as an Ansible role and is distributed over Ansible Galaxy
 ansible-galaxy install fititnt.adhoc_backup_restore
 ```
+
+### How extensible is ABR?
+90%+ of it's files can be replaced without need to fork the repository. Files
+under `{{ playbook_dir }}/overrides/roles/adhoc_backup_restore/` will have
+higher priority. It's both usefull to customize a single file or create your
+custom strategies.
+
+### Quickstart
+
+```yaml
+# ansible -i myihost.com, backup-directory-site-1.yml
+- name: "Converge: backup fs-directory"
+  hosts: all
+  remote_user: root
+  vars:
+    # backup? restore? restore-options?
+    abr_mode: backup
+
+    # Where will the backup/restore be saved?
+    # abr_bucket: ... # 20+ options, check https://rclone.org/
+    abr_prefix: "www-site-1/"
+
+    abr_driver: "fs-directory"
+    abr_fs_path: "/var/www/site-1/"
+
+    abr_strategy_compression: "targz-default"
+    abr_strategy_encryption: "base64-default"
+
+    abr_timestamped: false
+  roles:
+    - role: ansible-adhoc-backup-restore
+```
+
+(...)
 
 <!--
 

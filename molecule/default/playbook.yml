@@ -5,7 +5,10 @@
   hosts: all
   remote_user: root
   vars:
+
+    # backup? restore? restore-options?
     abr_mode: backup
+
     abr_driver: "fs-directory"
     abr_strategy_compression: "targz-default"
     abr_strategy_encryption: "base64-default"
@@ -22,6 +25,7 @@
   remote_user: root
   vars:
 
+    # backup? restore? restore-options?
     abr_mode: backup
 
     abr_uid: "single-file.csv"
@@ -70,7 +74,11 @@
   hosts: all
   remote_user: root
   vars:
+
+    # backup? restore? restore-options?
     abr_mode: restore
+
+
     abr_driver: "fs-directory"
     abr_strategy_compression: "targz-default"
     abr_strategy_encryption: "base64-default"
@@ -87,6 +95,7 @@
   remote_user: root
   vars:
 
+    # backup? restore? restore-options?
     abr_mode: restore
 
     abr_uid: "single-file.csv"

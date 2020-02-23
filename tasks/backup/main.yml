@@ -3,9 +3,6 @@
 # FILE:            {{ role_path }}/tasks/backup/main.yml
 # LICENSE:         Public Domain
 
-# - name: "backup/main.yml"
-#   include: "{{ abr_backup_taskfile }}"
-
   # abr_driver
 - name: "{{ abr__task_prefix }} | backup | include"
   include: "{{ include_task_backup_item }}"

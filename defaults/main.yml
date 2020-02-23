@@ -3,33 +3,57 @@
 # FILE:            {{ role_path }}/defaults/main.yml
 # LICENSE:         Public Domain
 
-### DRAFT of v0.5.0 new standard, START ________________________________________
+### NAMING & BUCKET (where to backup/restore) __________________________________
 # Affect name of the backups
-abr_uid: "{{ inventory_hostname_short + '-' + abr_driver_group }}"
-abr_bucket: ":local:/var/local/abr/bucket/" # See also abr_rclone_bucket_backup/abr_rclone_bucket_restore
-abr_prefix: ""
+abr_uid: "{{ inventory_hostname_short + '-' + abr_driver_group }}" # an hostname-fs like name will be used be used
+abr_bucket: ":local:/var/local/abr/bucket/" # A local bucket will be used if you don't customize
+abr_prefix: "" # Without customization, no prefix will be used (Recommended configure)
 abr_timestamped: false # Append TS like "__20200217T120618" to abr_uid
+abr_timestamp: "{{ ansible_date_time.iso8601_basic_short }}" # Used when abr_timestamped: true; You can define one here
 
-## Restore mode, start .........................................................
+## Special overrides exclusive for restore mode ................................
 # Define the exact UID to restore (including timestamp).
 abr_restore_uid: "{{ abr_uid }}" # Change this if 'abr_timestamped: true'
 abr_restore_filename: "{{ abr_uid }}" # Force filename on restore; ideal for "abr_driver: 'fs-file'"
-# abr_timestamp: null
-# abr_mode: "restore"
-# abr_bucket: ...
-# abr_prefix: ...
 
 ## Restore mode, end ...........................................................
+### ABR WORKFLOW _______________________________________________________________
+# ABR work on 3 different modes of operation with (abr_mode: 'backup',
+# 'restore', 'restore-options') and 3+ drivers (abr_driver) that translate what
+# needs to backup/restore to a format it can manipulate by other steps.
+# The abr_strategy_* apply transformations between the driver
+# exporting/importing and where the date will be stored.
 
 abr_mode: "restore-options"    # Options: 'backup', 'restore', 'restore-options'
-abr_skip_setup: false
-abr_driver: "fs-directory" # Options: "mariadb-mydumper", 'fs-directory'
-abr_strategy_compression: "targz-default" # Options: "xz-default", false
-abr_strategy_encryption: null # Options: none
-abr_skip_encryption: false
+abr_driver: "fs-directory" # Options: 'fs-directory', 'fs-file', 'mariadb-mydumper'
+abr_strategy_encryption: null # Options: null, 'base64-default'
+abr_strategy_compression: "targz-default" # Options: 'targz-default', "xz-default"
 abr_strategy_conversion: null # Options: none, maybe 'sqlines'
 abr_strategy_synchronization: "rclone-default"
+
+## Paranoid mode (The full-temp-backup-before-restore) .........................
+# Paranoid mode apply the 'full-temp-backup-before-restore' task and is expected
+# that all abr_driver also implement some way to do a full backup of what would
+# be replaced with restore. Some limitations of abr_paranoid: true
+#   - It will take more time to restore
+#       - While this may aceptable when restoring the main database of an server
+#         if you are restoring an smaller database of a server with several ones
+#         may be a good idea disable it (or be ok with some delay...)
+#   - If enabled, will trigger a fail if the target does not have some data
+#   - Some drivers may require full administrative privileges (like root for DBs)
+#     since ABR may not able to know excatly what database or dataset is changing
+#   - It will need manual clean up (if you made several restores, all restores)
+#     will be on /var/local/abr/full-temp-backup-before-restore/(uid + timestamp)
+#   - As ABR v0.8.0, we don't provide an automated restore for these backups.
+#     They are not designed to be used normaly.
 abr_paranoid: true
+
+## Steps Skipping ..............................................................
+abr_skip_setup: false
+abr_skip_encryption: false
+abr_skip_compression: false
+abr_skip_conversion: false
+abr_skip_synchronization: false
 
 abr_rclone_enviroment: {}
 # abr_rclone_enviroment:
@@ -42,7 +66,7 @@ abr_rclone_args: {}
 #   '--b2-key': "K000pyk..."
 # }
 
-abr_timestamp: "{{ ansible_date_time.iso8601_basic_short }}"
+
 
 ### Drivers: FS ________________________________________________________________
 abr_fs_path: null
@@ -68,21 +92,11 @@ abr_overrides_directory: "{{ playbook_dir }}/overrides/roles/adhoc_backup_restor
 ### DRAFT of v0.5.0 new standard, END __________________________________________
 
 ### Most common variables to change, start _____________________________________
-# Check abr_database var if you dont want FULL backup or FULL server restore
-# abr_mode: "undefined-mode-select-backup-or-restore" # Options: backup or restore
-# abr_name: "{{ abr_default_summary }}" # Example: myhostname__all-databases__20200213T052730
-# abr_rclone_bucket: ":local:/var/local/abr/abr-local-bucket/" # See also abr_rclone_bucket_backup/abr_rclone_bucket_restore
-# abr_pathprefix: "" # See also abr_pathprefix_local/abr_pathprefix_remote
-# abr_paranoid: yes # if you are running in production and is ok to do full-temp-backup-before-restore
-
-## Exclusive to: abr_mode: backup ..............................................
-abr_backup_timestamped: yes # Example 'no': myhostname__all-databases
-abr_backup_compress: false
 
 ## Exclusive to: abr_mode: restore ............................................
-abr_restore_timestamp: "" # Example: 20200213T052730, ignore when 'abr_backup_timestamped: no'
-abr_restore_database: ""  # If you export all databases, but want import just one, use it
-abr_restore_tables: []    # If want just specific databases
+# abr_restore_timestamp: "" # Example: 20200213T052730, ignore when 'abr_backup_timestamped: no'
+# abr_restore_database: ""  # If you export all databases, but want import just one, use it
+# abr_restore_tables: []    # If want just specific databases
 # abr_restore_customrclone: ""
 
 ### Most common variables to change, end _______________________________________
@@ -261,10 +275,3 @@ abr_dir_abrlocalbucket:
   group: "{{ abr_fs_group }}"
   mode: "{{ abr_fs_mode }}"
   state: directory
-
-## ADVANCED: backup/restore other databases ____________________________________
-
-# If you want to reuse abr for mongodump (MongDB), pg_dump (PostgreSQL),
-# redis-cli bgsave (Redis), create your custom task file and edit this:
-abr_backup_taskfile: "{{ role_path }}/tasks/backup/mydumper.yml"
-abr_restore_taskfile: "{{ role_path }}/tasks/restore/myloader.yml"
