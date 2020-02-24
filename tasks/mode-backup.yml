@@ -28,6 +28,8 @@
     - "{{ role_path }}/tasks/backup/main.yml"
   loop_control:
     loop_var: "include_task_mode_backup_backup_item"
+  when:
+    - "(abr_skip_maintask|bool is sameas false)"
 
 # STEP 4: DATA CONVERSION ____________________________ (abr_strategy_conversion)
 #         This optimal and less frequent step may allow users to create own
@@ -38,10 +40,11 @@
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/data-conversion/main.yml"
     - "{{ role_path }}/tasks/data-conversion/main.yml"
-  when:
-    - "(abr_strategy_conversion is defined) and (abr_strategy_conversion)"
   loop_control:
     loop_var: "include_task_mode_restore_item"
+  when:
+    - "(abr_strategy_conversion is defined) and (abr_strategy_conversion)"
+    - "(abr_skip_conversion|bool is sameas false)"
 
 # STEP 5: COMPRESSION _______________________________ (abr_strategy_compression)
 - name: "{{ abr__task_prefix }} | mode-backup | compress/main.yml"
@@ -49,10 +52,11 @@
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/compress/main.yml"
     - "{{ role_path }}/tasks/compress/main.yml"
-  when:
-    - "(abr_strategy_compression is defined) and (abr_strategy_compression)"
   loop_control:
     loop_var: "include_task_mode_backup_compress_item"
+  when:
+    - "(abr_strategy_compression is defined) and (abr_strategy_compression)"
+    - "(abr_skip_compression|bool is sameas false)"
 
 # STEP 6: ENCRYPT ____________________________________ (abr_strategy_encryption)
 # Security note: Compression -> Encryption is more efficent, but a bit less
@@ -63,10 +67,11 @@
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/encrypt/main.yml"
     - "{{ role_path }}/tasks/encrypt/main.yml"
-  when:
-    - "(abr_strategy_encryption is defined) and (abr_strategy_encryption)"
   loop_control:
     loop_var: "include_task_mode_backup_encrypt_item"
+  when:
+    - "(abr_strategy_encryption is defined) and (abr_strategy_encryption)"
+    - "(abr_skip_encryption|bool is sameas false)"
 
 # STEP 7: UPLOAD _______________________________  (abr_strategy_synchronization)
 - name: "{{ abr__task_prefix }} | mode-backup | upload/main.yml"
@@ -77,6 +82,8 @@
     - "{{ role_path }}/tasks/upload/main.yml"
   loop_control:
     loop_var: "include_task_mode_backup_upload_item"
+  when:
+    - "(abr_skip_synchronization|bool is sameas false)"
 
 # STEP 8: CLEANUP ____________________________________ (abr_skip_cleanup: false)
 - name: "{{ abr__task_prefix }} | mode-backup | restore-options/main.yml"
@@ -84,10 +91,10 @@
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/cleanup/main.yml"
     - "{{ role_path }}/tasks/cleanup/main.yml"
-  when:
-    - "(abr_skip_cleanup is not defined) or  (abr_skip_cleanup|bool is sameas false)"
   loop_control:
     loop_var: "include_task_mode_backup"
+  when:
+    - "(abr_skip_cleanup|bool is sameas false)"
 
 # STEP 9: RESTORE OPTIONS ________________________ (abr_mode: "restore-options")
 #         By default, we will finish the backup mode with message that would

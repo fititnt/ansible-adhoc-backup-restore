@@ -50,10 +50,12 @@ abr_paranoid: true
 
 ## Steps Skipping ..............................................................
 abr_skip_setup: false
+abr_skip_cleanup: false
+abr_skip_maintask: false # If you want skip the abr_driver main backup/restore task.
 abr_skip_encryption: false
 abr_skip_compression: false
 abr_skip_conversion: false
-abr_skip_synchronization: false
+abr_skip_synchronization: false # Skip upload/download to/from the bucket
 
 abr_bucket_enviroment: {}
 # abr_bucket_enviroment:
@@ -103,6 +105,14 @@ abr_overrides_directory: "{{ playbook_dir }}/overrides/roles/adhoc_backup_restor
 
 # MariaDB/MySQL/Galera Cluster _________________________________________________
 
+abr_mariadb_args: {} # if using mariadb-mydumper, defaults to backup/restore ALL databases (even system databases)
+abr_mariadb_args_backup: "{{ abr_mariadb_args }}"
+abr_mariadb_args_restore: "{{ abr_mariadb_args }}"
+
+abr_mariadb_enviroment: {} # mydumper & mysqldump dont use Env vars, so this does not have effect
+abr_mariadb_enviroment_backup: "{{ abr_mariadb_enviroment }}"
+abr_mariadb_enviroment_restore: "{{ abr_mariadb_enviroment }}"
+
 abr_database: null         # -B, --database: Database to dump (defalts to ALL databases, including system databases!)
 abr_tables_list: ""        # --tables-list: Comma delimited table list to dump (does not exclude regex option)
 abr_regex: ""              # -x, --regex: Regular expression for 'db.table' matching
@@ -122,7 +132,7 @@ abr_myloader_append: null  # String to append to myloader shell command
 
 # RCLONE _______________________________________________________________________
 
-abr_rclone_bucket_type: "local"
+# abr_rclone_bucket_type: "local"
 
 # abr_bucket_enviroment: {}
 # # abr_bucket_enviroment:
@@ -279,6 +289,10 @@ abr_dir_abrlocalbucket:
   state: directory
 
 ## ADVANCED ____________________________________________________________________
+
+abr_command_mariadb_backup: "{{ abr__backup_mariadb_command }}"
+abr_command_mariadb_restore: "{{ abr__restore_mariadb_command }}"
+abr_command_mariadb_paranoidbackup: "{{ abr__paranoid_mariadb_command }}"
 
 abr_command_restore_options: "{{ abr__restore_options_rclone_command }}"
 abr_command_paranoid_options: "rclone lsd -R /var/local/abr/full-temp-backup-before-restore/"

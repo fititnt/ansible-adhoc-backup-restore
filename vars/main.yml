@@ -89,3 +89,12 @@ abr_packages_mydumpermyloader:
 
 abr_packages_rclone:
   - rclone
+
+## MariaDB _____________________________________________________________________
+
+abr__backup_mariadb_args_string: "{{ abr_mariadb_args_backup | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
+abr__restore_mariadb_args_string: "{{ abr_mariadb_args_restore | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
+
+abr__backup_mariadb_command: "mydumper {{ abr__backup_mariadb_args_string }} --outputdir={{ abr_backup_temp.path | quote }}"
+abr__paranoid_mariadb_command: "mydumper {{ abr__backup_mariadb_args_string }} --outputdir={{ abr__ftbbr | quote }}"
+abr__restore_mariadb_command: "myloader {{ abr__restore_mariadb_args_string }} -d={{ abr_backup_temp.path | quote }}"

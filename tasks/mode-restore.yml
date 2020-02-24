@@ -27,6 +27,8 @@
     - "{{ role_path }}/tasks/download/main.yml"
   loop_control:
     loop_var: "include_task_mode_restore_item"
+  when:
+    - "(abr_skip_synchronization|bool is sameas false)"
 
 # STEP 3: DECRYPT ____________________________________ (abr_strategy_encryption)
 #         Files donwloaded that where encrypted (disabled by default) will be
@@ -36,10 +38,11 @@
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/decrypt/main.yml"
     - "{{ role_path }}/tasks/decrypt/main.yml"
-  when:
-    - "(abr_strategy_encryption is defined) and (abr_strategy_encryption)"
   loop_control:
     loop_var: "include_task_mode_restore_item"
+  when:
+    - "(abr_strategy_encryption is defined) and (abr_strategy_encryption)"
+    - "(abr_skip_encryption|bool is sameas false)"
 
 # STEP 4: DECOMPRESS ________________________________ (abr_strategy_compression)
 #         Files downloaded that where compressed (default) will be decompressed
@@ -49,10 +52,11 @@
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/decompress/main.yml"
     - "{{ role_path }}/tasks/decompress/main.yml"
-  when:
-    - "(abr_strategy_compression is defined) and (abr_strategy_compression)"
   loop_control:
     loop_var: "include_task_mode_restore_item"
+  when:
+    - "(abr_strategy_compression is defined) and (abr_strategy_compression)"
+    - "(abr_skip_compression|bool is sameas false)"
 
 # STEP 5: FULL-BACKUP-BEFORE-RESTORE ______________________ (abr_paranoid: true)
 #         Files downloaded that where compressed (default) will be decompressed
@@ -62,10 +66,10 @@
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/full-temp-backup-before-restore/main.yml"
     - "{{ role_path }}/tasks/full-temp-backup-before-restore/main.yml"
-  when:
-    - "abr_paranoid|bool"
   loop_control:
     loop_var: "include_task_mode_restore_item"
+  when:
+    - "abr_paranoid|bool"
 
 # STEP 5: DATA CONVERSION ____________________________ (abr_strategy_conversion)
 #         This optimal and less frequent step may allow users to create own
@@ -76,10 +80,11 @@
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/data-conversion/main.yml"
     - "{{ role_path }}/tasks/data-conversion/main.yml"
-  when:
-    - "(abr_strategy_conversion is defined) and (abr_strategy_conversion)"
   loop_control:
     loop_var: "include_task_mode_restore_item"
+  when:
+    - "(abr_strategy_conversion is defined) and (abr_strategy_conversion)"
+    - "(abr_skip_conversion|bool is sameas false)"
 
 # STEP 7: RESTORE MAIN TASK _______________________________________ (abr_driver)
 #         On this step, abr_driver convert whatever will need backup/restore
@@ -91,6 +96,8 @@
     - "{{ role_path }}/tasks/restore/main.yml"
   loop_control:
     loop_var: "include_task_mode_restore_item"
+  when:
+    - "(abr_skip_maintask|bool is sameas false)"
 
 # STEP 8: CLEANUP ____________________________________ (abr_skip_cleanup: false)
 - name: "{{ abr__task_prefix }} | mode-restore | restore-options/main.yml"
@@ -98,7 +105,7 @@
   with_first_found:
     - "{{ abr_overrides_directory }}/tasks/cleanup/main.yml"
     - "{{ role_path }}/tasks/cleanup/main.yml"
-  when:
-    - "(abr_skip_cleanup is not defined) or  (abr_skip_cleanup|bool is sameas false)"
   loop_control:
     loop_var: "include_task_mode_restore_item"
+  when:
+    - "(abr_skip_cleanup|bool is sameas false)"

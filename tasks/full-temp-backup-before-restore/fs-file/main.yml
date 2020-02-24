@@ -5,7 +5,7 @@
 
 - name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | fs-file | set_facts"
   set_fact:
-    abr__ftbbr: "{{ abr_dir_paranoidmode.path }}/{{ abr_uid + '__' + abr_timestamp }}"
+    abr__ftbbr: "{{ abr_dir_paranoidmode.path }}{{ abr_uid + '__' + abr_timestamp }}"
 
 - name: "abr:{{ abr_mode }} | full-temp-backup-before-restore | fs-file | Create {{ abr__ftbbr }}"
   file:

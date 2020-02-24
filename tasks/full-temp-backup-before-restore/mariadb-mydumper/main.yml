@@ -5,7 +5,7 @@
 
 - name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | mariadb-mydumper | set_facts"
   set_fact:
-    abr__ftbbr: "{{ abr_dir_paranoidmode.path }}/{{ abr_uid + '__' + abr_timestamp }}"
+    abr__ftbbr: "{{ abr_dir_paranoidmode.path }}{{ abr_uid + '__' + abr_timestamp }}"
 
 - name: "abr:{{ abr_mode }} | full-temp-backup-before-restore | mariadb-mydumper | Create {{ abr__ftbbr }}"
   file:
@@ -15,16 +15,27 @@
     mode: "{{ abr_fs_mode }}"
     state: directory
 
-- name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | mariadb-mydumper | copy {{ abr_fs_path_restore }} to {{ abr_backup_tempfolder.path }}"
-  copy:
-    src: "{{ abr_fs_path_restore }}" # We backup the RESTORE path (the one would be overriden)
-    dest: "{{ abr__ftbbr }}"
-    remote_src: yes
+# - name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | mariadb-mydumper | copy {{ abr_fs_path_restore }} to {{ abr_backup_tempfolder.path }}"
+#   copy:
+#     src: "{{ abr_fs_path_restore }}" # We backup the RESTORE path (the one would be overriden)
+#     dest: "{{ abr__ftbbr }}"
+#     remote_src: yes
+
+- name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | run mydumper" # noqa 301
+  command:
+    cmd: "{{ abr_command_mariadb_paranoidbackup }}"
+  register: ftbbr_command
+
+- name: "{{ abr__task_prefix }} |full-temp-backup-before-restore | mariadb-mydumper debug (requires -v)"
+  debug:
+    msg:
+      ftbbr_command: "{{ ftbbr_command | default('undefined') }}"
+    verbosity: 1
 
 - name: "{{ abr__task_prefix }} | full-temp-backup-before-restore | mariadb-mydumper | User message"
   debug:
     msg: |
-      The contents from {{ abr_fs_path_restore }} have a copy at {{ abr__ftbbr }}.
+      A complete backup of the MariaDB/MySQL have a copy at {{ abr__ftbbr }}.
       This copy will not be deleted automaticaly (needs manual clean up).
       The restore of this full-temp-backup-before-restore also does not have
       automation to be restored and, if really necessary, you should restore
