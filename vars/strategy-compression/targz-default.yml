@@ -5,4 +5,4 @@
 
 # TODO: review these vars
 abr__tarlike_extension: "tar"
-abr__compression_extension: "xz"
+abr__compression_extension: "gz"

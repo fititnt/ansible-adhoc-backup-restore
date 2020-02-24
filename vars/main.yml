@@ -33,7 +33,7 @@ abr__filename_timestamped_withextensions: "{{ abr__filename_timestamped + abr__f
 
 # when_backuping: abr__extensions_arr_diff_clean
 abr__filename_extension_when_backuping: "{{ (abr__extensions_arr_diff_clean|length > 0) | ternary('.' + (abr__extensions_arr_diff_clean | join('.')), '', '') }}"
-abr__filename_timestamped_withextensions_when_backuping: "{{ abr__filename_timestamped + abr__filename_extension_when_restoring }}"
+abr__filename_timestamped_withextensions_when_backuping: "{{ abr__filename_timestamped + abr__filename_extension_when_backuping }}"
 
 # when_restoring: abr__extensions_arr not in abr__extensions_arr_diff_clean
 abr__filename_extension_when_restoring: "{{ (abr__extensions_arr|length > 0) | ternary('.' + ((abr__extensions_arr | difference(abr__extensions_arr_diff_clean)) | join('.')), '', '') }}"
@@ -50,8 +50,8 @@ abr_default_summary: "{{ abr_uid + '__' + (abr_database | default('all-databases
 abr_backup_name: "{{ abr_uid }}{{ ((abr_timestamped|bool) | ternary('__' + abr_timestamp, '', '')) }}"
 abr_restore_name: "{{ abr_restore_uid }}"
 
-abr_rclone_args_backup_string: "{{ abr_rclone_args_backup | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
-abr_rclone_args_restore_string: "{{ abr_rclone_args_restore | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
+abr_rclone_args_backup_string: "{{ abr_bucket_args_backup | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
+abr_rclone_args_restore_string: "{{ abr_bucket_args_restore | to_json | regex_replace('\\:\\ ','=') | regex_replace('[\\[\\]{}\"]') | regex_replace('\\,\\ ',' ') }}"
 
 # abr_internal_islocalbucket: "{{ abr_rclone_bucket == 'abr-local-bucket' }}"
 

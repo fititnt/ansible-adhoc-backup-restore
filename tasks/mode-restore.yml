@@ -5,37 +5,6 @@
 # USAGE:
 #                 abr_driver: 'restore'
 
-# STEP 0: Variables ____________________________________________________________
-# - name: "{{ abr__task_prefix }} | mode-restore | setup/main.yml"
-#   set_fact:
-#     abr__extensions_arr: |
-#       {{ [
-#             (abr__tarlike_extension|default(false, true)),
-#             (abr__compression_extension|default(false, true)),
-#             (abr__encryption_extension|default(false, true)),
-#           ]
-#         | select | list }}
-
-# - name: "debug"
-#   debug:
-#     msg:
-#       abr__extensions_arr: "{{ abr__extensions_arr }}"
-#       abr__extension: "{{ abr__extension }}"
-#       #abr__timestamp: "{{ abr__timestamp }}"
-#       # abr__filename: "{{ abr__filename }}"
-#       abr__filename_timestamped: "{{ abr__filename_timestamped }}"
-#       abr__filename_timestamped_withextensions: "{{ abr__filename_timestamped_withextensions }}"
-#       #abr_timestamp: "{{ abr_timestamp }}"
-#       #abr_timestamped: "{{ abr_timestamped }}"
-#       #abr__timestamp2: "{{ abr__timestamp2 }}"
-#       abr_backup_name: "{{ abr_backup_name }}"
-#       aaa: "{{ (abr_timestamped|bool | ternary(ansible_date_time.iso8601_basic_short, '')) }}"
-#       bbb: "{{ abr_timestamp | default(((abr_timestamped|bool) | ternary(ansible_date_time.iso8601_basic_short, '')), true) }}"
-
-# - name: 'fail'
-#   fail:
-#     msg: "test"
-
 # STEP 1: SETUP ________________________________________ (abr_skip_setup: false)
 #         Setup step will create directories used by ABR and will install
 #         dependencies based on enabled drivers and strategies

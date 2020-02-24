@@ -10,7 +10,7 @@
   debug:
     msg:
       abr_backup_rclone_command: "{{ abr_backup_rclone_command | default('undefined') }}"
-      abr_rclone_enviroment: "{{ abr_rclone_enviroment | default('undefined') }}"
+      abr_bucket_enviroment: "{{ abr_bucket_enviroment | default('undefined') }}"
       abr__extensions_arr: "{{ abr__extensions_arr | default('undefined') }}"
       abr__extension: "{{ abr__extension | default('undefined') }}"
       abr__extension2: "{{ abr__extension2 | default('undefined') }}"
@@ -23,5 +23,5 @@
 - name: "{{ abr__task_prefix }} | upload | rclone-default | rclone command"
   command:
     cmd: "{{ abr_backup_rclone_command }}"
-  environment: "{{ abr_rclone_enviroment }}"
+  environment: "{{ abr_bucket_enviroment }}"
   register: command_result

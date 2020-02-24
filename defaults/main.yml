@@ -55,13 +55,13 @@ abr_skip_compression: false
 abr_skip_conversion: false
 abr_skip_synchronization: false
 
-abr_rclone_enviroment: {}
-# abr_rclone_enviroment:
+abr_bucket_enviroment: {}
+# abr_bucket_enviroment:
 #   RCLONE_B2_ACCOUNT: "000b3e7..."
 #   RCLONE_B2_KEY: "K000pyk..."
 
-abr_rclone_args: {}
-# abr_rclone_args: {
+abr_bucket_args: {}
+# abr_bucket_args: {
 #   '--b2-account': "000b3e7...",
 #   '--b2-key': "K000pyk..."
 # }
@@ -124,13 +124,13 @@ abr_myloader_append: null  # String to append to myloader shell command
 
 abr_rclone_bucket_type: "local"
 
-# abr_rclone_enviroment: {}
-# # abr_rclone_enviroment:
+# abr_bucket_enviroment: {}
+# # abr_bucket_enviroment:
 # #   RCLONE_B2_ACCOUNT: "000b3e7..."
 # #   RCLONE_B2_KEY: "K000pyk..."
 
-# abr_rclone_args: {}
-# # abr_rclone_args: {
+# abr_bucket_args: {}
+# # abr_bucket_args: {
 # #   '--b2-account': "000b3e7...",
 # #   '--b2-key': "K000pyk..."
 # # }
@@ -142,10 +142,10 @@ abr_rclone_bucket_type: "local"
 # options) the user can customize both
 abr_rclone_bucket_backup: "{{ abr_bucket }}"
 abr_rclone_bucket_restore: "{{ abr_bucket }}"
-abr_rclone_enviroment_backup: "{{ abr_rclone_enviroment }}"
-abr_rclone_enviroment_restore: "{{ abr_rclone_enviroment }}"
-abr_rclone_args_backup: "{{ abr_rclone_args }}"
-abr_rclone_args_restore: "{{ abr_rclone_args }}"
+abr_bucket_enviroment_backup: "{{ abr_bucket_enviroment }}"
+abr_bucket_enviroment_restore: "{{ abr_bucket_enviroment }}"
+abr_bucket_args_backup: "{{ abr_bucket_args }}"
+abr_bucket_args_restore: "{{ abr_bucket_args }}"
 
 # abr_rclone_valt_send_method: "move" # Move files from source to dest https://rclone.org/commands/rclone_move/
 # abr_rclone_valt_send_method: "moveto" # Move files from source to dest https://rclone.org/commands/rclone_move/
@@ -156,7 +156,7 @@ abr_rclone_valt_send_method: "copyto" # Move files from source to dest https://r
 abr_download_rclone_method: "copyto"
 
 # @see https://rclone.org/docs/#environment-variables
-# abr_rclone_enviroment:
+# abr_bucket_enviroment:
 #   RCLONE_YOUR_CUSTOM_VAR: "here."
 #   RCLONE_ANOTHER_VAR: "here"
 

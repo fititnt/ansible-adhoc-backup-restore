@@ -52,7 +52,7 @@
 - name: "{{ abr__task_prefix }} | backup | mariadb-mydumper | set_facts: prepare for next step"
   set_fact:
     abr__steps: "{{ abr__steps | default([] + ['backup/mariadb-mydumper']) }}"
-    abr__path: "{{ abr_backup_temp.path }}"
+    abr__path: "{{ abr_backup_temp.path }}/" # THIS / IS IMPORTANT!
     abr__type: "directory"
     abr__temporary: true
 

@@ -3,12 +3,50 @@
 Ansible role, allows control the full workflow of backup, storage, and restore
 of anything supported by it's drivers.**
 
-While it _may_ be executed automated (e.g. running via [Ansible AWX](https://github.com/ansible/awx)) the main reason to exist have an _somewhat standard_ workflow to humans do
-_Ad-Hoc backups_ (quick backups) **OR** _Ad-Hoc restore_
-<sup>(optional default `full-temp-backup-before-restore` )</sup>.
+While it _may_ be executed automated (e.g. running via [Ansible AWX](https://github.com/ansible/awx)) the main reason to exist have an standard workflow to humans do _Ad-Hoc backups_ (quick backups)
+**OR** _Ad-Hoc restore_ <sup>(optional default
+`full-temp-backup-before-restore`)</sup> and may be as simple as rename
+`abr_mode: "backup"` to `abr_mode: "restore"`.
 
-Out-of-the-box Support 20+ persistent storage backends, Check
-<https://rclone.org/>.
+While by default the _control node_ will use as `abr_bucket` a local folder
+`/var/local/abr/bucket/`, you are encoraged to store your backups on a remote
+server (even some just with FTP account).  **Since we use <https://rclone.org/>,
+ABR out-of-the-box support Google Drive, Amazon Drive, S3, Dropbox,
+Backblaze B2, One Drive, Swift, Hubic, Cloudfiles, Google Cloud Storage,
+Yandex Files and more!** The use of custom `abr_prefix` to organize
+the subfolders where the data will be is recommended.
+
+ABR try to keep it's internal steps somewhat standard to make easier you to edit
+or create intermediate transformatons.
+
+<!--
+Some features and optionated design decisions:
+
+1. While out of the box uses `/var/local/abr/bucket/` as `abr_bucket`, the way
+   it mean to be used is storing on a remote storage. **You can define any
+   custom server to store via FTP or SSH, but also popular storages, like
+   Google Drive, Amazon Drive, S3, Dropbox, Backblaze B2, One Drive, Swift,
+   Hubic, Cloudfiles, Google Cloud Storage & Yandex Files!** Check
+   <https://rclone.org/>
+2. ABR is **optimized for human Ad-Hoc usage**, with difference from backup to
+  restore **may** be as simple as renaming `abr_mode: "backup"` to
+   `abr_mode: "restore"` and internal steps designed in a pipeline-like
+   workflow.
+   1. Some steps may be less computer efficient (in special need of **temporary
+      storage**) than the equivalent without ABR. This design decision on
+      plugins may help new people create custom extensions with less chance to
+      break.
+   2. We don't provide cron-like backups, if you really want, can use
+     [Ansible AWX](https://github.com/ansible/awx)).
+3. Out-of-the-box all drivers support a feature called
+   `full-temp-backup-before-restore` when `abr_paranoid: true`. If you servers
+   are faster enough and have extra storage, you may like leave it enabled.
+-->
+
+<!--
+
+-->
+
 
 ## Usage
 
@@ -16,9 +54,12 @@ Visit the complete official documentation at
 <https://ansible-adhoc-backup-restore.readthedocs.io/>.
 
 ### TL;DR
-If you already know Ansible the "3 files to quick look" are [defaults/main.yml](defaults/main.yml),
+If you already know Ansible the _"3 files to quick look"_ are
+[defaults/main.yml](defaults/main.yml),
 [tasks/mode-backup.yml](tasks/mode-backup.yml) and
 [tasks/mode-restore.yml](tasks/mode-restore.yml).
+
+To install:
 
 ```bash
 # Too long didn't read:
@@ -26,13 +67,13 @@ If you already know Ansible the "3 files to quick look" are [defaults/main.yml](
 ansible-galaxy install fititnt.adhoc_backup_restore
 ```
 
-### How extensible is ABR?
+#### How extensible is ABR?
 90%+ of it's files can be replaced without need to fork the repository. Files
 under `{{ playbook_dir }}/overrides/roles/adhoc_backup_restore/` will have
 higher priority. It's both usefull to customize a single file or create your
 custom strategies.
 
-### Quickstart
+### Example
 
 ```yaml
 # ansible -i myihost.com, backup-directory-site-1.yml

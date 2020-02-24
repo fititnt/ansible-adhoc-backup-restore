@@ -11,7 +11,7 @@
 #     msg:
 #       teste: "{{ 'teste' }}"
 #       # abr_backup_rclone_command: "{{ abr_backup_rclone_command | default('undefined') }}"
-#       # abr_rclone_enviroment: "{{ abr_rclone_enviroment | default('undefined') }}"
+#       # abr_bucket_enviroment: "{{ abr_bucket_enviroment | default('undefined') }}"
 #       # abr_backup_rclone_command: "{{ abr_backup_rclone_command | default('undefined') }}"
 #     # verbosity: 1
 
@@ -22,7 +22,7 @@
 # - name: "abr:{{ abr_mode }} | restore-options | rclone-default | rclone command"
 # # - name: "abr | valt-send | rclone command"
 #   shell: "{{ abr_restore_options_rclone_command }}"
-#   environment: "{{ abr_rclone_enviroment }}"
+#   environment: "{{ abr_bucket_enviroment }}"
 #   register: command_result
 #   # warn: false
 
@@ -30,7 +30,7 @@
   command:
     cmd: "{{ abr_restore_options_rclone_command }}"
     # warn: False
-  environment: "{{ abr_rclone_enviroment }}"
+  environment: "{{ abr_bucket_enviroment }}"
   register: command_result
   # warn: false
 

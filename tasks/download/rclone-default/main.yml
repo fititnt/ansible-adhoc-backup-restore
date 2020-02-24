@@ -9,7 +9,7 @@
 # - name: "abr | valt-send | debug (requires -v, -vv, -vvv, or -vvvv)"
   debug:
     msg:
-      abr_rclone_enviroment: "{{ abr_rclone_enviroment | default('undefined') }}"
+      abr_bucket_enviroment: "{{ abr_bucket_enviroment | default('undefined') }}"
       abr__download_rclone_default_command: "{{ abr__download_rclone_default_command | default('undefined') }}"
     verbosity: 1
 
@@ -34,7 +34,7 @@
 # - name: "{{ abr__task_prefix }} | download | rclone-default | rclone command"
 # # - name: "abr | valt-send | rclone command"
 #   shell: "{{ abr__download_rclone_default_command }}"
-#   environment: "{{ abr_rclone_enviroment }}"
+#   environment: "{{ abr_bucket_enviroment }}"
 #   register: command_result
 
 - name: "{{ abr__task_prefix }} | download | rclone-default | rclone command" # noqa 301
@@ -42,7 +42,7 @@
   command:
     cmd: "{{ abr__download_rclone_default_command }}"
     # warn: False
-  environment: "{{ abr_rclone_enviroment }}"
+  environment: "{{ abr_bucket_enviroment }}"
   register: command_result
 
 - name: "{{ abr__task_prefix }} | download | rclone-default | debug (requires -v)"
