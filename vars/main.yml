@@ -68,7 +68,7 @@ abr_restore_rclone_source: "{{ abr_rclone_bucket_backup + abr_prefix + abr_backu
 abr_restore_rclone_destiny: "{{ abr_dir_mydumpermyloader.path }}"
 abr_restore_rclone_command: "rclone {{ abr_rclone_valt_receive_method }} {{ abr_rclone_args_restore_string }} {{ abr_backup_source }} {{ abr_backup_destiny }}"
 
-abr_restore_options_rclone_command: "rclone lsd {{ abr_rclone_args_restore_string }} {{ abr_bucket + abr_prefix }}"
+abr__restore_options_rclone_command: "rclone lsjson {{ abr_rclone_args_restore_string }} {{ abr_bucket + abr_prefix }}"
 
 # abr__download_rclone_default_source: "{{ abr_rclone_bucket_restore + abr_prefix + abr_backup_name + (abr_strategy_compression | ternary('.' + abr_compression_format, '')) }}"
 # abr__download_rclone_default_source: "{{ abr_rclone_bucket_restore + abr_prefix + abr_backup_name + abr__extension }}"

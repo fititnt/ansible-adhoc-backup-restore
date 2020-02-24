@@ -5,22 +5,10 @@
 # USAGE:
 #                 abr_driver: 'restore-options'
 
-# STEP 1: SETUP ________________________________________ (abr_skip_setup: false)
-#         Setup step will create directories used by ABR and will install
-#         dependencies based on enabled drivers and strategies
-- name: "{{ abr__task_prefix }} | mode-restore-options | setup/main.yml"
-  include: "{{ include_task_restore }}"
-  with_first_found:
-    - "{{ abr_overrides_directory }}/tasks/setup/main.yml"
-    - "{{ role_path }}/tasks/setup/main.yml"
-  loop_control:
-    loop_var: "include_task_restore"
-  when:
-    - "(abr_skip_setup|bool is sameas false)"
 
-# STEP 1: SETUP ________________________________________ (abr_skip_setup: false)
-#         Setup step will create directories used by ABR and will install
-#         dependencies based on enabled drivers and strategies
+# STEP 1: RESTORE-OPTIONS ______________________ (abr_driver: 'restore-options')
+#         This steps will only show what options for the current abr_bucket and
+#         abr_prefix exist.
 - name: "{{ abr__task_prefix }} | mode-restore-options | restore-options/main.yml"
   include: "{{ include_task_restore }}"
   with_first_found:

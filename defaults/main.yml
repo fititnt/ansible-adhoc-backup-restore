@@ -142,6 +142,8 @@ abr_rclone_bucket_type: "local"
 # options) the user can customize both
 abr_rclone_bucket_backup: "{{ abr_bucket }}"
 abr_rclone_bucket_restore: "{{ abr_bucket }}"
+abr_bucket_backup: "{{ abr_bucket }}"
+abr_bucket_restore: "{{ abr_bucket }}"
 abr_bucket_enviroment_backup: "{{ abr_bucket_enviroment }}"
 abr_bucket_enviroment_restore: "{{ abr_bucket_enviroment }}"
 abr_bucket_args_backup: "{{ abr_bucket_args }}"
@@ -275,3 +277,8 @@ abr_dir_abrlocalbucket:
   group: "{{ abr_fs_group }}"
   mode: "{{ abr_fs_mode }}"
   state: directory
+
+## ADVANCED ____________________________________________________________________
+
+abr_command_restore_options: "{{ abr__restore_options_rclone_command }}"
+abr_command_paranoid_options: "rclone lsd -R /var/local/abr/full-temp-backup-before-restore/"

@@ -2,35 +2,52 @@
 
 # FILE:            {{ role_path }}/tasks/restore-options/rclone-default/main.yml
 # LICENSE:         Public Domain
-# SEE:             https://forum.rclone.org/t/can-rclone-be-run-solely-with-command-line-options-no-config-no-env-vars/6314/2
-# SEE:             https://github.com/rclone/rclone/issues/2449 (Title: Allow creation of backends from command line parameters)
+# SEE:             rclone ls https://rclone.org/commands/rclone_ls/
 
-# - name: "abr:{{ abr_mode }} | restore-options | rclone-default | debug (requires -v, -vv, -vvv, or -vvvv)"
-# # - name: "abr | valt-send | debug (requires -v, -vv, -vvv, or -vvvv)"
-#   debug:
-#     msg:
-#       teste: "{{ 'teste' }}"
-#       # abr_backup_rclone_command: "{{ abr_backup_rclone_command | default('undefined') }}"
-#       # abr_bucket_enviroment: "{{ abr_bucket_enviroment | default('undefined') }}"
-#       # abr_backup_rclone_command: "{{ abr_backup_rclone_command | default('undefined') }}"
-#     # verbosity: 1
+# TODO:            using rclone lsjson may return directories and not just files
+#                  and this may result in false positives on assert. We could
+#                  improve this logic running two rclone options commands without
+#                  need to parse the json format (fititnt, 2020-02-23 22:01 BRT)
 
-# - name: "abr:{{ abr_mode }} | upload | rclone-default | set_facts: prepare"
-#   set_fact:
-#     abr_upload_rclone_command: "{{ abr__path | default('/error/source/not-exist', true) }}"
+- name: "abr:{{ abr_mode }} | restore-options | rclone-default | debug (requires -v)"
+  debug:
+    msg:
+      abr_command_restore_options: "{{ abr_command_restore_options | default('undefined') }}"
+      abr_prefix: "{{ abr_prefix | default('undefined') }}"
+      abr_bucket: "{{ abr_bucket | default('undefined') }}"
+      abr_bucket_backup: "{{ abr_bucket_backup | default('undefined') }}"
+      abr_bucket_restore: "{{ abr_bucket_restore | default('undefined') }}"
+      abr_bucket_enviroment_backup: "{{ abr_bucket_enviroment_backup | default('undefined') }}"
+      abr_bucket_enviroment_restore: "{{ abr_bucket_enviroment_restore | default('undefined') }}"
+      abr_bucket_args_backup: "{{ abr_bucket_args_backup | default('undefined') }}"
+      abr_bucket_args_restore: "{{ abr_bucket_args_restore | default('undefined') }}"
+    verbosity: 1
 
-# - name: "abr:{{ abr_mode }} | restore-options | rclone-default | rclone command"
-# # - name: "abr | valt-send | rclone command"
-#   shell: "{{ abr_restore_options_rclone_command }}"
-#   environment: "{{ abr_bucket_enviroment }}"
-#   register: command_result
-#   # warn: false
+- name: "abr:{{ abr_mode }} | restore-options | rclone-default | paranoid options command (local copy)" # noqa 301
+  command:
+    cmd: "{{ abr_command_paranoid_options }}"
+  register: paranoid_options
+  ignore_errors: true
+  when:
+    - "(abr_paranoid|bool)"
+
+- name: "abr:{{ abr_mode }} | restore-options | rclone-default | paranoid options output (local copy)"
+  debug:
+    msg:
+      # command_result: "{{ command_result | default('undefined') }}"
+      # options: "{{ command_result | default('undefined') }}"
+      paranoid_options: "{{ paranoid_options.stdout_lines | default('undefined') }}"
+    # verbosity: 1
+  when:
+    - "(abr_paranoid|bool)"
+    - "(paranoid_options) and (not paranoid_options.failed)"
 
 - name: "abr:{{ abr_mode }} | restore-options | rclone-default | rclone command" # noqa 301
   command:
-    cmd: "{{ abr_restore_options_rclone_command }}"
+    # cmd: "{{ abr_restore_options_rclone_command }}"
+    cmd: "{{ abr_command_restore_options }}"
     # warn: False
-  environment: "{{ abr_bucket_enviroment }}"
+  environment: "{{ abr_bucket_enviroment_restore }}"
   register: command_result
   # warn: false
 
@@ -38,5 +55,19 @@
   debug:
     msg:
       # command_result: "{{ command_result | default('undefined') }}"
-      options: "{{ command_result.stdout_lines | default('undefined') }}"
+      # options: "{{ command_result | default('undefined') }}"
+      options: "{{ command_result.stdout | default('undefined') }}"
     # verbosity: 1
+
+- name: "abr:{{ abr_mode }} | restore-options | rclone-default | very basic sanity test"
+  assert:
+      that:
+        - "(command_result.stdout_lines|length > 0)"
+      fail_msg: |
+        WARNING! ABR did not identified at least one restore option. Please
+        check your configurations. Running with -v (-vv, -vvv, -vvvv) may help
+        you to check internal variables.
+      success_msg: |
+        The current abr_bucket_restore ("{{ abr_bucket_restore }}") and
+        abr_prefix ("{{ abr_prefix }}") have at least one potential restore
+        option.
